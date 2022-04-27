@@ -19,7 +19,10 @@ public class SmartBoard extends Application {
         Stage loginStage = new Stage();
         loginStage.setTitle("Smart Board - Login");
         loginStage.setScene(loginScene);
+        loginStage.setResizable(false);
         loginStage.show();
+
+        createUserStage();
 
         FXMLLoader fxmlPrimaryLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlPrimaryName));
 
@@ -33,14 +36,14 @@ public class SmartBoard extends Application {
         //primaryStage.show();
     }
 
-    public void createUserStage(Stage openStage) throws IOException {
-        openStage.close();  //TODO
-        String fxmlCreateUserName = "login.fxml";
-        FXMLLoader fxmlLoginLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlCreateUserName));
-        Scene scene = new Scene(fxmlLoginLoader.load());
+    public void createUserStage() throws IOException {
+        String fxmlCreateUserName = "newuser.fxml";
+        FXMLLoader fxmlLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlCreateUserName));
+        Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setTitle("Smart Board - Create a New User Account");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 

@@ -1,14 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.smartboard.Newuser"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<GridPane prefHeight="300.0" prefWidth="500.0" vgap="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.smartboard.NewUserController">
+   <children>
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="169.0" pickOnBounds="true" preserveRatio="true">
+               <VBox.margin>
+                  <Insets left="40.0" right="40.0" />
+               </VBox.margin>
+            </ImageView>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Click image to update" textAlignment="CENTER">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="70.0" right="70.0" top="10.0" />
+               </VBox.margin>
+            </Text>
+         </children>
+         <GridPane.margin>
+            <Insets top="20.0" />
+         </GridPane.margin>
+      </VBox>
+      <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter your details" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="50.0" right="50.0" />
+               </VBox.margin>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your Username">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="10.0" />
+               </VBox.margin>
+            </Text>
+            <TextField promptText="Username">
+               <font>
+                  <Font size="14.0" />
+               </font></TextField>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your First Name">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="10.0" top="10.0" />
+               </VBox.margin>
+            </Text>
+            <TextField promptText="First Name">
+               <font>
+                  <Font size="14.0" />
+               </font></TextField>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your Last Name">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="10.0" top="10.0" />
+               </VBox.margin>
+            </Text>
+            <TextField promptText="Last Name">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="A Strong Password">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="10.0" top="10.0" />
+               </VBox.margin>
+            </Text>
+            <PasswordField>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </PasswordField>
+         </children>
+      </VBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <children>
+            <Button defaultButton="true" mnemonicParsing="false" text="Create User" textAlignment="CENTER">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button cancelButton="true" mnemonicParsing="false" text="Close" textAlignment="CENTER">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="100.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+      <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Message Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+   </children>
+   <columnConstraints>
+      <ColumnConstraints minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="60.0" />
+      <ColumnConstraints minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints valignment="CENTER" />
+      <RowConstraints minHeight="50.0" prefHeight="30.0" valignment="CENTER" />
+   </rowConstraints>
+</GridPane>
