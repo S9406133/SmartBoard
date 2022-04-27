@@ -10,20 +10,16 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class SmartBoard extends Application {
+
     @Override
     public void start(Stage primaryStage) throws IOException {
-        String fxmlLoginName = "login.fxml";
+
+        createLoginStage();
+
+    }
+
+    protected static void createPrimaryStage() throws IOException {
         String fxmlPrimaryName = "smartboard.fxml";
-        FXMLLoader fxmlLoginLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlLoginName));
-        Scene loginScene = new Scene(fxmlLoginLoader.load());
-        Stage loginStage = new Stage();
-        loginStage.setTitle("Smart Board - Login");
-        loginStage.setScene(loginScene);
-        loginStage.setResizable(false);
-        loginStage.show();
-
-        createUserStage();
-
         FXMLLoader fxmlPrimaryLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlPrimaryName));
 
         Rectangle2D rect = Screen.getPrimary().getBounds();
@@ -31,20 +27,31 @@ public class SmartBoard extends Application {
         double initSizeY = rect.getHeight() * 0.8;
 
         Scene primaryScene = new Scene(fxmlPrimaryLoader.load(), initSizeX, initSizeY);
+        Stage primaryStage = new Stage();
         primaryStage.setTitle("Smart Board");
         primaryStage.setScene(primaryScene);
-        //primaryStage.show();
+        primaryStage.show();
+    }
+    protected static void createLoginStage() throws IOException {
+        String fxmlLoginName = "login.fxml";
+        FXMLLoader fxmlLoginLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlLoginName));
+        Scene loginScene = new Scene(fxmlLoginLoader.load());
+        Stage loginStage = new Stage();
+        loginStage.setTitle("Smart Board - Login");
+        loginStage.setScene(loginScene);
+        loginStage.setResizable(false);
+        loginStage.show();
     }
 
-    public void createUserStage() throws IOException {
+    protected static void createNewUserStage() throws IOException {
         String fxmlCreateUserName = "newuser.fxml";
         FXMLLoader fxmlLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlCreateUserName));
         Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = new Stage();
-        stage.setTitle("Smart Board - Create a New User Account");
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
+        Stage createUserStage = new Stage();
+        createUserStage.setTitle("Smart Board - Create a New User Account");
+        createUserStage.setScene(scene);
+        createUserStage.setResizable(false);
+        createUserStage.show();
     }
 
     public static void main(String[] args) {
