@@ -1,16 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.smartboard.SBController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.smartboard.SBController">
+   <children>
+      <MenuBar prefHeight="25.0" prefWidth="900.0">
+        <menus>
+          <Menu fx:id="workspaceMenu" mnemonicParsing="false" text="Workspace">
+            <items>
+              <MenuItem id="newProject" fx:id="newProject" mnemonicParsing="false" text="New Project" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+            </items>
+          </Menu>
+          <Menu fx:id="projectMenu" mnemonicParsing="false" text="Project">
+            <items>
+              <MenuItem id="addColumn" fx:id="addColumn" mnemonicParsing="false" text="Add Column" />
+                  <MenuItem id="renameProject" fx:id="renameProject" mnemonicParsing="false" text="Rename" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <RadioMenuItem id="setDefault" fx:id="setDefault" mnemonicParsing="false" text="Set as Default">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="setDefaultGroup" />
+                     </toggleGroup>
+                  </RadioMenuItem>
+                  <RadioMenuItem id="unsetDefault" fx:id="unsetDefault" mnemonicParsing="false" text="Unset Default" toggleGroup="$setDefaultGroup" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem id="deleteProject" fx:id="deleteProject" mnemonicParsing="false" text="Delete Project" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="User">
+              <items>
+                <MenuItem id="editProfile" fx:id="editProfile" mnemonicParsing="false" text="Edit Profile" />
+                  <MenuItem id="logout" fx:id="logout" mnemonicParsing="false" onAction="#onLogoutMenuItemSelected" text="Log out" />
+              </items>
+            </Menu>
+          <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem id="about" fx:id="about" mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <ToolBar layoutY="25.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="900.0">
+        <items>
+          <Button fx:id="mainExitButton" alignment="CENTER" cancelButton="true" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefHeight="25.0" prefWidth="65.0" text="Exit" textAlignment="CENTER" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="814.0" text="This is the insirational quote" textAlignment="CENTER">
+               <font>
+                  <Font name="System Italic" size="14.0" />
+               </font>
+            </Label>
+        </items>
+      </ToolBar>
+   </children>
+</AnchorPane>

@@ -17,9 +17,10 @@ public class AlertDialog {
 
         Label content = new Label(message);
         content.setFont(new Font(16));
+        content.paddingProperty().setValue(new Insets(10, 10, 10, 10));
 
         DialogPane dialogPane = new DialogPane();
-        dialogPane.paddingProperty().setValue(new Insets(0, 10, 0, 10));
+        dialogPane.paddingProperty().setValue(new Insets(0, 20, 0, 20));
         dialogPane.setContent(content);
         dialogPane.getButtonTypes().add(ButtonType.OK);
         dialogPane.lookupButton(ButtonType.OK).setOnMouseClicked(
