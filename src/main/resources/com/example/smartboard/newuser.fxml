@@ -23,7 +23,7 @@
                   <Insets left="50.0" right="50.0" top="20.0" />
                </VBox.margin>
                <image>
-                  <Image url="@../../../../../../fry_avatar.jpg" />
+                  <Image url="@../../../fry_avatar.jpg" />
                </image>
             </ImageView>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Click image to update" textAlignment="CENTER">

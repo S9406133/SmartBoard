@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -11,8 +12,10 @@ import java.io.IOException;
 
 public class SmartBoard extends Application {
 
+    private static Image icon = new Image("icon.png");
+
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage stage) throws IOException {
 
         createLoginStage();
 
@@ -29,6 +32,7 @@ public class SmartBoard extends Application {
         Scene primaryScene = new Scene(fxmlPrimaryLoader.load(), initSizeX, initSizeY);
         Stage primaryStage = new Stage();
         primaryStage.setTitle("Smart Board");
+        primaryStage.getIcons().add(icon);
         primaryStage.setScene(primaryScene);
         primaryStage.show();
     }
@@ -38,6 +42,7 @@ public class SmartBoard extends Application {
         Scene loginScene = new Scene(fxmlLoginLoader.load());
         Stage loginStage = new Stage();
         loginStage.setTitle("Smart Board - Login");
+        loginStage.getIcons().add(icon);
         loginStage.setScene(loginScene);
         loginStage.setResizable(false);
         loginStage.show();
@@ -49,6 +54,7 @@ public class SmartBoard extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         Stage createUserStage = new Stage();
         createUserStage.setTitle("Smart Board - Create a New User Account");
+        createUserStage.getIcons().add(icon);
         createUserStage.setScene(scene);
         createUserStage.setResizable(false);
         createUserStage.show();

@@ -16,6 +16,7 @@ public class NewUserController implements Closable{
     @FXML
     private void onCreateUserButtonClick(){
         try {
+            AlertDialog.show("New user created");
             SmartBoard.createPrimaryStage();
             Stage stage = (Stage) createUserButton.getScene().getWindow();
             stage.close();
