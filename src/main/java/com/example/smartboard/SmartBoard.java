@@ -12,12 +12,14 @@ import java.io.IOException;
 
 public class SmartBoard extends Application {
 
-    private static Image icon = new Image("icon.png");
+    static Image icon = new Image("icon.png");
 
     @Override
     public void start(Stage stage) throws IOException {
 
-        createLoginStage();
+        //createLoginStage();
+
+        createPrimaryStage();
 
     }
 
@@ -30,9 +32,11 @@ public class SmartBoard extends Application {
         double initSizeY = rect.getHeight() * 0.8;
 
         Scene primaryScene = new Scene(fxmlPrimaryLoader.load(), initSizeX, initSizeY);
+
         Stage primaryStage = new Stage();
         primaryStage.setTitle("Smart Board");
         primaryStage.getIcons().add(icon);
+//        primaryStage.setMaximized(true);
         primaryStage.setScene(primaryScene);
         primaryStage.show();
     }

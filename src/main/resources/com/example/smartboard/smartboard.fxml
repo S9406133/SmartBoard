@@ -1,64 +1,183 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.smartboard.SBController">
-   <children>
-      <MenuBar prefHeight="25.0" prefWidth="900.0">
-        <menus>
-          <Menu fx:id="workspaceMenu" mnemonicParsing="false" text="Workspace">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="466.0" prefWidth="686.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.smartboard.SBController">
+    <center>
+        <TabPane prefWidth="1500.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="Project 1">
+                    <ScrollPane fx:id="scrollPane" BorderPane.alignment="CENTER">
+                        <content>
+                            <HBox alignment="CENTER" spacing="10.0">
+                        <children>
+                           <VBox prefWidth="300.0" spacing="10.0">
+                              <children>
+                                 <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" style="-fx-background-color: lightblue; -fx-border-color: grey;">
+                                   <items>
+                                     <Button mnemonicParsing="false" text="Add Task" />
+                                       <Label nodeOrientation="LEFT_TO_RIGHT" prefWidth="200.0" text="Task Name" />
+                                   </items>
+                                    <VBox.margin>
+                                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </VBox.margin>
+                                 </ToolBar>
+                                 <AnchorPane prefWidth="300.0" style="-fx-background-color: lightgreen; -fx-border-color: grey;">
+                                    <VBox.margin>
+                                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </VBox.margin>
+                                    <padding>
+                                       <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                    </padding>
+                                    <children>
+                                       <Button layoutX="225.0" layoutY="74.0" mnemonicParsing="false" prefWidth="65.0" text="Update" />
+                                       <Button layoutX="168.0" layoutY="74.0" mnemonicParsing="false" text="Delete" />
+                                       <Label layoutX="14.0" layoutY="6.0" style="-fx-background-color: white;" text="Task Name goes here">
+                                          <padding>
+                                             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                          </padding>
+                                       </Label>
+                                       <Label layoutX="14.0" layoutY="47.0" style="-fx-background-color: white;" text="Checklist 0/3">
+                                          <padding>
+                                             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                          </padding>
+                                       </Label>
+                                       <Label layoutX="14.0" layoutY="86.0" style="-fx-background-color: white;" text="Due date 01/01/2022">
+                                          <padding>
+                                             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                          </padding>
+                                       </Label>
+                                       <Button disable="true" layoutX="225.0" layoutY="15.0" mnemonicParsing="false" text="^" />
+                                       <Button layoutX="265.0" layoutY="15.0" mnemonicParsing="false" rotate="180.0" text="^" />
+                                       <Button disable="true" layoutX="225.0" layoutY="45.0" mnemonicParsing="false" text="&lt;" />
+                                       <Button layoutX="265.0" layoutY="44.0" mnemonicParsing="false" text="&gt;" />
+                                    </children>
+                                 </AnchorPane>
+                                 <AnchorPane prefWidth="300.0" style="-fx-background-color: lightgreen; -fx-border-color: grey;">
+                                    <padding>
+                                       <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                    </padding>
+                                    <children>
+                                       <Button layoutX="225.0" layoutY="74.0" mnemonicParsing="false" prefWidth="65.0" text="Delete" />
+                                       <Button layoutX="225.0" layoutY="44.0" mnemonicParsing="false" prefWidth="65.0" text="Update" />
+                                       <Label layoutX="14.0" layoutY="6.0" style="-fx-background-color: white;" text="Task Name goes here">
+                                          <padding>
+                                             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                          </padding>
+                                       </Label>
+                                       <Label layoutX="14.0" layoutY="47.0" style="-fx-background-color: white;" text="Checklist 0/3">
+                                          <padding>
+                                             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                          </padding>
+                                       </Label>
+                                       <Label layoutX="14.0" layoutY="86.0" style="-fx-background-color: white;" text="Due date 01/01/2022">
+                                          <padding>
+                                             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                          </padding>
+                                       </Label>
+                                       <Button disable="true" layoutX="226.0" layoutY="14.0" mnemonicParsing="false" text="&lt;" />
+                                       <Button layoutX="265.0" layoutY="14.0" mnemonicParsing="false" text="&gt;" />
+                                    </children>
+                                    <VBox.margin>
+                                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </VBox.margin>
+                                 </AnchorPane>
+                              </children>
+                           </VBox>
+                           <VBox prefHeight="200.0" prefWidth="100.0" />
+                           <VBox prefHeight="200.0" prefWidth="100.0" />
+                        </children></HBox>
+                        </content>
+                    </ScrollPane>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </center>
+    <bottom>
+        <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="646.0" BorderPane.alignment="CENTER">
             <items>
-              <MenuItem id="newProject" fx:id="newProject" mnemonicParsing="false" text="New Project" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
+                <Button fx:id="mainExitButton" alignment="CENTER" cancelButton="true" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefHeight="25.0" prefWidth="65.0" text="Exit" textAlignment="CENTER" />
+                <Label fx:id="toolbarUsername" nodeOrientation="LEFT_TO_RIGHT" text="Username">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                    <padding>
+                        <Insets right="10.0" />
+                    </padding>
+                </Label>
+                <ImageView fx:id="toolbarImage" fitHeight="32.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../fry_avatar.jpg" />
+                    </image>
+                </ImageView>
+                <Label fx:id="toolbarQuote" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefWidth="485.0" text="This is the inspirational quote" textAlignment="CENTER">
+                    <font>
+                        <Font name="System Italic" size="14.0" />
+                    </font>
+                </Label>
             </items>
-          </Menu>
-          <Menu fx:id="projectMenu" mnemonicParsing="false" text="Project">
-            <items>
-              <MenuItem id="addColumn" fx:id="addColumn" mnemonicParsing="false" text="Add Column" />
-                  <MenuItem id="renameProject" fx:id="renameProject" mnemonicParsing="false" text="Rename" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <RadioMenuItem id="setDefault" fx:id="setDefault" mnemonicParsing="false" text="Set as Default">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="setDefaultGroup" />
-                     </toggleGroup>
-                  </RadioMenuItem>
-                  <RadioMenuItem id="unsetDefault" fx:id="unsetDefault" mnemonicParsing="false" text="Unset Default" toggleGroup="$setDefaultGroup" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem id="deleteProject" fx:id="deleteProject" mnemonicParsing="false" text="Delete Project" />
-            </items>
-          </Menu>
-            <Menu mnemonicParsing="false" text="User">
-              <items>
-                <MenuItem id="editProfile" fx:id="editProfile" mnemonicParsing="false" text="Edit Profile" />
-                  <MenuItem id="logout" fx:id="logout" mnemonicParsing="false" onAction="#onLogoutMenuItemSelected" text="Log out" />
-              </items>
-            </Menu>
-          <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem id="about" fx:id="about" mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <ToolBar layoutY="25.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="900.0">
-        <items>
-          <Button fx:id="mainExitButton" alignment="CENTER" cancelButton="true" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefHeight="25.0" prefWidth="65.0" text="Exit" textAlignment="CENTER" />
-            <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="814.0" text="This is the insirational quote" textAlignment="CENTER">
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-            </Label>
-        </items>
-      </ToolBar>
-   </children>
-</AnchorPane>
+        </ToolBar>
+    </bottom>
+    <top>
+        <MenuBar prefHeight="25.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+            <menus>
+                <Menu mnemonicParsing="false" text="Workspace">
+                    <items>
+                        <MenuItem id="newProject" mnemonicParsing="false" onAction="#createNewItem" text="New Project" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <RadioMenuItem mnemonicParsing="false" selected="true" text="Project 1">
+                            <toggleGroup>
+                                <ToggleGroup fx:id="projectGroup" />
+                            </toggleGroup>
+                        </RadioMenuItem>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Project">
+                    <items>
+                        <MenuItem id="newColumn" mnemonicParsing="false" onAction="#createNewItem" text="Add Column" />
+                        <MenuItem id="renameProject" mnemonicParsing="false" text="Rename" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <RadioMenuItem id="setDefault" mnemonicParsing="false" selected="true" text="Set as Default">
+                            <toggleGroup>
+                                <ToggleGroup fx:id="setDefaultGroup" />
+                            </toggleGroup>
+                        </RadioMenuItem>
+                        <RadioMenuItem id="unsetDefault" disable="false" mnemonicParsing="false" text="Unset Default" toggleGroup="$setDefaultGroup" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem id="deleteProject" mnemonicParsing="false" text="Delete Project" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="User">
+                    <items>
+                        <MenuItem id="editProfile" mnemonicParsing="false" text="Edit Profile" />
+                        <MenuItem id="logout" mnemonicParsing="false" onAction="#onLogoutMenuItemSelected" text="Log out" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem id="about" mnemonicParsing="false" text="About" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+</BorderPane>
