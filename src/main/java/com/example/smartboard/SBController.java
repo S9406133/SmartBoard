@@ -1,11 +1,14 @@
 package com.example.smartboard;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventTarget;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -13,9 +16,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SBController implements Closable, Initializable {
-    String inputText;
-    @FXML
-    ScrollPane scrollPane;
+
+    private String inputText;
     @FXML
     private Button mainExitButton;
 
@@ -30,8 +32,8 @@ public class SBController implements Closable, Initializable {
         Stage stage = (Stage) mainExitButton.getScene().getWindow();
         Alert exitAlert = new Alert(Alert.AlertType.CONFIRMATION);
         exitAlert.setTitle("Logout");
-        exitAlert.setHeaderText("You're about to logout!");
-        exitAlert.setContentText("Press OK to continue, or cancel to return to Smart Board");
+        exitAlert.setHeaderText("You're about to exit Smart Board!");
+        exitAlert.setContentText("Press OK to exit, or cancel to return to Smart Board");
 
         if (exitAlert.showAndWait().get() == ButtonType.OK) {
             stage.close();
@@ -39,24 +41,49 @@ public class SBController implements Closable, Initializable {
     }
 
     @FXML
-    protected void createNewItem(@NotNull ActionEvent event) {
+    protected void showInputDialog(@NotNull ActionEvent event) {
         try {
             String title = "", prompt = "";
             String id = ((MenuItem) event.getTarget()).getId();
             System.out.println(id);
 
-            if (id.equals("newProject")){
-                title = "Create a new project";
-                prompt = "Project title";
-            }else if (id.equals("newColumn")){
-                title = "Add a new column";
-                prompt = "Column name";
+            switch (id) {
+                case "newProject" -> {
+                    title = "Create a new project";
+                    prompt = "Project title";
+                }
+                case "newColumn" -> {
+                    title = "Add a new column";
+                    prompt = "Column name";
+                }
+                case "renameProject" -> {
+                    title = "Rename project";
+                    prompt = "Project title";
+                }
             }
 
             inputText = TextInputDialog.show(title, prompt);
             System.out.println(inputText);
         } catch (ClassCastException cce) {
             System.out.println(cce.getMessage());
+        }
+    }
+
+    @FXML
+    protected void onEditProfileSelected(){
+        try {
+            String fxmlName = "editprofile.fxml";
+            FXMLLoader fxmlLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlName));
+            Scene editScene = new Scene(fxmlLoader.load());
+            Stage editStage = new Stage(StageStyle.UTILITY);
+            editStage.initModality(Modality.APPLICATION_MODAL);
+            editStage.setTitle("Edit user profile");
+            editStage.getIcons().add(SmartBoard.icon);
+            editStage.setScene(editScene);
+            editStage.setResizable(false);
+            editStage.showAndWait();
+        } catch (IOException ioe){
+            System.out.println(ioe.getMessage());
         }
     }
 
@@ -69,6 +96,28 @@ public class SBController implements Closable, Initializable {
         } catch (IOException ioe) {
             System.out.println(ioe.getMessage());
         }
+    }
+
+    @FXML
+    protected void onDeleteProjectSelected() {
+        Alert deleteAlert = new Alert(Alert.AlertType.WARNING);
+        deleteAlert.getButtonTypes().add(ButtonType.CANCEL);
+        deleteAlert.setTitle("Delete project");
+        deleteAlert.setHeaderText("You're about to delete the current project!");
+        deleteAlert.setContentText("Press OK to delete, or cancel to return to Smart Board");
+
+        if (deleteAlert.showAndWait().get() == ButtonType.OK) {
+            System.out.println("Project has been deleted");
+        }
+    }
+
+    @FXML
+    protected void showAboutInfo() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("About Smart Board");
+        alert.setHeaderText("Smart Board version 1.1\nDeveloper: Simon Mckindley" +
+                "\nCreated for Further Programming A2\nMay 2022");
+        alert.showAndWait();
     }
 
 }
