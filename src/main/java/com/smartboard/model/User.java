@@ -7,12 +7,12 @@ public class User extends BoardItem<Project> {
 	private String password;
 	private String firstName;
 	private String lastName;
-	private String picturePath;
+	private String imagePath;
 
 	public User(String userName, String password, String firstName, String lastName) throws StringLengthException {
 		super(userName);
 
-		if (password.length() > 0 && firstName.length() > 2 && lastName.length() > 2) {
+		if (password.length() > 0 && firstName.length() > 1 && lastName.length() > 1) {
 			this.password = password;
 			this.firstName = firstName;
 			this.lastName = lastName;
@@ -20,7 +20,7 @@ public class User extends BoardItem<Project> {
 			throw new StringLengthException("Invalid data length - User not created");
 		}
 
-		this.picturePath = "fry_avatar.jpg";
+		this.imagePath = "fry_avatar.jpg";
 		this.subItems.add(new Project("Project1"));
 		this.subItems.get(0).setDefault(true);
 	}
@@ -60,7 +60,7 @@ public class User extends BoardItem<Project> {
 
 	}
 
-	protected String getFirstName() {
+	public String getFirstName() {
 		return firstName;
 	}
 
@@ -72,7 +72,7 @@ public class User extends BoardItem<Project> {
 		}
 	}
 
-	protected String getLastName() {
+	public String getLastName() {
 		return lastName;
 	}
 
@@ -84,12 +84,12 @@ public class User extends BoardItem<Project> {
 		}
 	}
 
-	protected String getPicturePath() {
-		return picturePath;
+	public String getImagePath() {
+		return imagePath;
 	}
 
-	protected void setPicturePath(String picture) {
-		this.picturePath = picture;
+	protected void setImagePath(String path) {
+		this.imagePath = path;
 	}
 
 }

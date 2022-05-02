@@ -26,8 +26,7 @@ public class LoginController implements Closable {
 
         if (!username.isBlank() && !password.isBlank()) {
             try {
-                Data data = new Data();
-                data.login(username, password);
+                Data.login(username, password);
 
                 SmartBoard.createPrimaryStage();
 
@@ -36,10 +35,10 @@ public class LoginController implements Closable {
                 System.out.println(ioe.getMessage());
 
             } catch (IllegalArgumentException iae) {
-                errorAlert(iae.getMessage());
+                Utility.errorAlert(iae.getMessage());
             }
         } else {
-            errorAlert("Enter text in both fields");
+            Utility.errorAlert("Enter text in both fields");
         }
     }
 
@@ -60,9 +59,4 @@ public class LoginController implements Closable {
         stage.close();
     }
 
-    private void errorAlert(String message){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText(message);
-        alert.showAndWait();
-    }
 }

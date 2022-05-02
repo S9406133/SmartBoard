@@ -45,7 +45,7 @@
                   <Insets bottom="5.0" left="10.0" />
                </VBox.margin>
             </Text>
-            <TextField fx:id="usernameField" promptText="Username">
+            <TextField fx:id="newUsernameField" promptText="Username">
                <font>
                   <Font size="14.0" />
                </font>
@@ -55,7 +55,7 @@
                   <Insets bottom="5.0" left="10.0" top="10.0" />
                </VBox.margin>
             </Text>
-            <TextField fx:id="firstnameField" promptText="First Name">
+            <TextField fx:id="newFirstnameField" promptText="First Name">
                <font>
                   <Font size="14.0" />
                </font>
@@ -65,7 +65,7 @@
                   <Insets bottom="5.0" left="10.0" top="10.0" />
                </VBox.margin>
             </Text>
-            <TextField fx:id="lastnameField" promptText="Last Name">
+            <TextField fx:id="newLastnameField" promptText="Last Name">
                <font>
                   <Font size="14.0" />
                </font>
@@ -75,7 +75,7 @@
                   <Insets bottom="5.0" left="10.0" top="10.0" />
                </VBox.margin>
             </Text>
-            <PasswordField fx:id="passwordField" promptText="Password">
+            <PasswordField fx:id="newPasswordField" promptText="Password">
                <font>
                   <Font size="14.0" />
                </font>

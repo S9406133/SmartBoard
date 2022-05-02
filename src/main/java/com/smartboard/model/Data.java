@@ -12,17 +12,12 @@ public class Data {
             new Quote("Fear is the path to the dark side. Fear leads to anger. Anger leads to hate. Hate leads to suffering.", "Yoda"),
             new Quote("Who's the more foolish: the fool or the fool who follows him?", "Obi-Wan Kenobi")
     };
-    public static String defPicturePath = "@../../fry_avatar.jpg";
+    public static String defPicturePath = "fry_avatar.jpg";
     public static User currentUser = null;
-    public ArrayList<User> users;
+    public static ArrayList<User> users = new ArrayList<>();
 
-    public Data() {
-        this.users = new ArrayList<>();
-        try {
-            this.users.add(new User("Simo", "a", "Simon", "James"));
-        } catch (IndexOutOfBoundsException | StringLengthException e) {
-            System.out.println(e.getMessage());
-        }
+    public static void createInitUser() throws StringLengthException {
+        users.add(new User("Simo", "a", "Simon", "James"));
     }
 
     public static Quote getRandomQuote() {
@@ -31,9 +26,9 @@ public class Data {
         return QUOTES[randomInt];
     }
 
-    public void login(String username, String password) throws IllegalArgumentException {
+    public static void login(String username, String password) throws IllegalArgumentException {
 
-        for (User user : this.users) {
+        for (User user : users) {
             if (user.getName().equalsIgnoreCase(username)) {
                 if (user.validateLogin(username, password)) {
                     currentUser = user;
@@ -47,5 +42,32 @@ public class Data {
         if (currentUser == null) {
             throw new IllegalArgumentException("No such Username");
         }
+    }
+
+    public static void createUser(String username, String password, String firstName, String lastName)
+            throws IllegalArgumentException, StringLengthException {
+
+        if (usernameExists(username)) {
+            throw new IllegalArgumentException("This Username already exists");
+        }
+
+        users.add(new User(username, password, firstName, lastName));
+        currentUser = users.get(users.size() - 1);
+    }
+
+    /**
+     * Method to find if the username already exists in the users list
+     */
+    private static boolean usernameExists(String username) {
+        boolean returnVal = false;
+
+        for (User user : users) {
+            if (username.equalsIgnoreCase(user.getName())) {
+                returnVal = true;
+                break;
+            }
+        }
+
+        return returnVal;
     }
 }

@@ -1,5 +1,7 @@
 package com.smartboard;
 
+import com.smartboard.model.Data;
+import com.smartboard.model.StringLengthException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -15,15 +17,12 @@ public class SmartBoard extends Application {
     public static Image icon = new Image("icon.png");
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException, StringLengthException {
 
-        try {
-            createLoginStage();
+        Data.createInitUser();
+        createLoginStage();
 
-            //createPrimaryStage();
-        }catch (IOException e){
-            System.out.println(e.getMessage());
-        }
+        //createPrimaryStage();
 
     }
 
@@ -44,6 +43,7 @@ public class SmartBoard extends Application {
         primaryStage.setScene(primaryScene);
         primaryStage.show();
     }
+
     public static void createLoginStage() throws IOException {
         String fxmlLoginName = "login.fxml";
         FXMLLoader fxmlLoginLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlLoginName));

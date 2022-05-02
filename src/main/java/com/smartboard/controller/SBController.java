@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -24,10 +26,16 @@ public class SBController implements Closable, Initializable {
     private Button mainExitButton;
     @FXML
     private Label toolbarQuote;
+    @FXML
+    private ImageView toolbarImage;
+    @FXML
+    private Label toolbarName;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         toolbarQuote.setText(Data.getRandomQuote().toString());
+        toolbarImage.setImage(new Image(Data.currentUser.getImagePath()));
+        toolbarName.setText(Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName());
     }
 
     @FXML

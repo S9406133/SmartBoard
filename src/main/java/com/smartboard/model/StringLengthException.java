@@ -11,9 +11,5 @@ public class StringLengthException extends Exception{
 		super(message);
 	}
 
-	@Override
-	public String getMessage() {
-		return "Invalid string length";
-	}
 
 }
