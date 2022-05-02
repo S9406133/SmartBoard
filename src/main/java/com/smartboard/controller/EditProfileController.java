@@ -1,4 +1,4 @@
-package com.example.smartboard;
+package com.smartboard.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -14,8 +14,6 @@ public class EditProfileController implements Closable {
     protected TextField editFirstnameField;
     @FXML
     protected TextField editLastnameField;
-    @FXML
-    protected TextField editPasswordField;
 
     @FXML
     @Override
@@ -28,7 +26,6 @@ public class EditProfileController implements Closable {
     protected void onUpdateClicked() {
         String firstname = editFirstnameField.getText().strip();
         String lastname = editLastnameField.getText().strip();
-        String password = editPasswordField.getText().strip();
         boolean updated = false;
 
         if (!firstname.isBlank()){
@@ -37,10 +34,6 @@ public class EditProfileController implements Closable {
         }
         if (!lastname.isBlank()){
             System.out.println("updated - Last name: " + lastname);
-            updated = true;
-        }
-        if (!password.isBlank()){
-            System.out.println("updated - Password: " + password);
             updated = true;
         }
 

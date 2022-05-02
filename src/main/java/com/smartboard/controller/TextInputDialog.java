@@ -1,5 +1,6 @@
-package com.example.smartboard;
+package com.smartboard.controller;
 
+import com.smartboard.SmartBoard;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;

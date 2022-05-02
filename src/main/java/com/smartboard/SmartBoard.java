@@ -1,4 +1,4 @@
-package com.example.smartboard;
+package com.smartboard;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,18 +12,22 @@ import java.io.IOException;
 
 public class SmartBoard extends Application {
 
-    static Image icon = new Image("icon.png");
+    public static Image icon = new Image("icon.png");
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
 
-        //createLoginStage();
+        try {
+            createLoginStage();
 
-        createPrimaryStage();
+            //createPrimaryStage();
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
 
     }
 
-    protected static void createPrimaryStage() throws IOException {
+    public static void createPrimaryStage() throws IOException {
         String fxmlPrimaryName = "smartboard.fxml";
         FXMLLoader fxmlPrimaryLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlPrimaryName));
 
@@ -40,7 +44,7 @@ public class SmartBoard extends Application {
         primaryStage.setScene(primaryScene);
         primaryStage.show();
     }
-    protected static void createLoginStage() throws IOException {
+    public static void createLoginStage() throws IOException {
         String fxmlLoginName = "login.fxml";
         FXMLLoader fxmlLoginLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlLoginName));
         Scene loginScene = new Scene(fxmlLoginLoader.load());
@@ -52,7 +56,7 @@ public class SmartBoard extends Application {
         loginStage.show();
     }
 
-    protected static void createNewUserStage() throws IOException {
+    public static void createNewUserStage() throws IOException {
         String fxmlCreateUserName = "newuser.fxml";
         FXMLLoader fxmlLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlCreateUserName));
         Scene scene = new Scene(fxmlLoader.load());

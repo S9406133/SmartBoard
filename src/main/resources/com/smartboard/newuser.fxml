@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="372.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.smartboard.NewUserController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="372.0" prefWidth="600.0" style="-fx-background-color: lightsteelblue;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartboard.controller.NewUserController">
    <children>
       <VBox layoutX="300.0" layoutY="62.0" prefHeight="200.0" prefWidth="100.0">
          <children>
@@ -20,7 +20,7 @@
                   <Insets left="50.0" right="50.0" top="20.0" />
                </VBox.margin>
                <image>
-                  <Image url="@../../../fry_avatar.jpg" />
+                  <Image url="@../../fry_avatar.jpg" />
                </image>
             </ImageView>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Click image to update" textAlignment="CENTER">

@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="466.0" prefWidth="686.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.smartboard.SBController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="466.0" prefWidth="790.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartboard.controller.SBController">
     <center>
         <TabPane prefWidth="1500.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
@@ -126,15 +126,18 @@
                         <Insets right="10.0" />
                     </padding>
                 </Label>
-                <ImageView fx:id="toolbarImage" fitHeight="32.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="toolbarImage" fitHeight="32.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../../../fry_avatar.jpg" />
+                        <Image url="@../../fry_avatar.jpg" />
                     </image>
                 </ImageView>
-                <Label fx:id="toolbarQuote" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefWidth="485.0" text="This is the inspirational quote" textAlignment="CENTER">
+                <Label fx:id="toolbarQuote" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" text="This is the inspirational quote" textAlignment="CENTER" textFill="#800909">
                     <font>
-                        <Font name="System Italic" size="14.0" />
+                        <Font name="System Italic" size="15.0" />
                     </font>
+               <padding>
+                  <Insets right="50.0" />
+               </padding>
                 </Label>
             </items>
         </ToolBar>

@@ -1,4 +1,4 @@
-package com.example.smartboard;
+package com.smartboard.controller;
 
 import javafx.fxml.FXML;
 

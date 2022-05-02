@@ -1,5 +1,7 @@
-package com.example.smartboard;
+package com.smartboard.controller;
 
+import com.smartboard.SmartBoard;
+import com.smartboard.model.Data;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,10 +22,12 @@ public class SBController implements Closable, Initializable {
     private String inputText;
     @FXML
     private Button mainExitButton;
+    @FXML
+    private Label toolbarQuote;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        toolbarQuote.setText(Data.getRandomQuote().toString());
     }
 
     @FXML

@@ -1,5 +1,6 @@
-package com.example.smartboard;
+package com.smartboard.controller;
 
+import com.smartboard.SmartBoard;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;

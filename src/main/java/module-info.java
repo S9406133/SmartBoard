@@ -1,9 +1,10 @@
-module com.example.smartboard {
-    requires javafx.controls;
-    requires javafx.fxml;
-    requires org.jetbrains.annotations;
+module com.smartboard {
+        requires javafx.controls;
+        requires javafx.fxml;
+        requires org.jetbrains.annotations;
 
-
-    opens com.example.smartboard to javafx.fxml;
-    exports com.example.smartboard;
+        opens com.smartboard to javafx.fxml;
+        exports com.smartboard;
+        exports com.smartboard.controller;
+        opens com.smartboard.controller to javafx.fxml;
 }
