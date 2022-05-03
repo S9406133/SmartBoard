@@ -2,14 +2,19 @@ package com.smartboard.controller;
 
 import com.smartboard.SmartBoard;
 import com.smartboard.model.Data;
+import com.smartboard.model.Project;
+import com.smartboard.view.LoginView;
+import com.smartboard.view.ProjectView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -21,6 +26,8 @@ import java.util.ResourceBundle;
 
 public class SBController implements Closable, Initializable {
 
+    @FXML
+    private TabPane projectsPane;
     private String inputText;
     @FXML
     private Button mainExitButton;
@@ -29,11 +36,26 @@ public class SBController implements Closable, Initializable {
     @FXML
     private ImageView toolbarImage;
     @FXML
-    private Label toolbarName;
+    protected Label toolbarName;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         toolbarQuote.setText(Data.getRandomQuote().toString());
+        setUserData();
+
+        projectsPane.getTabs().addAll(new Tab("init 1"), new Tab("init 2"));
+        ProjectView projectView = new ProjectView(projectsPane);
+
+        for (Project project: Data.currentUser.getSubItemList()) {
+            projectView.createProjectView(project);
+            if (project.isDefault()) {
+                System.out.println(project.isDefault());
+                projectsPane.getSelectionModel().selectLast();
+            }
+        }
+    }
+
+    public void setUserData(){
         toolbarImage.setImage(new Image(Data.currentUser.getImagePath()));
         toolbarName.setText(Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName());
     }
@@ -102,7 +124,7 @@ public class SBController implements Closable, Initializable {
     @FXML
     protected void onLogoutMenuItemSelected() {
         try {
-            SmartBoard.createLoginStage();
+            LoginView.createLoginStage();
             Stage stage = (Stage) mainExitButton.getScene().getWindow();
             stage.close();
         } catch (IOException ioe) {
@@ -127,8 +149,11 @@ public class SBController implements Closable, Initializable {
     protected void showAboutInfo() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About Smart Board");
-        alert.setHeaderText("Smart Board version 1.1\nDeveloper: Simon Mckindley" +
-                "\nCreated for Further Programming A2\nMay 2022");
+        alert.setHeaderText("""
+                Smart Board version 1.1
+                Developer: Simon Mckindley
+                Created for Further Programming A2
+                May 2022""");
         alert.showAndWait();
     }
 

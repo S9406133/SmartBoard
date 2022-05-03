@@ -1,19 +1,42 @@
 package com.smartboard.controller;
 
+import com.smartboard.model.Data;
+import com.smartboard.model.StringLengthException;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-public class EditProfileController implements Closable {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class EditProfileController implements Closable, Initializable {
 
     @FXML
-    protected Button editCloseButton;
+    private ImageView editUserImage;
     @FXML
-    protected TextField editFirstnameField;
+    private Label currentUsername;
     @FXML
-    protected TextField editLastnameField;
+    private Label currentName;
+    @FXML
+    private Button editCloseButton;
+    @FXML
+    private TextField editFirstnameField;
+    @FXML
+    private TextField editLastnameField;
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        currentUsername.setText(Data.currentUser.getName());
+        currentName.setText(Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName());
+        editUserImage.setImage(new Image(Data.currentUser.getImagePath()));
+    }
 
     @FXML
     @Override
@@ -27,21 +50,31 @@ public class EditProfileController implements Closable {
         String firstname = editFirstnameField.getText().strip();
         String lastname = editLastnameField.getText().strip();
         boolean updated = false;
+        String alertMessage = "No data entered";
 
-        if (!firstname.isBlank()){
-            System.out.println("updated - First name: " + firstname);
-            updated = true;
-        }
-        if (!lastname.isBlank()){
-            System.out.println("updated - Last name: " + lastname);
-            updated = true;
+        try {
+            if (!firstname.isBlank()) {
+                System.out.println("updated - First name: " + firstname);
+                Data.currentUser.setFirstName(firstname);
+                updated = true;
+            }
+            if (!lastname.isBlank()) {
+                System.out.println("updated - Last name: " + lastname);
+                Data.currentUser.setLastName(lastname);
+                updated = true;
+            }
+        }catch(StringLengthException sle){
+            alertMessage = sle.getMessage();
         }
 
         if (!updated) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("No data entered");
+            alert.setHeaderText(alertMessage);
             alert.showAndWait();
         } else {
+            // TODO update sb names somehow
+            SBController sbController = new SBController();
+            sbController.setUserData();
             this.handleCloseButtonAction();
         }
     }

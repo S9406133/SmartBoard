@@ -1,8 +1,9 @@
 package com.smartboard.controller;
 
-import com.smartboard.SmartBoard;
 import com.smartboard.model.Data;
 import com.smartboard.model.StringLengthException;
+import com.smartboard.view.LoginView;
+import com.smartboard.view.SmartBoardView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -56,7 +57,7 @@ public class NewUserController implements Closable, Initializable {
                 exitAlert.setHeaderText(headerText);
                 exitAlert.showAndWait();
 
-                SmartBoard.createPrimaryStage();
+                SmartBoardView.createSmartBoardStage();
                 Stage stage = (Stage) createUserButton.getScene().getWindow();
                 stage.close();
             } catch (IOException ioe) {
@@ -73,7 +74,7 @@ public class NewUserController implements Closable, Initializable {
     @Override
     public void handleCloseButtonAction() {
         try {
-            SmartBoard.createLoginStage();
+            LoginView.createLoginStage();
             Stage stage = (Stage) closeButton.getScene().getWindow();
             stage.close();
         } catch (IOException ioe) {

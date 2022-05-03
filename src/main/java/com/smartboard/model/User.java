@@ -26,7 +26,7 @@ public class User extends BoardItem<Project> {
 	}
 
 	@Override
-	protected void addSubItem(String subItemName) throws StringLengthException {
+	public void addSubItem(String subItemName) throws StringLengthException {
 		this.subItems.add(new Project(subItemName));
 
 		if ((getDefaultProject() == null)) {
@@ -64,7 +64,7 @@ public class User extends BoardItem<Project> {
 		return firstName;
 	}
 
-	protected void setFirstName(String firstName) throws StringLengthException {
+	public void setFirstName(String firstName) throws StringLengthException {
 		if (firstName.length() > 2) {
 			this.firstName = firstName;
 		} else {
@@ -76,7 +76,7 @@ public class User extends BoardItem<Project> {
 		return lastName;
 	}
 
-	protected void setLastName(String lastName) throws StringLengthException {
+	public void setLastName(String lastName) throws StringLengthException {
 		if (lastName.length() > 2) {
 			this.lastName = lastName;
 		} else {

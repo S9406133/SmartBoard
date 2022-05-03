@@ -14,7 +14,7 @@ public class Task extends BoardItem<String> {
 	}
 
 	@Override
-	protected void addSubItem(String subItemName) {
+	public void addSubItem(String subItemName) {
 		this.subItems.add(subItemName);
 	}
 
@@ -28,7 +28,7 @@ public class Task extends BoardItem<String> {
 		}
 	}
 
-	protected LocalDateTime getDueDate() {
+	public LocalDateTime getDueDate() {
 		return this.dueDate;
 	}
 

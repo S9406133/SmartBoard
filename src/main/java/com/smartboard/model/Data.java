@@ -18,6 +18,8 @@ public class Data {
 
     public static void createInitUser() throws StringLengthException {
         users.add(new User("Simo", "a", "Simon", "James"));
+
+        //currentUser = users.get(0); // Only for testing - no login required
     }
 
     public static Quote getRandomQuote() {

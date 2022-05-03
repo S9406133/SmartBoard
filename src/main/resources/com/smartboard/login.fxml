@@ -7,10 +7,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: lightsteelblue;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartboard.controller.LoginController">
    <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3f2ff" height="145.0" layoutX="147.0" layoutY="95.0" stroke="TRANSPARENT" strokeType="INSIDE" width="306.0" />
       <Label layoutX="67.0" layoutY="30.0" lineSpacing="1.0" text="Welcome to Smart Board" textAlignment="CENTER">
          <font>
             <Font name="Bookman Old Style Bold" size="36.0" />

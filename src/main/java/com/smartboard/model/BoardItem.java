@@ -19,21 +19,21 @@ public abstract class BoardItem<T> {
 		this.subItems = new ArrayList<>();
 	}
 
-	protected abstract void addSubItem(String subItemName) throws StringLengthException;
+	public abstract void addSubItem(String subItemName) throws StringLengthException;
 
-	protected boolean removeSubItem(BoardItem item) {
+	public boolean removeSubItem(BoardItem item) {
 		return this.subItems.remove(item);
 	}
 
-	protected T getSubItem(int index) throws IndexOutOfBoundsException {
+	public T getSubItem(int index) throws IndexOutOfBoundsException {
 		return this.subItems.get(index);
 	}
 
-	protected List<T> getSubItemList() {
+	public List<T> getSubItemList() {
 		return this.subItems;
 	}
 
-	protected int getListSize() {
+	public int getListSize() {
 		return this.subItems.size();
 	}
 
@@ -41,7 +41,7 @@ public abstract class BoardItem<T> {
 		return this.name;
 	}
 
-	protected void setName(String name) throws StringLengthException {
+	public void setName(String name) throws StringLengthException {
 		if (name.length() > 2) {
 			this.name = name;
 		} else {

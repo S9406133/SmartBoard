@@ -14,15 +14,15 @@ public class Project extends BoardItem<Column> {
 	}
 
 	@Override
-	protected void addSubItem(String subItemName) throws StringLengthException {
+	public void addSubItem(String subItemName) throws StringLengthException {
 		this.subItems.add(new Column(subItemName));
 	}
 
-	protected boolean isDefault() {
+	public boolean isDefault() {
 		return isDefault;
 	}
 
-	protected void setDefault(boolean isDefault) {
+	public void setDefault(boolean isDefault) {
 		this.isDefault = isDefault;
 		
 		if (isDefault) {

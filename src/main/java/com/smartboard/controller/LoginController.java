@@ -1,9 +1,9 @@
 package com.smartboard.controller;
 
-import com.smartboard.SmartBoard;
 import com.smartboard.model.Data;
+import com.smartboard.view.NewUserView;
+import com.smartboard.view.SmartBoardView;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -28,7 +28,7 @@ public class LoginController implements Closable {
             try {
                 Data.login(username, password);
 
-                SmartBoard.createPrimaryStage();
+                SmartBoardView.createSmartBoardStage();
 
                 handleCloseButtonAction();
             } catch (IOException ioe) {
@@ -45,7 +45,7 @@ public class LoginController implements Closable {
     @FXML
     private void onCreateUserButtonClick() {
         try {
-            SmartBoard.createNewUserStage();
+            NewUserView.createNewUserStage();
             handleCloseButtonAction();
         } catch (IOException ioe) {
             System.out.println(ioe.getMessage());
