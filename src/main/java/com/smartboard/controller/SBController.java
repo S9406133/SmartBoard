@@ -40,6 +40,7 @@ public class SBController implements Closable, Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         staticToolbarImage = toolbarImage;
         staticToolbarName = toolbarName;
+        projectsPane.setTabMinWidth(100);
 
         toolbarImage.setImage(new Image(Data.currentUser.getImagePath()));
         toolbarName.setText(Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName());
@@ -89,9 +90,11 @@ public class SBController implements Closable, Initializable {
         }
     }
 
-    private void addProject(){
-        TextInputDialog.show("Create a new project", "Project title");
-
+    private void addProject() throws StringLengthException {
+        String name = TextInputDialog.show("Create a new project", "Project title");
+        Data.currentUser.addSubItem(name);
+        Project newProject = Data.currentUser.getSubItem(Data.currentUser.getListSize() - 1);
+        projectView.createProjectView(newProject);
     }
 
     private void renameProject() throws StringLengthException {
