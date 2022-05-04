@@ -3,6 +3,7 @@ package com.smartboard.model;
 public class Project extends BoardItem<Column> {
 	
 	private boolean isDefault;
+	private final String DEF_NAME_SUFFIX = " #";
 
 	public Project(String name) throws StringLengthException {
 		super(name);
@@ -18,6 +19,15 @@ public class Project extends BoardItem<Column> {
 		this.subItems.add(new Column(subItemName));
 	}
 
+	@Override
+	public void setName(String name) throws StringLengthException {
+		super.setName(name);
+
+		if (this.isDefault){
+			this.name += DEF_NAME_SUFFIX;
+		}
+	}
+
 	public boolean isDefault() {
 		return isDefault;
 	}
@@ -26,9 +36,9 @@ public class Project extends BoardItem<Column> {
 		this.isDefault = isDefault;
 		
 		if (isDefault) {
-			this.name += " #";
+			this.name += DEF_NAME_SUFFIX;
 		}else {
-			int index = this.name.indexOf(" #");
+			int index = this.name.indexOf(DEF_NAME_SUFFIX);
 			if (index > 1) {
 				this.name = this.name.substring(0, index).strip();
 			}

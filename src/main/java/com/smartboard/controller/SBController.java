@@ -1,23 +1,19 @@
 package com.smartboard.controller;
 
-import com.smartboard.SmartBoard;
 import com.smartboard.model.Data;
 import com.smartboard.model.Project;
+import com.smartboard.model.StringLengthException;
+import com.smartboard.view.EditProfileView;
 import com.smartboard.view.LoginView;
 import com.smartboard.view.ProjectView;
+import com.smartboard.view.TextInputDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -28,36 +24,37 @@ public class SBController implements Closable, Initializable {
 
     @FXML
     private TabPane projectsPane;
-    private String inputText;
+    private ProjectView projectView;
     @FXML
     private Button mainExitButton;
     @FXML
     private Label toolbarQuote;
     @FXML
     private ImageView toolbarImage;
+    public static ImageView staticToolbarImage;
     @FXML
     protected Label toolbarName;
+    public static Label staticToolbarName;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        staticToolbarImage = toolbarImage;
+        staticToolbarName = toolbarName;
+
+        toolbarImage.setImage(new Image(Data.currentUser.getImagePath()));
+        toolbarName.setText(Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName());
+
         toolbarQuote.setText(Data.getRandomQuote().toString());
-        setUserData();
 
-        projectsPane.getTabs().addAll(new Tab("init 1"), new Tab("init 2"));
-        ProjectView projectView = new ProjectView(projectsPane);
+        projectView = new ProjectView(projectsPane);
 
-        for (Project project: Data.currentUser.getSubItemList()) {
+        for (Project project : Data.currentUser.getSubItemList()) {
             projectView.createProjectView(project);
             if (project.isDefault()) {
-                System.out.println(project.isDefault());
                 projectsPane.getSelectionModel().selectLast();
             }
         }
-    }
-
-    public void setUserData(){
-        toolbarImage.setImage(new Image(Data.currentUser.getImagePath()));
-        toolbarName.setText(Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName());
+        //projectsPane.getTabs().addAll(new Tab("init 1"), new Tab("init 2"));
     }
 
     @FXML
@@ -77,46 +74,40 @@ public class SBController implements Closable, Initializable {
     @FXML
     protected void showInputDialog(@NotNull ActionEvent event) {
         try {
-            String title = "", prompt = "";
             String id = ((MenuItem) event.getTarget()).getId();
-            System.out.println(id);
 
             switch (id) {
-                case "newProject" -> {
-                    title = "Create a new project";
-                    prompt = "Project title";
-                }
-                case "newColumn" -> {
-                    title = "Add a new column";
-                    prompt = "Column name";
-                }
-                case "renameProject" -> {
-                    title = "Rename project";
-                    prompt = "Project title";
-                }
+                case "newProject" -> addProject();
+                case "newColumn" -> TextInputDialog.show("Add a new column", "Column name");
+                case "renameProject" -> renameProject();
             }
 
-            inputText = TextInputDialog.show(title, prompt);
-            System.out.println(inputText);
         } catch (ClassCastException cce) {
             System.out.println(cce.getMessage());
+        } catch (StringLengthException sle) {
+            Utility.errorAlert(sle.getMessage());
         }
     }
 
+    private void addProject(){
+        TextInputDialog.show("Create a new project", "Project title");
+
+    }
+
+    private void renameProject() throws StringLengthException {
+        String newName = TextInputDialog.show("Rename project", "Project title");
+        int currentTabIndex = projectsPane.getSelectionModel().getSelectedIndex();
+        Data.currentUser.getSubItem(currentTabIndex).setName(newName);
+        projectsPane.getTabs().get(currentTabIndex).setText(
+                Data.currentUser.getSubItem(currentTabIndex).getName()
+        );
+    }
+
     @FXML
-    protected void onEditProfileSelected(){
+    protected void onEditProfileSelected() {
         try {
-            String fxmlName = "editprofile.fxml";
-            FXMLLoader fxmlLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlName));
-            Scene editScene = new Scene(fxmlLoader.load());
-            Stage editStage = new Stage(StageStyle.UTILITY);
-            editStage.initModality(Modality.APPLICATION_MODAL);
-            editStage.setTitle("Edit user profile");
-            editStage.getIcons().add(SmartBoard.icon);
-            editStage.setScene(editScene);
-            editStage.setResizable(false);
-            editStage.showAndWait();
-        } catch (IOException ioe){
+            EditProfileView.createEditProfileStage();
+        } catch (IOException ioe) {
             System.out.println(ioe.getMessage());
         }
     }

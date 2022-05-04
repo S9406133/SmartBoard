@@ -1,4 +1,4 @@
-package com.smartboard.controller;
+package com.smartboard.view;
 
 import com.smartboard.SmartBoard;
 import javafx.geometry.Insets;

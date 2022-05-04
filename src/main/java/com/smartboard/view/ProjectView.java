@@ -14,12 +14,14 @@ import java.util.ArrayList;
 public class ProjectView extends Pane {
 
     private final TabPane tabPane;
+    public static String staticProjectName;
 
     public ProjectView(TabPane tabPane) {
         this.tabPane = tabPane;
     }
 
     public void createProjectView(Project project) {
+        staticProjectName = project.getName();
         HBox hBox = new HBox();
 
         for (Column column : project.getSubItemList()) {
@@ -30,13 +32,6 @@ public class ProjectView extends Pane {
         ScrollPane scrollPane = new ScrollPane(hBox);
 
         Tab projectTab = new Tab(project.getName(), scrollPane);
-
-        SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-        if (project.isDefault()) {
-            System.out.println(project.isDefault());
-            tabPane.getSelectionModel().select(projectTab); //Select tab index
-            //selectionModel.select(projectTab); //TODO
-        }
 
         tabPane.getTabs().add(projectTab);
     }
@@ -95,14 +90,14 @@ public class ProjectView extends Pane {
     }
 
     //TODO
-    private String getFormattedDate(LocalDateTime dateTime){
+    private String getFormattedDate(LocalDateTime dateTime) {
         String date = String.format("");
 
         return date;
     }
 
     //TODO
-    private String getChecklistSummary(ArrayList<String> checklist){
+    private String getChecklistSummary(ArrayList<String> checklist) {
 
         return "";
     }

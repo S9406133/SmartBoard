@@ -54,12 +54,10 @@ public class EditProfileController implements Closable, Initializable {
 
         try {
             if (!firstname.isBlank()) {
-                System.out.println("updated - First name: " + firstname);
                 Data.currentUser.setFirstName(firstname);
                 updated = true;
             }
             if (!lastname.isBlank()) {
-                System.out.println("updated - Last name: " + lastname);
                 Data.currentUser.setLastName(lastname);
                 updated = true;
             }
@@ -72,9 +70,7 @@ public class EditProfileController implements Closable, Initializable {
             alert.setHeaderText(alertMessage);
             alert.showAndWait();
         } else {
-            // TODO update sb names somehow
-            SBController sbController = new SBController();
-            sbController.setUserData();
+            SBController.staticToolbarName.setText(Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName());
             this.handleCloseButtonAction();
         }
     }

@@ -7,4 +7,6 @@ module com.smartboard {
         exports com.smartboard;
         exports com.smartboard.controller;
         opens com.smartboard.controller to javafx.fxml;
+    exports com.smartboard.view;
+    opens com.smartboard.view to javafx.fxml;
 }
