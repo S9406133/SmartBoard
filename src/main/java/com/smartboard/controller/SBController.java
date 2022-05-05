@@ -1,5 +1,6 @@
 package com.smartboard.controller;
 
+import com.smartboard.model.Column;
 import com.smartboard.model.Data;
 import com.smartboard.model.Project;
 import com.smartboard.model.StringLengthException;
@@ -8,11 +9,13 @@ import com.smartboard.view.LoginView;
 import com.smartboard.view.ProjectView;
 import com.smartboard.view.TextInputDialog;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,18 +47,10 @@ public class SBController implements Closable, Initializable {
 
         toolbarImage.setImage(new Image(Data.currentUser.getImagePath()));
         toolbarName.setText(Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName());
-
         toolbarQuote.setText(Data.getRandomQuote().toString());
 
         projectView = new ProjectView(projectsPane);
-
-        for (Project project : Data.currentUser.getSubItemList()) {
-            projectView.createProjectView(project);
-            if (project.isDefault()) {
-                projectsPane.getSelectionModel().selectLast();
-            }
-        }
-        //projectsPane.getTabs().addAll(new Tab("init 1"), new Tab("init 2"));
+        displayProjects();
     }
 
     @FXML
@@ -79,7 +74,7 @@ public class SBController implements Closable, Initializable {
 
             switch (id) {
                 case "newProject" -> addProject();
-                case "newColumn" -> TextInputDialog.show("Add a new column", "Column name");
+                case "newColumn" -> addColumn();
                 case "renameProject" -> renameProject();
             }
 
@@ -90,6 +85,15 @@ public class SBController implements Closable, Initializable {
         }
     }
 
+    private void displayProjects() {
+        for (Project project : Data.currentUser.getSubItemList()) {
+            projectView.createProjectView(project);
+            if (project.isDefault()) {
+                projectsPane.getSelectionModel().selectLast();
+            }
+        }
+    }
+
     private void addProject() throws StringLengthException {
         String name = TextInputDialog.show("Create a new project", "Project title");
         Data.currentUser.addSubItem(name);
@@ -97,13 +101,28 @@ public class SBController implements Closable, Initializable {
         projectView.createProjectView(newProject);
     }
 
+    private void addColumn() throws StringLengthException {
+        String name = TextInputDialog.show("Add a new column", "Column name");
+        int currentTabIndex = getCurrentTabIndex();
+        Project currentProject = getCurrentProject();
+        currentProject.addSubItem(name);
+        Column newColumn = currentProject.getSubItem(currentProject.getListSize() - 1);
+
+        try {
+            ScrollPane scrollPane = (ScrollPane) projectsPane.getTabs().get(currentTabIndex).getContent();
+            HBox hBox = (HBox) scrollPane.getContent();
+            hBox.getChildren().add(projectView.createColumnView(newColumn));
+        } catch (ClassCastException cce) {
+            System.out.println(cce.getMessage());
+        }
+    }
+
     private void renameProject() throws StringLengthException {
         String newName = TextInputDialog.show("Rename project", "Project title");
-        int currentTabIndex = projectsPane.getSelectionModel().getSelectedIndex();
-        Data.currentUser.getSubItem(currentTabIndex).setName(newName);
-        projectsPane.getTabs().get(currentTabIndex).setText(
-                Data.currentUser.getSubItem(currentTabIndex).getName()
-        );
+        int currentTabIndex = getCurrentTabIndex();
+        Project currentProject = getCurrentProject();
+        currentProject.setName(newName);
+        projectsPane.getTabs().get(currentTabIndex).setText(currentProject.getName());
     }
 
     @FXML
@@ -123,6 +142,22 @@ public class SBController implements Closable, Initializable {
             stage.close();
         } catch (IOException ioe) {
             System.out.println(ioe.getMessage());
+        }
+    }
+
+    @FXML
+    protected void onSetDefaultSelected() {
+        Project currentProject = getCurrentProject();
+
+        if (!currentProject.isDefault()) {
+            Data.currentUser.setDefaultProject(getCurrentTabIndex());
+
+            for (int i = 0; i < Data.currentUser.getListSize(); i++) {
+                projectsPane.getTabs().get(i).setText(Data.currentUser.getSubItem(i).getName());
+            }
+            System.out.println("New default set: "+ currentProject.getName());
+        }else {
+            System.out.println("is already default");
         }
     }
 
@@ -149,6 +184,14 @@ public class SBController implements Closable, Initializable {
                 Created for Further Programming A2
                 May 2022""");
         alert.showAndWait();
+    }
+
+    private int getCurrentTabIndex() {
+        return projectsPane.getSelectionModel().getSelectedIndex();
+    }
+
+    private Project getCurrentProject() {
+        return Data.currentUser.getSubItem(getCurrentTabIndex());
     }
 
 }

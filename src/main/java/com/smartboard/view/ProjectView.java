@@ -1,8 +1,11 @@
 package com.smartboard.view;
 
+import com.smartboard.controller.SBController;
 import com.smartboard.model.Column;
 import com.smartboard.model.Project;
 import com.smartboard.model.Task;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.*;
@@ -14,14 +17,12 @@ import java.util.ArrayList;
 public class ProjectView extends Pane {
 
     private final TabPane tabPane;
-    public static String staticProjectName;
 
     public ProjectView(TabPane tabPane) {
         this.tabPane = tabPane;
     }
 
     public void createProjectView(Project project) {
-        staticProjectName = project.getName();
         HBox hBox = new HBox();
 
         for (Column column : project.getSubItemList()) {
