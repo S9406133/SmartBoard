@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class SBController implements Closable, Initializable {
@@ -27,6 +28,9 @@ public class SBController implements Closable, Initializable {
     @FXML
     private TabPane projectsPane;
     private ProjectView projectView;
+    @FXML
+    private Menu workspaceMenu;
+    private ArrayList<MenuItem> itemList;
     @FXML
     private Button mainExitButton;
     @FXML
@@ -37,6 +41,10 @@ public class SBController implements Closable, Initializable {
     @FXML
     protected Label toolbarName;
     public static Label staticToolbarName;
+
+    public SBController() {
+        itemList = new ArrayList<>();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -85,10 +93,35 @@ public class SBController implements Closable, Initializable {
     }
 
     private void displayProjects() {
+        int i = 0;
         for (Project project : Data.currentUser.getSubItemList()) {
             projectView.createProjectView(project);
             if (project.isDefault()) {
                 projectsPane.getSelectionModel().selectLast();
+            }
+            addProjectToMenu(project, projectsPane.getTabs().get(i));
+            i++;
+        }
+    }
+
+    protected void addProjectToMenu(Project project, Tab tab) {
+        itemList.add(new MenuItem(project.getName()));
+        MenuItem currItem = itemList.get(itemList.size() - 1);
+        currItem.setId(project.getName());
+        currItem.setOnAction(actionEvent -> {
+            projectsPane.getSelectionModel().select(tab);
+        });
+
+        workspaceMenu.getItems().add(currItem);
+    }
+
+    private void removeProjectsFromMenu() {
+        for (MenuItem item : workspaceMenu.getItems()) {
+            if (item.getId() != null) {
+                if (!item.getId().equals("newProject")) {
+                    System.out.println(item.getId());
+                    item.setVisible(false);
+                }
             }
         }
     }
@@ -98,6 +131,7 @@ public class SBController implements Closable, Initializable {
         Data.currentUser.addSubItem(name);
         Project newProject = Data.currentUser.getSubItem(Data.currentUser.getListSize() - 1);
         projectView.createProjectView(newProject);
+        addProjectToMenu(newProject, projectsPane.getTabs().get(Data.currentUser.getListSize() - 1));
     }
 
     private void addColumn() throws StringLengthException {
@@ -154,9 +188,6 @@ public class SBController implements Closable, Initializable {
             for (int i = 0; i < Data.currentUser.getListSize(); i++) {
                 projectsPane.getTabs().get(i).setText(Data.currentUser.getSubItem(i).getName());
             }
-            System.out.println("New default set: "+ currentProject.getName());
-        }else {
-            System.out.println("is already default");
         }
     }
 
@@ -167,20 +198,21 @@ public class SBController implements Closable, Initializable {
         Alert deleteAlert = new Alert(Alert.AlertType.WARNING);
         deleteAlert.getButtonTypes().add(ButtonType.CANCEL);
         deleteAlert.setTitle(alertTitle);
-        deleteAlert.setHeaderText("You're about to delete the current project - " + projectName +"!");
+        deleteAlert.setHeaderText("You're about to delete the current project - " + projectName + "!");
         deleteAlert.setContentText("Press OK to delete, or cancel to return to Smart Board");
 
         if (deleteAlert.showAndWait().get() == ButtonType.OK) {
-            if (Data.currentUser.removeSubItem(getCurrentProject())){
+            if (Data.currentUser.removeSubItem(getCurrentProject())) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle(alertTitle);
                 alert.setHeaderText("Project - " + projectName + " successfully deleted.");
                 alert.showAndWait();
 
+                removeProjectsFromMenu();
                 projectsPane.getTabs().clear();
                 displayProjects();
 
-            } else{
+            } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle(alertTitle);
                 alert.setHeaderText("Error deleting project - " + projectName);
