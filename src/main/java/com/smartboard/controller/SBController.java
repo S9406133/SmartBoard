@@ -9,7 +9,6 @@ import com.smartboard.view.LoginView;
 import com.smartboard.view.ProjectView;
 import com.smartboard.view.TextInputDialog;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -108,7 +107,7 @@ public class SBController implements Closable, Initializable {
         currentProject.addSubItem(name);
         Column newColumn = currentProject.getSubItem(currentProject.getListSize() - 1);
 
-        try {
+        try {       // Could also clear the pane and reload
             ScrollPane scrollPane = (ScrollPane) projectsPane.getTabs().get(currentTabIndex).getContent();
             HBox hBox = (HBox) scrollPane.getContent();
             hBox.getChildren().add(projectView.createColumnView(newColumn));
@@ -163,14 +162,30 @@ public class SBController implements Closable, Initializable {
 
     @FXML
     protected void onDeleteProjectSelected() {
+        String alertTitle = "Delete project";
+        String projectName = getCurrentProject().getName();
         Alert deleteAlert = new Alert(Alert.AlertType.WARNING);
         deleteAlert.getButtonTypes().add(ButtonType.CANCEL);
-        deleteAlert.setTitle("Delete project");
-        deleteAlert.setHeaderText("You're about to delete the current project!");
+        deleteAlert.setTitle(alertTitle);
+        deleteAlert.setHeaderText("You're about to delete the current project - " + projectName +"!");
         deleteAlert.setContentText("Press OK to delete, or cancel to return to Smart Board");
 
         if (deleteAlert.showAndWait().get() == ButtonType.OK) {
-            System.out.println("Project has been deleted");
+            if (Data.currentUser.removeSubItem(getCurrentProject())){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(alertTitle);
+                alert.setHeaderText("Project - " + projectName + " successfully deleted.");
+                alert.showAndWait();
+
+                projectsPane.getTabs().clear();
+                displayProjects();
+
+            } else{
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(alertTitle);
+                alert.setHeaderText("Error deleting project - " + projectName);
+                alert.showAndWait();
+            }
         }
     }
 

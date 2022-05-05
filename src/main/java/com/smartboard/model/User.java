@@ -1,10 +1,8 @@
 package com.smartboard.model;
 
-import java.util.List;
-
 public class User extends BoardItem<Project> {
 
-    private String password;
+    private final String password;
     private String firstName;
     private String lastName;
     private String imagePath;
@@ -34,6 +32,18 @@ public class User extends BoardItem<Project> {
         }
     }
 
+    @Override
+    public boolean removeSubItem(BoardItem item) {
+        boolean success = this.subItems.remove(item);
+
+        if (success && (getDefaultProject() == null) && (this.getListSize() > 0)) {
+            setDefaultProject(0);
+        }
+
+
+        return success;
+    }
+
     public boolean validateLogin(String username, String password) {
         return this.name.equalsIgnoreCase(username) && this.password.equals(password);
     }
@@ -54,7 +64,9 @@ public class User extends BoardItem<Project> {
     public void setDefaultProject(int index) throws IndexOutOfBoundsException {
 
         if (!this.subItems.get(index).isDefault()) {
-            getDefaultProject().setDefault(false);
+            if (getDefaultProject() != null) {
+                getDefaultProject().setDefault(false);
+            }
             this.subItems.get(index).setDefault(true);
         }
     }
