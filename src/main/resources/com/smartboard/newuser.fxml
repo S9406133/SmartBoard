@@ -18,7 +18,7 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3f2ff" height="294.0" layoutX="35.0" layoutY="75.0" stroke="TRANSPARENT" strokeType="INSIDE" width="279.0" />
       <VBox layoutX="353.0" layoutY="63.0" prefHeight="200.0" prefWidth="100.0">
          <children>
-            <ImageView fx:id="userImage" fitHeight="150.0" fitWidth="169.0" onMouseClicked="#handleCloseButtonAction" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="userImage" fitHeight="150.0" fitWidth="169.0" onMouseClicked="#onImageClicked" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
                   <Insets left="50.0" right="50.0" top="20.0" />
                </VBox.margin>

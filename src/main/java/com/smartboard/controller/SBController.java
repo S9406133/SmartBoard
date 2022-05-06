@@ -108,9 +108,7 @@ public class SBController implements Closable, Initializable {
         itemList.add(new MenuItem(project.getName()));
         MenuItem currItem = itemList.get(itemList.size() - 1);
         currItem.setId(project.getName());
-        currItem.setOnAction(actionEvent -> {
-            projectsPane.getSelectionModel().select(tab);
-        });
+        currItem.setOnAction(actionEvent -> projectsPane.getSelectionModel().select(tab));
 
         workspaceMenu.getItems().add(currItem);
     }
@@ -119,7 +117,6 @@ public class SBController implements Closable, Initializable {
         for (MenuItem item : workspaceMenu.getItems()) {
             if (item.getId() != null) {
                 if (!item.getId().equals("newProject")) {
-                    System.out.println(item.getId());
                     item.setVisible(false);
                 }
             }

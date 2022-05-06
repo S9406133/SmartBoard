@@ -2,8 +2,11 @@ package com.smartboard.controller;
 
 import com.smartboard.model.Data;
 import com.smartboard.model.StringLengthException;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,10 +15,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class EditProfileController implements Closable, Initializable {
+public class EditProfileController implements Closable, Initializable, UpdatableImage {
 
     @FXML
     private ImageView editUserImage;
@@ -46,6 +50,21 @@ public class EditProfileController implements Closable, Initializable {
     }
 
     @FXML
+    @Override
+    public void onImageClicked(Event event) {
+        handleCloseButtonAction();
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        File imageFile = Utility.displayFileChooser(stage);
+
+        if (imageFile != null) {
+            System.out.println(imageFile);
+            Data.currentUser.setImagePath(imageFile.getPath());
+            SBController.staticToolbarImage.setImage(new Image(Data.currentUser.getImagePath()));
+        }
+    }
+
+    @FXML
     protected void onUpdateClicked() {
         String firstname = editFirstnameField.getText().strip();
         String lastname = editLastnameField.getText().strip();
@@ -61,7 +80,7 @@ public class EditProfileController implements Closable, Initializable {
                 Data.currentUser.setLastName(lastname);
                 updated = true;
             }
-        }catch(StringLengthException sle){
+        } catch (StringLengthException sle) {
             alertMessage = sle.getMessage();
         }
 

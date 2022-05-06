@@ -9,7 +9,10 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,10 +43,16 @@ public class ProjectView extends Pane {
     public VBox createColumnView(Column column) {
         // Column Header
         Button addTaskButton = new Button("Add Task");
+        Button deleteButton = new Button();
+        ImageView deleteIcon = new ImageView(new Image("delete_icon.png"));
+        deleteIcon.preserveRatioProperty().setValue(true);
+        deleteIcon.setFitHeight(17);
+        deleteButton.setGraphic(deleteIcon);
         Label columnLabel = new Label(column.getName());
+        columnLabel.setFont(new Font(14));
         columnLabel.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-        columnLabel.setPrefWidth(200);
-        ToolBar columnHeader = new ToolBar(addTaskButton, columnLabel);
+        columnLabel.setPrefWidth(180);
+        ToolBar columnHeader = new ToolBar(addTaskButton, deleteButton, columnLabel);
         columnHeader.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         columnHeader.setStyle("-fx-background-color: lightblue; -fx-border-color: grey;");
         VBox.setMargin(columnHeader, new Insets(5));
@@ -67,9 +76,9 @@ public class ProjectView extends Pane {
         Button update = new Button("Update");
         Button delete = new Button("Delete");
         update.setPrefWidth(65);
-        delete.setPrefWidth(65);
         update.setLayoutX(225);
         update.setLayoutY(44);
+        delete.setPrefWidth(65);
         delete.setLayoutX(225);
         delete.setLayoutY(74);
         Label taskName = new Label(task.getName());

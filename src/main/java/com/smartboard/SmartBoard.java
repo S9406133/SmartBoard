@@ -3,6 +3,7 @@ package com.smartboard;
 import com.smartboard.model.Data;
 import com.smartboard.model.StringLengthException;
 import com.smartboard.view.LoginView;
+import com.smartboard.view.SmartBoardView;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
