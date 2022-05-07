@@ -16,6 +16,11 @@ public class Utility {
 
     public static File displayFileChooser(Stage stage){
         FileChooser fileChooser = new FileChooser();
+
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter(
+                        "Image Files", "*.jpg", "*.JPG", "*.png", "*.PNG", "*.gif", "*.GIF")
+        );
         return fileChooser.showOpenDialog(stage);
     }
 }

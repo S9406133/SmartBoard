@@ -24,7 +24,6 @@ public class SmartBoardView {
         Stage primaryStage = new Stage();
         primaryStage.setTitle("Smart Board");
         primaryStage.getIcons().add(SmartBoard.icon);
-//        primaryStage.setMaximized(true);
         primaryStage.setScene(primaryScene);
         primaryStage.show();
     }

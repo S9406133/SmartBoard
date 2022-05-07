@@ -1,11 +1,8 @@
 package com.smartboard.view;
 
-import com.smartboard.controller.SBController;
 import com.smartboard.model.Column;
 import com.smartboard.model.Project;
 import com.smartboard.model.Task;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.*;

@@ -1,7 +1,6 @@
 package com.smartboard.model;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Data {
 
@@ -22,54 +21,4 @@ public class Data {
         //currentUser = users.get(0); // Only for testing - no login required
     }
 
-    public static Quote getRandomQuote() {
-        Random rand = new Random();
-        int randomInt = rand.nextInt(QUOTES.length);
-        return QUOTES[randomInt];
-    }
-
-    public static void login(String username, String password) throws IllegalArgumentException {
-
-        for (User user : users) {
-            if (user.getName().equalsIgnoreCase(username)) {
-                if (user.validateLogin(username, password)) {
-                    currentUser = user;
-                    break;
-                } else {
-                    throw new IllegalArgumentException("Password is incorrect");
-                }
-            }
-        }
-
-        if (currentUser == null) {
-            throw new IllegalArgumentException("No such Username");
-        }
-    }
-
-    public static void createUser(String username, String password, String firstName, String lastName)
-            throws IllegalArgumentException, StringLengthException {
-
-        if (usernameExists(username)) {
-            throw new IllegalArgumentException("This Username already exists");
-        }
-
-        users.add(new User(username, password, firstName, lastName));
-        currentUser = users.get(users.size() - 1);
-    }
-
-    /**
-     * Method to find if the username already exists in the users list
-     */
-    private static boolean usernameExists(String username) {
-        boolean returnVal = false;
-
-        for (User user : users) {
-            if (username.equalsIgnoreCase(user.getName())) {
-                returnVal = true;
-                break;
-            }
-        }
-
-        return returnVal;
-    }
 }

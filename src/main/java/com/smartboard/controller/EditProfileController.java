@@ -2,7 +2,6 @@ package com.smartboard.controller;
 
 import com.smartboard.model.Data;
 import com.smartboard.model.StringLengthException;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.net.URL;
@@ -44,15 +44,15 @@ public class EditProfileController implements Closable, Initializable, Updatable
 
     @FXML
     @Override
-    public void handleCloseButtonAction() {
+    public void handleCloseButtonAction(@NotNull Event event) {
         Stage stage = (Stage) editCloseButton.getScene().getWindow();
         stage.close();
     }
 
     @FXML
     @Override
-    public void onImageClicked(Event event) {
-        handleCloseButtonAction();
+    public void onImageClicked(@NotNull Event event) {
+        handleCloseButtonAction(event);
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
         File imageFile = Utility.displayFileChooser(stage);
@@ -65,7 +65,7 @@ public class EditProfileController implements Closable, Initializable, Updatable
     }
 
     @FXML
-    protected void onUpdateClicked() {
+    protected void onUpdateClicked(Event event) {
         String firstname = editFirstnameField.getText().strip();
         String lastname = editLastnameField.getText().strip();
         boolean updated = false;
@@ -89,8 +89,10 @@ public class EditProfileController implements Closable, Initializable, Updatable
             alert.setHeaderText(alertMessage);
             alert.showAndWait();
         } else {
-            SBController.staticToolbarName.setText(Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName());
-            this.handleCloseButtonAction();
+            SBController.staticToolbarName.setText(
+                    Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName()
+            );
+            this.handleCloseButtonAction(event);
         }
     }
 

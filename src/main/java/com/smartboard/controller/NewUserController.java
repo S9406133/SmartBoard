@@ -2,9 +2,9 @@ package com.smartboard.controller;
 
 import com.smartboard.model.Data;
 import com.smartboard.model.StringLengthException;
+import com.smartboard.model.User;
 import com.smartboard.view.LoginView;
 import com.smartboard.view.SmartBoardView;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +55,7 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
 
         if (!username.isBlank() && !firstname.isBlank() && !lastname.isBlank() && !password.isBlank()) {
             try {
-                Data.createUser(username, password, firstname, lastname);
+                createUser(username, password, firstname, lastname);
                 Data.currentUser.setImagePath(imagePath);
                 String headerText = String.format("New user: %s\nName: %s %s",
                         Data.currentUser.getName(), Data.currentUser.getFirstName(), Data.currentUser.getLastName());
@@ -69,17 +70,44 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
                 stage.close();
             } catch (IOException ioe) {
                 System.out.println(ioe.getMessage());
-            } catch (StringLengthException sle) {
-                Utility.errorAlert(sle.getMessage());
+            } catch (StringLengthException | IllegalArgumentException e) {
+                Utility.errorAlert(e.getMessage());
             }
         } else {
             Utility.errorAlert("Enter text in all fields");
         }
     }
 
+    private void createUser(String username, String password, String firstName, String lastName)
+            throws IllegalArgumentException, StringLengthException {
+
+        if (usernameExists(username)) {
+            throw new IllegalArgumentException("This Username already exists");
+        }
+
+        Data.users.add(new User(username, password, firstName, lastName));
+        Data.currentUser = Data.users.get(Data.users.size() - 1);
+    }
+
+    /**
+     * Method to find if the username already exists in the users list
+     */
+    private boolean usernameExists(String username) {
+        boolean returnVal = false;
+
+        for (User user : Data.users) {
+            if (username.equalsIgnoreCase(user.getName())) {
+                returnVal = true;
+                break;
+            }
+        }
+
+        return returnVal;
+    }
+
     @FXML
     @Override
-    public void handleCloseButtonAction() {
+    public void handleCloseButtonAction(@NotNull Event event) {
         try {
             LoginView.createLoginStage();
             Stage stage = (Stage) closeButton.getScene().getWindow();
@@ -91,12 +119,15 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
 
     @FXML
     @Override
-    public void onImageClicked(Event event) {
+    public void onImageClicked(@NotNull Event event) {
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
         File imageFile = Utility.displayFileChooser(stage);
-        System.out.println(imageFile);
-        imagePath = imageFile.getPath();
-        userImage.setImage(new Image(imagePath));
+
+        if (imageFile != null) {
+            System.out.println(imageFile);
+            imagePath = imageFile.getPath();
+            userImage.setImage(new Image(imagePath));
+        }
     }
 }

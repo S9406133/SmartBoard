@@ -1,17 +1,16 @@
 package com.smartboard.controller;
 
-import com.smartboard.model.Column;
-import com.smartboard.model.Data;
-import com.smartboard.model.Project;
-import com.smartboard.model.StringLengthException;
+import com.smartboard.model.*;
 import com.smartboard.view.EditProfileView;
 import com.smartboard.view.LoginView;
 import com.smartboard.view.ProjectView;
 import com.smartboard.view.TextInputDialog;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Menu;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -21,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class SBController implements Closable, Initializable {
@@ -54,7 +54,7 @@ public class SBController implements Closable, Initializable {
 
         toolbarImage.setImage(new Image(Data.currentUser.getImagePath()));
         toolbarName.setText(Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName());
-        toolbarQuote.setText(Data.getRandomQuote().toString());
+        toolbarQuote.setText(getRandomQuote().toString());
 
         projectView = new ProjectView(projectsPane);
         displayProjects();
@@ -62,7 +62,7 @@ public class SBController implements Closable, Initializable {
 
     @FXML
     @Override
-    public void handleCloseButtonAction() {
+    public void handleCloseButtonAction(@NotNull Event event) {
         Stage stage = (Stage) mainExitButton.getScene().getWindow();
         Alert exitAlert = new Alert(Alert.AlertType.CONFIRMATION);
         exitAlert.setTitle("Logout");
@@ -104,7 +104,7 @@ public class SBController implements Closable, Initializable {
         }
     }
 
-    protected void addProjectToMenu(Project project, Tab tab) {
+    protected void addProjectToMenu(@NotNull Project project, Tab tab) {
         itemList.add(new MenuItem(project.getName()));
         MenuItem currItem = itemList.get(itemList.size() - 1);
         currItem.setId(project.getName());
@@ -170,6 +170,7 @@ public class SBController implements Closable, Initializable {
             LoginView.createLoginStage();
             Stage stage = (Stage) mainExitButton.getScene().getWindow();
             stage.close();
+            Data.currentUser = null;
         } catch (IOException ioe) {
             System.out.println(ioe.getMessage());
         }
@@ -228,6 +229,12 @@ public class SBController implements Closable, Initializable {
                 Created for Further Programming A2
                 May 2022""");
         alert.showAndWait();
+    }
+
+    private Quote getRandomQuote() {
+        Random rand = new Random();
+        int randomInt = rand.nextInt(Data.QUOTES.length);
+        return Data.QUOTES[randomInt];
     }
 
     private int getCurrentTabIndex() {

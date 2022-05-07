@@ -40,7 +40,6 @@ public class User extends BoardItem<Project> {
             setDefaultProject(0);
         }
 
-
         return success;
     }
 
