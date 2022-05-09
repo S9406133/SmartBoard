@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="columnBox" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" spacing="10.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartboard.controller.SBController">
+    <children>
+        <ToolBar nodeOrientation="RIGHT_TO_LEFT" style="-fx-background-color: lightblue; -fx-border-color: grey;">
+            <items>
+                <Button mnemonicParsing="false" text="Add Task" />
+                <Button mnemonicParsing="false">
+                    <graphic>
+                        <ImageView fitHeight="17.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../delete_icon.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Label fx:id="columnLabel" nodeOrientation="LEFT_TO_RIGHT" prefWidth="160.0" text="Column Name">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+            </items>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </ToolBar>
+    </children>
+    <padding>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+    </padding>
+</VBox>

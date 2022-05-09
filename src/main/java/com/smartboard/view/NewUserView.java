@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class NewUserView {
 
-    public static void createNewUserStage() throws IOException {
+    public static void createNewUserView() throws IOException {
         String fxmlCreateUserName = "newuser.fxml";
         FXMLLoader fxmlLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlCreateUserName));
         Scene scene = new Scene(fxmlLoader.load());

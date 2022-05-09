@@ -2,7 +2,7 @@ package com.smartboard.model;
 
 import java.time.LocalDateTime;
 
-public class Task extends BoardItem<String> {
+public class Task extends BoardItem<ChecklistItem> {
 
     private String description;
     private LocalDateTime dueDate;
@@ -16,7 +16,7 @@ public class Task extends BoardItem<String> {
 
     @Override
     public void addSubItem(String subItemName) {
-        this.subItems.add(subItemName);
+        this.subItems.add(new ChecklistItem(subItemName));
     }
 
     protected String getDescription() {
@@ -37,12 +37,6 @@ public class Task extends BoardItem<String> {
         if (newDate.isAfter(LocalDateTime.now())) {
             this.dueDate = newDate;
         }
-    }
-
-    @Override
-    public String toString() {
-        return String.format("    << Task: %s\n        Description: %s\n        Due Date: %s >>", this.name,
-                this.description, this.dueDate.toLocalDate());
     }
 
 }

@@ -65,7 +65,8 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
                 exitAlert.setHeaderText(headerText);
                 exitAlert.showAndWait();
 
-                SmartBoardView.createSmartBoardStage();
+                SmartBoardView sbView = new SmartBoardView();
+                sbView.createSmartBoardStage();
                 Stage stage = (Stage) createUserButton.getScene().getWindow();
                 stage.close();
             } catch (IOException ioe) {
@@ -109,7 +110,7 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
     @Override
     public void handleCloseButtonAction(@NotNull Event event) {
         try {
-            LoginView.createLoginStage();
+            LoginView.createLoginView();
             Stage stage = (Stage) closeButton.getScene().getWindow();
             stage.close();
         } catch (IOException ioe) {

@@ -99,12 +99,12 @@
                 <Font name="System Bold" size="24.0" />
             </font>
         </Text>
-        <Button layoutX="308.0" layoutY="300.0" mnemonicParsing="false" onAction="#onUpdateClicked" prefWidth="90.0" text="Update" textAlignment="CENTER">
+        <Button defaultButton="true" layoutX="308.0" layoutY="300.0" mnemonicParsing="false" onAction="#onUpdateClicked" prefWidth="90.0" text="Update" textAlignment="CENTER">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="editCloseButton" cancelButton="true" defaultButton="true" layoutX="456.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefWidth="90.0" text="Close" textAlignment="CENTER">
+        <Button fx:id="editCloseButton" cancelButton="true" layoutX="456.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefWidth="90.0" text="Close" textAlignment="CENTER">
             <font>
                 <Font size="14.0" />
             </font>

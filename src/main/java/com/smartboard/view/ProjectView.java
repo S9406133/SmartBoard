@@ -1,54 +1,83 @@
 package com.smartboard.view;
 
+import com.smartboard.SmartBoard;
+import com.smartboard.controller.SBController;
 import com.smartboard.model.Column;
 import com.smartboard.model.Project;
 import com.smartboard.model.Task;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ProjectView extends Pane {
 
     private final TabPane tabPane;
+    SBController sbController;
 
     public ProjectView(TabPane tabPane) {
         this.tabPane = tabPane;
     }
 
-    public void createProjectView(Project project) {
-        HBox hBox = new HBox();
+    public void createProjectView(Project project) throws IOException {
+//        String fxmlName = "project.fxml";
+//        FXMLLoader fxmlLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlName));
+//        System.out.println("loader created");
+//        try {
+//            Parent scrollPane = fxmlLoader.load();
+//            Tab projectTab = new Tab(project.getName(), scrollPane);
+//            System.out.println("tab created" + projectTab);
+//            HBox hBox = (HBox) scrollPane.getChildrenUnmodifiable();
+//            System.out.println("for loop");
+//            for (Column column : project.getSubItemList()) {
+//                hBox.getChildren().add(createColumnView(column));
+//            }
+//            tabPane.getTabs().add(projectTab);
+//        }catch(IOException e){
+//            e.printStackTrace();
+//        }
 
+
+        HBox hBox = new HBox();
         for (Column column : project.getSubItemList()) {
             hBox.getChildren().add(createColumnView(column));
         }
         // ALT project.getSubItemList().forEach(column -> hBox.getChildren().add(createColumnView(column)));
-
         ScrollPane scrollPane = new ScrollPane(hBox);
-
         Tab projectTab = new Tab(project.getName(), scrollPane);
-
         tabPane.getTabs().add(projectTab);
     }
 
     public VBox createColumnView(Column column) {
         // Column Header
         Button addTaskButton = new Button("Add Task");
+
+
         Button deleteButton = new Button();
         ImageView deleteIcon = new ImageView(new Image("delete_icon.png"));
         deleteIcon.preserveRatioProperty().setValue(true);
         deleteIcon.setFitHeight(17);
         deleteButton.setGraphic(deleteIcon);
+//        deleteButton.setOnAction(actionEvent ->
+//                    sbc.onDeleteColumnClicked(column.getName())
+//        );
+
         Label columnLabel = new Label(column.getName());
         columnLabel.setFont(new Font(14));
         columnLabel.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
         columnLabel.setPrefWidth(180);
+
         ToolBar columnHeader = new ToolBar(addTaskButton, deleteButton, columnLabel);
         columnHeader.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         columnHeader.setStyle("-fx-background-color: lightblue; -fx-border-color: grey;");
@@ -69,6 +98,17 @@ public class ProjectView extends Pane {
     }
 
     public AnchorPane createTaskView(Task task) {
+//        String fxmlName = "task.fxml";
+//        FXMLLoader fxmlLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlName));
+//        sbController = fxmlLoader.getController();
+//        System.out.println(task.getName() + " loader created " + fxmlLoader.getLocation());
+//        AnchorPane taskPane = null;
+//        try {
+//            taskPane = new AnchorPane(fxmlLoader.load());
+//            System.out.println("loader finished");
+//        } catch (IOException e){
+//            e.printStackTrace();
+//        }
         // Task pane
         Button update = new Button("Update");
         Button delete = new Button("Delete");

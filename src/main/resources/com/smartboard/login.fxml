@@ -10,58 +10,65 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: lightsteelblue;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartboard.controller.LoginController">
-   <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3f2ff" height="145.0" layoutX="147.0" layoutY="95.0" stroke="TRANSPARENT" strokeType="INSIDE" width="306.0" />
-      <Label layoutX="67.0" layoutY="30.0" lineSpacing="1.0" text="Welcome to Smart Board" textAlignment="CENTER">
-         <font>
-            <Font name="Bookman Old Style Bold" size="36.0" />
-         </font>
-      </Label>
-      <VBox layoutX="161.0" layoutY="100.0" prefHeight="123.0" prefWidth="278.0">
-         <children>
-            <Label text="Username">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
-               </VBox.margin>
-            </Label>
-            <TextField fx:id="usernameField" promptText="Username">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </TextField>
-            <Label text="Password">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
-               </VBox.margin>
-            </Label>
-            <PasswordField fx:id="passwordField" promptText="Password">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </PasswordField>
-         </children>
-      </VBox>
-      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="239.0" layoutY="330.0" mnemonicParsing="false" onAction="#onCreateUserButtonClick" text="Create New User" textAlignment="CENTER">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button alignment="CENTER" defaultButton="true" layoutX="178.0" layoutY="257.0" mnemonicParsing="false" onAction="#onSignInButtonClick" prefWidth="65.0" text="Sign In" textAlignment="CENTER">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="exitButton" alignment="CENTER" cancelButton="true" layoutX="361.0" layoutY="257.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefWidth="65.0" text="Exit" textAlignment="CENTER">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" style="-fx-background-color: lightsteelblue;" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartboard.controller.LoginController">
+    <children>
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3f2ff" height="210.0" layoutX="147.0" layoutY="95.0"
+                   stroke="TRANSPARENT" strokeType="INSIDE" width="306.0"/>
+        <Label layoutX="67.0" layoutY="30.0" lineSpacing="1.0" text="Welcome to Smart Board" textAlignment="CENTER">
+            <font>
+                <Font name="Bookman Old Style Bold" size="36.0"/>
+            </font>
+        </Label>
+        <VBox layoutX="161.0" layoutY="100.0" prefHeight="123.0" prefWidth="278.0">
+            <children>
+                <Label text="Username">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
+                    </VBox.margin>
+                </Label>
+                <TextField fx:id="usernameField" promptText="Username">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="10.0"/>
+                    </VBox.margin>
+                </TextField>
+                <Label text="Password">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
+                    </VBox.margin>
+                </Label>
+                <PasswordField fx:id="passwordField" promptText="Password">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                </PasswordField>
+            </children>
+        </VBox>
+        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="161.0" layoutY="330.0" mnemonicParsing="false"
+                onAction="#onCreateUserButtonClick" text="Create New User" textAlignment="CENTER">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Button>
+        <Button alignment="CENTER" defaultButton="true" layoutX="239.0" layoutY="253.0" mnemonicParsing="false"
+                onAction="#onSignInButtonClick" prefWidth="122.0" text="Sign In" textAlignment="CENTER">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Button>
+        <Button fx:id="exitButton" alignment="CENTER" cancelButton="true" layoutX="317.0" layoutY="330.0"
+                minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleCloseButtonAction"
+                prefWidth="122.0" text="Exit" textAlignment="CENTER">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Button>
+    </children>
 </AnchorPane>

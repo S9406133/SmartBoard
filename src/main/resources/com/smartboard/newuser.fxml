@@ -93,12 +93,12 @@
             <Font name="System Bold" size="24.0" />
          </font>
       </Text>
-      <Button fx:id="createUserButton" layoutX="362.0" layoutY="300.0" mnemonicParsing="false" onAction="#onCreateUserButtonClick" prefWidth="90.0" text="Create User" textAlignment="CENTER">
+      <Button fx:id="createUserButton" defaultButton="true" layoutX="362.0" layoutY="300.0" mnemonicParsing="false" onAction="#onCreateUserButtonClick" prefWidth="90.0" text="Create User" textAlignment="CENTER">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="closeButton" cancelButton="true" defaultButton="true" layoutX="500.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefWidth="90.0" text="Close" textAlignment="CENTER">
+      <Button fx:id="closeButton" cancelButton="true" layoutX="500.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefWidth="90.0" text="Close" textAlignment="CENTER">
          <font>
             <Font size="14.0" />
          </font>

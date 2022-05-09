@@ -49,17 +49,4 @@ public abstract class BoardItem<T> {
         }
     }
 
-    @Override
-    public String toString() {
-        StringBuilder returnVal = new StringBuilder(String.format("%s: %s\n{", this.getClass().getSimpleName(), this.name));
-
-        for (T value : this.subItems) {
-            returnVal.append("    ").append(value).append("\n");
-        }
-
-        returnVal.append("}");
-
-        return returnVal.toString();
-    }
-
 }

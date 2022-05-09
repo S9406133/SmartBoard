@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class EditProfileView {
 
-    public static void createEditProfileStage() throws IOException {
+    public static void createEditProfileView() throws IOException {
         String fxmlName = "editprofile.fxml";
         FXMLLoader fxmlLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlName));
         Scene editScene = new Scene(fxmlLoader.load());

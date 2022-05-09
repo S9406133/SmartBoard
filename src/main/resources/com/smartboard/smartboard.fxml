@@ -14,34 +14,41 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="466.0" prefWidth="790.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartboard.controller.SBController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="466.0"
+            prefWidth="790.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.smartboard.controller.SBController">
     <center>
-        <TabPane fx:id="projectsPane" prefWidth="1500.0" tabClosingPolicy="UNAVAILABLE">
+        <TabPane fx:id="projectsPane" prefWidth="1500.0" tabClosingPolicy="UNAVAILABLE" tabMinWidth="100.0">
         </TabPane>
     </center>
     <bottom>
         <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="646.0" BorderPane.alignment="CENTER">
             <items>
-                <Button fx:id="mainExitButton" alignment="CENTER" cancelButton="true" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefHeight="25.0" prefWidth="65.0" text="Exit" textAlignment="CENTER" />
-                <Label fx:id="toolbarName" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#onEditProfileSelected" text="Name">
+                <Button fx:id="mainExitButton" alignment="CENTER" cancelButton="true" mnemonicParsing="false"
+                        onAction="#handleCloseButtonAction" prefHeight="25.0" prefWidth="65.0" text="Exit"
+                        textAlignment="CENTER"/>
+                <Label fx:id="toolbarName" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#onEditProfileSelected"
+                       text="Name">
                     <font>
-                        <Font size="14.0" />
+                        <Font size="14.0"/>
                     </font>
                     <padding>
-                        <Insets left="5.0" right="10.0" />
+                        <Insets left="5.0" right="10.0"/>
                     </padding>
                 </Label>
-                <ImageView fx:id="toolbarImage" fitHeight="32.0" fitWidth="40.0" onMouseClicked="#onEditProfileSelected" pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="toolbarImage" fitHeight="32.0" fitWidth="40.0" onMouseClicked="#onEditProfileSelected"
+                           pickOnBounds="true" preserveRatio="true">
                     <cursor>
-                        <Cursor fx:constant="HAND" />
+                        <Cursor fx:constant="HAND"/>
                     </cursor>
                 </ImageView>
-                <Label fx:id="toolbarQuote" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" text="This is the inspirational quote" textAlignment="CENTER" textFill="#800909">
+                <Label fx:id="toolbarQuote" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT"
+                       text="This is the inspirational quote" textAlignment="CENTER" textFill="#800909">
                     <font>
-                        <Font name="System Italic" size="15.0" />
+                        <Font name="System Italic" size="15.0"/>
                     </font>
                     <padding>
-                        <Insets right="50.0" />
+                        <Insets right="50.0"/>
                     </padding>
                 </Label>
             </items>
@@ -52,29 +59,35 @@
             <menus>
                 <Menu fx:id="workspaceMenu" mnemonicParsing="false" text="Workspace">
                     <items>
-                        <MenuItem id="newProject" mnemonicParsing="false" onAction="#showInputDialog" text="New Project" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem id="newProject" mnemonicParsing="false" onAction="#showInputDialog"
+                                  text="New Project"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Project">
                     <items>
-                        <MenuItem id="newColumn" mnemonicParsing="false" onAction="#showInputDialog" text="Add Column" />
-                        <MenuItem id="renameProject" mnemonicParsing="false" onAction="#showInputDialog" text="Rename Project" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem id="setDefault" mnemonicParsing="false" onAction="#onSetDefaultSelected" text="Set as Default" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem id="deleteProject" mnemonicParsing="false" onAction="#onDeleteProjectSelected" text="Delete Project" />
+                        <MenuItem id="newColumn" mnemonicParsing="false" onAction="#showInputDialog" text="Add Column"/>
+                        <MenuItem id="renameProject" mnemonicParsing="false" onAction="#showInputDialog"
+                                  text="Rename Project"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem id="setDefault" mnemonicParsing="false" onAction="#onSetDefaultSelected"
+                                  text="Set as Default"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem id="deleteProject" mnemonicParsing="false" onAction="#onDeleteProjectSelected"
+                                  text="Delete Project"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="User">
                     <items>
-                        <MenuItem id="editProfile" mnemonicParsing="false" onAction="#onEditProfileSelected" text="Edit Profile" />
-                        <MenuItem id="logout" mnemonicParsing="false" onAction="#onLogoutMenuItemSelected" text="Log out" />
+                        <MenuItem id="editProfile" mnemonicParsing="false" onAction="#onEditProfileSelected"
+                                  text="Edit Profile"/>
+                        <MenuItem id="logout" mnemonicParsing="false" onAction="#onLogoutMenuItemSelected"
+                                  text="Log out"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem id="about" mnemonicParsing="false" onAction="#showAboutInfo" text="About" />
+                        <MenuItem id="about" mnemonicParsing="false" onAction="#showAboutInfo" text="About"/>
                     </items>
                 </Menu>
             </menus>

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class LoginView {
 
-    public static void createLoginStage() throws IOException {
+    public static void createLoginView() throws IOException {
         String fxmlLoginName = "login.fxml";
         FXMLLoader fxmlLoginLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlLoginName));
         Scene loginScene = new Scene(fxmlLoginLoader.load());

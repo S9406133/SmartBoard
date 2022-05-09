@@ -1,5 +1,6 @@
 package com.smartboard;
 
+import com.smartboard.controller.LoginController;
 import com.smartboard.model.Data;
 import com.smartboard.model.StringLengthException;
 import com.smartboard.view.LoginView;
@@ -19,7 +20,7 @@ public class SmartBoard extends Application {
 
         Data.createInitUser();
 
-        LoginView.createLoginStage();
+        LoginView.createLoginView();
 
         //SmartBoardView.createSmartBoardStage();
     }
