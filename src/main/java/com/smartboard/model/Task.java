@@ -1,17 +1,18 @@
 package com.smartboard.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Task extends BoardItem<ChecklistItem> {
 
     private String description;
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
 
     public Task(String name) throws StringLengthException {
         super(name);
 
         this.description = "Provide a description";
-        this.dueDate = LocalDateTime.now();
+        this.dueDate = LocalDate.now();
     }
 
     @Override
@@ -19,22 +20,22 @@ public class Task extends BoardItem<ChecklistItem> {
         this.subItems.add(new ChecklistItem(subItemName));
     }
 
-    protected String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    protected void setDescription(String description) {
+    public void setDescription(String description) {
         if (!description.isBlank()) {
             this.description = description;
         }
     }
 
-    public LocalDateTime getDueDate() {
+    public LocalDate getDueDate() {
         return this.dueDate;
     }
 
-    protected void setDueDate(LocalDateTime newDate) {
-        if (newDate.isAfter(LocalDateTime.now())) {
+    public void setDueDate(LocalDate newDate) {
+        if (newDate.isAfter(LocalDate.now())) {
             this.dueDate = newDate;
         }
     }

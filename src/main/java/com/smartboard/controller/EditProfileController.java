@@ -28,8 +28,6 @@ public class EditProfileController implements Closable, Initializable, Updatable
     @FXML
     private Label currentName;
     @FXML
-    private Button editCloseButton;
-    @FXML
     private TextField editFirstnameField;
     @FXML
     private TextField editLastnameField;
@@ -45,7 +43,8 @@ public class EditProfileController implements Closable, Initializable, Updatable
     @FXML
     @Override
     public void handleCloseButtonAction(@NotNull Event event) {
-        Stage stage = (Stage) editCloseButton.getScene().getWindow();
+        Button button = (Button) event.getTarget();
+        Stage stage = (Stage) button.getScene().getWindow();
         stage.close();
     }
 

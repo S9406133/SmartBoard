@@ -25,10 +25,6 @@ public class User extends BoardItem<Project> {
     @Override
     public void addSubItem(String subItemName) throws StringLengthException {
         this.subItems.add(new Project(subItemName));
-
-        if ((getDefaultProject() == null)) {
-            this.subItems.get(0).setDefault(true);
-        }
     }
 
     public boolean validateLogin(String username, String password) {
@@ -56,7 +52,7 @@ public class User extends BoardItem<Project> {
             }
             this.subItems.get(index).setDefault(true);
 
-        }else {
+        } else {
             this.subItems.get(index).setDefault(false);
         }
     }

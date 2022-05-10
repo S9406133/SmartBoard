@@ -63,7 +63,7 @@
                 <Font size="14.0"/>
             </font>
         </Button>
-        <Button fx:id="exitButton" alignment="CENTER" cancelButton="true" layoutX="317.0" layoutY="330.0"
+        <Button alignment="CENTER" cancelButton="true" layoutX="317.0" layoutY="330.0"
                 minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleCloseButtonAction"
                 prefWidth="122.0" text="Exit" textAlignment="CENTER">
             <font>

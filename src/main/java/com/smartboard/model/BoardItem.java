@@ -21,12 +21,25 @@ public abstract class BoardItem<T> {
 
     public abstract void addSubItem(String subItemName) throws StringLengthException;
 
-    public boolean removeSubItem(BoardItem item) {
+    public boolean removeSubItem(T item) {
         return this.subItems.remove(item);
     }
 
     public T getSubItem(int index) throws IndexOutOfBoundsException {
         return this.subItems.get(index);
+    }
+
+    public T getSubItemByObject(T item){
+        T boardItem = null;
+
+        for (T subItem : this.subItems){
+            if (subItem == item){
+                boardItem = subItem;
+                break;
+            }
+        }
+
+        return boardItem;
     }
 
     public List<T> getSubItemList() {

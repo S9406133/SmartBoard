@@ -3,6 +3,7 @@ package com.smartboard.controller;
 import com.smartboard.model.*;
 import com.smartboard.view.EditProfileView;
 import com.smartboard.view.LoginView;
+import com.smartboard.view.TaskEditorView;
 import com.smartboard.view.TextInputDialog;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -111,10 +112,19 @@ public class SBController implements Closable, Initializable {
         addIcon.preserveRatioProperty().setValue(true);
         addIcon.setFitHeight(iconHeight);
         addTaskButton.setGraphic(addIcon);
-        //TODO addTask event
+        addTaskButton.setOnAction(actionEvent -> {
+            try {
+                Data.currentColumn = column;
+                Data.currentTask = null;
+                TaskEditorView.createTaskEditorView();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        });
+        // TODO addTask event
 
         Button deleteButton = new Button();
-        ImageView deleteIcon = new ImageView(new Image("delete_icon.png"));
+        ImageView deleteIcon = new ImageView(new Image("delete_f_icon.png"));
         deleteIcon.preserveRatioProperty().setValue(true);
         deleteIcon.setFitHeight(iconHeight);
         deleteButton.setGraphic(deleteIcon);
@@ -170,12 +180,11 @@ public class SBController implements Closable, Initializable {
         checklist.setLayoutX(14);
         checklist.setLayoutY(46);
 
-        Label dueDate = new Label("Due Date: " + task.getDueDate().toLocalDate());
+        Label dueDate = new Label("Due Date: " + task.getDueDate());
         dueDate.setLayoutX(14);
         dueDate.setLayoutY(86);
 
         taskPane = new AnchorPane(update, delete, taskName, checklist, dueDate);
-        //taskPane.prefWidth(COLUMN_WIDTH);
         taskPane.setStyle("-fx-background-color: lightgreen; -fx-border-color: grey;");
         VBox.setMargin(taskPane, new Insets(5));
         taskPane.paddingProperty().setValue(new Insets(5));
@@ -277,8 +286,6 @@ public class SBController implements Closable, Initializable {
 
     @FXML
     private void toggleDefaultSetting() {
-        Project currentProject = getCurrentProject();
-
         Data.currentUser.toggleDefaultProject(getCurrentTabIndex());
 
         for (int i = 0; i < Data.currentUser.getListSize(); i++) {
@@ -358,7 +365,9 @@ public class SBController implements Closable, Initializable {
     @FXML
     @Override
     public void handleCloseButtonAction(@NotNull Event event) {
-        Stage stage = (Stage) mainExitButton.getScene().getWindow();
+        Button button = (Button) event.getTarget();
+        Stage stage = (Stage) button.getScene().getWindow();
+        stage.close();
         Alert exitAlert = new Alert(Alert.AlertType.CONFIRMATION);
         exitAlert.setTitle("Logout");
         exitAlert.setHeaderText("You're about to exit Smart Board!");

@@ -35,8 +35,6 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
     @FXML
     private Button createUserButton;
     @FXML
-    private Button closeButton;
-    @FXML
     private ImageView userImage;
     private String imagePath;
 
@@ -111,7 +109,8 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
     public void handleCloseButtonAction(@NotNull Event event) {
         try {
             LoginView.createLoginView();
-            Stage stage = (Stage) closeButton.getScene().getWindow();
+            Button button = (Button) event.getTarget();
+            Stage stage = (Stage) button.getScene().getWindow();
             stage.close();
         } catch (IOException ioe) {
             System.out.println(ioe.getMessage());

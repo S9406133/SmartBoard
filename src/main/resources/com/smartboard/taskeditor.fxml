@@ -13,23 +13,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" style="-fx-background-color: mintcream;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" style="-fx-background-color: mintcream;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartboard.controller.TaskEditorController">
     <children>
         <VBox prefWidth="600.0" spacing="15.0">
             <children>
                 <VBox prefHeight="47.0" prefWidth="300.0" spacing="5.0">
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Task Name" />
-                        <TextField prefHeight="25.0" prefWidth="235.0" />
+                        <TextField fx:id="taskName" prefHeight="25.0" prefWidth="235.0" />
                     </children>
                     <VBox.margin>
                         <Insets right="250.0" />
                     </VBox.margin>
                 </VBox>
-                <RadioButton mnemonicParsing="false" text="Include a Due Date" />
-                <DatePicker fx:id="datePicker" />
-                <RadioButton mnemonicParsing="false" text="Include a Checklist" />
-                <VBox fx:id="checklistBox" spacing="5.0">
+                <RadioButton fx:id="dueDateRadio" mnemonicParsing="false" onAction="#toggleDueDate" text="Include a Due Date" />
+                <DatePicker fx:id="datePicker" visible="false" />
+                <RadioButton fx:id="checklistRadio" mnemonicParsing="false" text="Include a Checklist" />
+                <VBox fx:id="checklistBox" spacing="5.0" visible="false">
                     <children>
                         <HBox prefWidth="540.0">
                             <children>
@@ -52,7 +52,7 @@
                 <VBox prefWidth="231.0" spacing="5.0">
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" />
-                        <TextArea prefHeight="111.0" prefWidth="540.0" />
+                        <TextArea fx:id="taskDescription" prefHeight="111.0" prefWidth="540.0" />
                     </children>
                 </VBox>
             </children>
@@ -61,9 +61,9 @@
             </padding>
         </VBox>
         <Button defaultButton="true" layoutX="437.0" layoutY="433.0" mnemonicParsing="false" prefWidth="55.0" text="Ok" />
-        <Button cancelButton="true" layoutX="514.0" layoutY="433.0" mnemonicParsing="false" prefWidth="55.0" text="Cancel" />
+        <Button cancelButton="true" layoutX="514.0" layoutY="433.0" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefWidth="55.0" text="Cancel" />
     </children>
-   <padding>
-      <Insets bottom="10.0" />
-   </padding>
+    <padding>
+        <Insets bottom="10.0" />
+    </padding>
 </AnchorPane>

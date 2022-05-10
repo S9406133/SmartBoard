@@ -14,6 +14,8 @@ public class Data {
     public static String defPicturePath = "fry_avatar.jpg";
     public static User currentUser = null;
     public static ArrayList<User> users = new ArrayList<>();
+    public static Column currentColumn = null;
+    public static Task currentTask = null;
 
     public static void createInitUser() throws StringLengthException {
         users.add(new User("Simo", "a", "Simon", "James"));

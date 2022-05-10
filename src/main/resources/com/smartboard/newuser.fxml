@@ -13,95 +13,102 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="408.0" prefWidth="626.0" style="-fx-background-color: lightsteelblue;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartboard.controller.NewUserController">
-   <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3f2ff" height="294.0" layoutX="35.0" layoutY="75.0" stroke="TRANSPARENT" strokeType="INSIDE" width="279.0" />
-      <VBox layoutX="353.0" layoutY="63.0" prefHeight="200.0" prefWidth="100.0">
-         <children>
-            <ImageView fx:id="userImage" fitHeight="150.0" fitWidth="169.0" onMouseClicked="#onImageClicked" pickOnBounds="true" preserveRatio="true">
-               <VBox.margin>
-                  <Insets left="50.0" right="50.0" top="20.0" />
-               </VBox.margin>
-               <image>
-                  <Image url="@../../fry_avatar.jpg" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Click image to update" textAlignment="CENTER">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="70.0" right="70.0" top="10.0" />
-               </VBox.margin>
-            </Text>
-         </children>
-      </VBox>
-      <VBox layoutX="49.0" layoutY="91.0">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter your details" textAlignment="CENTER">
-               <font>
-                  <Font name="System Bold" size="13.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="10.0" left="50.0" right="50.0" />
-               </VBox.margin>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your Username">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="10.0" />
-               </VBox.margin>
-            </Text>
-            <TextField fx:id="newUsernameField" promptText="Username">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your First Name">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="10.0" top="10.0" />
-               </VBox.margin>
-            </Text>
-            <TextField fx:id="newFirstnameField" promptText="First Name">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your Last Name">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="10.0" top="10.0" />
-               </VBox.margin>
-            </Text>
-            <TextField fx:id="newLastnameField" promptText="Last Name">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="A Strong Password">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="10.0" top="10.0" />
-               </VBox.margin>
-            </Text>
-            <PasswordField fx:id="newPasswordField" promptText="Password">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </PasswordField>
-         </children>
-      </VBox>
-      <Text layoutX="165.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create a new user account" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Text>
-      <Button fx:id="createUserButton" defaultButton="true" layoutX="362.0" layoutY="300.0" mnemonicParsing="false" onAction="#onCreateUserButtonClick" prefWidth="90.0" text="Create User" textAlignment="CENTER">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="closeButton" cancelButton="true" layoutX="500.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefWidth="90.0" text="Close" textAlignment="CENTER">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="408.0"
+            prefWidth="626.0" style="-fx-background-color: lightsteelblue;" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartboard.controller.NewUserController">
+    <children>
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3f2ff" height="294.0" layoutX="35.0" layoutY="75.0"
+                   stroke="TRANSPARENT" strokeType="INSIDE" width="279.0"/>
+        <VBox layoutX="353.0" layoutY="63.0" prefHeight="200.0" prefWidth="100.0">
+            <children>
+                <ImageView fx:id="userImage" fitHeight="150.0" fitWidth="169.0" onMouseClicked="#onImageClicked"
+                           pickOnBounds="true" preserveRatio="true">
+                    <VBox.margin>
+                        <Insets left="50.0" right="50.0" top="20.0"/>
+                    </VBox.margin>
+                    <image>
+                        <Image url="@../../fry_avatar.jpg"/>
+                    </image>
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
+                </ImageView>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Click image to update" textAlignment="CENTER">
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="70.0" right="70.0" top="10.0"/>
+                    </VBox.margin>
+                </Text>
+            </children>
+        </VBox>
+        <VBox layoutX="49.0" layoutY="91.0">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter your details" textAlignment="CENTER">
+                    <font>
+                        <Font name="System Bold" size="13.0"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="50.0" right="50.0"/>
+                    </VBox.margin>
+                </Text>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your Username">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="10.0"/>
+                    </VBox.margin>
+                </Text>
+                <TextField fx:id="newUsernameField" promptText="Username">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </TextField>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your First Name">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="10.0" top="10.0"/>
+                    </VBox.margin>
+                </Text>
+                <TextField fx:id="newFirstnameField" promptText="First Name">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </TextField>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your Last Name">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="10.0" top="10.0"/>
+                    </VBox.margin>
+                </Text>
+                <TextField fx:id="newLastnameField" promptText="Last Name">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </TextField>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="A Strong Password">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="10.0" top="10.0"/>
+                    </VBox.margin>
+                </Text>
+                <PasswordField fx:id="newPasswordField" promptText="Password">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </PasswordField>
+            </children>
+        </VBox>
+        <Text layoutX="165.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create a new user account"
+              textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Text>
+        <Button fx:id="createUserButton" defaultButton="true" layoutX="362.0" layoutY="300.0" mnemonicParsing="false"
+                onAction="#onCreateUserButtonClick" prefWidth="90.0" text="Create User" textAlignment="CENTER">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Button>
+        <Button cancelButton="true" layoutX="500.0" layoutY="300.0" mnemonicParsing="false"
+                onAction="#handleCloseButtonAction" prefWidth="90.0" text="Close" textAlignment="CENTER">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Button>
+    </children>
 </AnchorPane>
