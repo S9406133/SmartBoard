@@ -1,15 +1,12 @@
 package com.smartboard.controller;
 
-import com.smartboard.SmartBoard;
 import com.smartboard.model.*;
 import com.smartboard.view.EditProfileView;
 import com.smartboard.view.LoginView;
-import com.smartboard.view.ProjectView;
 import com.smartboard.view.TextInputDialog;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
@@ -34,9 +31,7 @@ public class SBController implements Closable, Initializable {
 
     @FXML
     private TabPane projectsPane;
-    private VBox columnBox;
     private AnchorPane taskPane;
-    //private ProjectView projectView;
     @FXML
     private Menu workspaceMenu;
     private final ArrayList<MenuItem> itemList;
@@ -50,6 +45,7 @@ public class SBController implements Closable, Initializable {
     @FXML
     protected Label toolbarName;
     public static Label staticToolbarName;
+    private final Font HEAD_FONT_SIZE = new Font(14);
 
     public SBController() {
         itemList = new ArrayList<>();
@@ -64,18 +60,12 @@ public class SBController implements Closable, Initializable {
         toolbarName.setText(Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName());
         toolbarQuote.setText(getRandomQuote().toString());
 
-        //projectView = new ProjectView(projectsPane);
-        try {
-            displayProjects();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        displayProjects();
     }
 
-    private void displayProjects() throws IOException {
+    private void displayProjects() {
         int i = 0;
         for (Project project : Data.currentUser.getSubItemList()) {
-            //projectView.
             createProjectView(project);
             if (project.isDefault()) {
                 projectsPane.getSelectionModel().selectLast();
@@ -87,40 +77,56 @@ public class SBController implements Closable, Initializable {
 
     private void createProjectView(Project project) {
         HBox columnHolder = new HBox();
-//        for (Column column : project.getSubItemList()) {
-//            columnHolder.getChildren().add(createColumnView(column));
-//        }
         loadColumns(columnHolder, project);
-        // ALT project.getSubItemList().forEach(column -> hBox.getChildren().add(createColumnView(column)));
         ScrollPane scrollPane = new ScrollPane(columnHolder);
         Tab projectTab = new Tab(project.getName(), scrollPane);
         projectsPane.getTabs().add(projectTab);
     }
 
-    private void loadColumns(HBox columnHolder, Project project){
+    private void loadColumns(HBox columnHolder, Project project) {
         for (Column column : project.getSubItemList()) {
             columnHolder.getChildren().add(createColumnView(column));
+        }
+        // ALT project.getSubItemList().forEach(column -> hBox.getChildren().add(createColumnView(column)));
+    }
+
+    private void reLoadColumns() {
+        try {
+            ScrollPane scrollPane = (ScrollPane) projectsPane.getTabs().get(getCurrentTabIndex()).getContent();
+            HBox hBox = (HBox) scrollPane.getContent();
+            hBox.getChildren().clear();
+            loadColumns(hBox, getCurrentProject());
+        } catch (ClassCastException cce) {
+            System.out.println(cce.getMessage());
         }
     }
 
     private VBox createColumnView(Column column) {
-        // Column Header
-        Button addTaskButton = new Button("Add Task");
+        int columnWidth = 300;
+        int iconHeight = 17;
 
+        // Column Header
+        Button addTaskButton = new Button();
+        ImageView addIcon = new ImageView(new Image("add_icon.png"));
+        addIcon.preserveRatioProperty().setValue(true);
+        addIcon.setFitHeight(iconHeight);
+        addTaskButton.setGraphic(addIcon);
+        //TODO addTask event
 
         Button deleteButton = new Button();
         ImageView deleteIcon = new ImageView(new Image("delete_icon.png"));
         deleteIcon.preserveRatioProperty().setValue(true);
-        deleteIcon.setFitHeight(17);
+        deleteIcon.setFitHeight(iconHeight);
         deleteButton.setGraphic(deleteIcon);
         deleteButton.setOnAction(
                 actionEvent -> onDeleteColumnClicked(column)
         );
 
         Label columnLabel = new Label(column.getName());
-        columnLabel.setFont(new Font(14));
+        columnLabel.setFont(HEAD_FONT_SIZE);
         columnLabel.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-        columnLabel.setPrefWidth(180);
+        columnLabel.setMaxWidth(200);
+        columnLabel.setPrefWidth(200);
 
         ToolBar columnHeader = new ToolBar(addTaskButton, deleteButton, columnLabel);
         columnHeader.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
@@ -128,7 +134,7 @@ public class SBController implements Closable, Initializable {
         VBox.setMargin(columnHeader, new Insets(5));
 
         // Column
-        columnBox = new VBox(columnHeader);
+        VBox columnBox = new VBox(columnHeader);
 
         for (Task task : column.getSubItemList()) {
             columnBox.getChildren().add(createTaskView(task));
@@ -136,7 +142,7 @@ public class SBController implements Closable, Initializable {
         // ALT column.getSubItemList().forEach(task -> columnBox.getChildren().add(createTaskView(task)));
 
         columnBox.setSpacing(10);
-        columnBox.setPrefWidth(300);
+        columnBox.setMaxWidth(columnWidth);
 
         return columnBox;
     }
@@ -144,24 +150,32 @@ public class SBController implements Closable, Initializable {
     private AnchorPane createTaskView(Task task) {
         // Task pane
         Button update = new Button("Update");
-        Button delete = new Button("Delete");
+        //TODO
         update.setPrefWidth(65);
         update.setLayoutX(225);
         update.setLayoutY(44);
+
+        Button delete = new Button("Delete");
+        //TODO
         delete.setPrefWidth(65);
         delete.setLayoutX(225);
         delete.setLayoutY(74);
+
         Label taskName = new Label(task.getName());
-        Label checklist = new Label("Checklist 0/3");
-        Label dueDate = new Label("Due Date: " + task.getDueDate().toLocalDate());
+        taskName.setFont(HEAD_FONT_SIZE);
         taskName.setLayoutX(14);
         taskName.setLayoutY(6);
+
+        Label checklist = new Label("Checklist 0/3");
         checklist.setLayoutX(14);
         checklist.setLayoutY(46);
+
+        Label dueDate = new Label("Due Date: " + task.getDueDate().toLocalDate());
         dueDate.setLayoutX(14);
         dueDate.setLayoutY(86);
+
         taskPane = new AnchorPane(update, delete, taskName, checklist, dueDate);
-        taskPane.prefWidth(300);
+        //taskPane.prefWidth(COLUMN_WIDTH);
         taskPane.setStyle("-fx-background-color: lightgreen; -fx-border-color: grey;");
         VBox.setMargin(taskPane, new Insets(5));
         taskPane.paddingProperty().setValue(new Insets(5));
@@ -199,21 +213,21 @@ public class SBController implements Closable, Initializable {
                 case "renameProject" -> renameProject();
             }
 
-        } catch (ClassCastException | IOException e) {
-            e.printStackTrace();
+        } catch (ClassCastException cce) {
+            cce.printStackTrace();
         } catch (StringLengthException sle) {
             Utility.errorAlert(sle.getMessage());
         }
     }
 
-    private void addProject() throws StringLengthException, IOException {
+    private void addProject() throws StringLengthException {
         String name = TextInputDialog.show("Create a new project", "Project title");
 
         if (name != null) {
             Data.currentUser.addSubItem(name);
             Project newProject = Data.currentUser.getSubItem(Data.currentUser.getListSize() - 1);
-            //projectView.
             createProjectView(newProject);
+            projectsPane.getSelectionModel().selectLast();
             addProjectToMenu(newProject, projectsPane.getTabs().get(Data.currentUser.getListSize() - 1));
         }
     }
@@ -222,19 +236,10 @@ public class SBController implements Closable, Initializable {
         String name = TextInputDialog.show("Add a new column", "Column name");
 
         if (name != null) {
-            int currentTabIndex = getCurrentTabIndex();
             Project currentProject = getCurrentProject();
             currentProject.addSubItem(name);
-            Column newColumn = currentProject.getSubItem(currentProject.getListSize() - 1);
 
-            try {       // Could also clear the pane and reload
-                ScrollPane scrollPane = (ScrollPane) projectsPane.getTabs().get(currentTabIndex).getContent();
-                HBox hBox = (HBox) scrollPane.getContent();
-
-                hBox.getChildren().add(/*projectView.*/createColumnView(newColumn));
-            } catch (ClassCastException cce) {
-                System.out.println(cce.getMessage());
-            }
+            reLoadColumns();
         }
     }
 
@@ -250,7 +255,7 @@ public class SBController implements Closable, Initializable {
     }
 
     @FXML
-    protected void onEditProfileSelected() {
+    private void onEditProfileSelected() {
         try {
             EditProfileView.createEditProfileView();
         } catch (IOException ioe) {
@@ -259,7 +264,7 @@ public class SBController implements Closable, Initializable {
     }
 
     @FXML
-    protected void onLogoutMenuItemSelected() {
+    private void onLogoutMenuItemSelected() {
         try {
             LoginView.createLoginView();
             Stage stage = (Stage) mainExitButton.getScene().getWindow();
@@ -271,20 +276,19 @@ public class SBController implements Closable, Initializable {
     }
 
     @FXML
-    protected void onSetDefaultSelected() {
+    private void toggleDefaultSetting() {
         Project currentProject = getCurrentProject();
 
-        if (!currentProject.isDefault()) {
-            Data.currentUser.setDefaultProject(getCurrentTabIndex());
+        Data.currentUser.toggleDefaultProject(getCurrentTabIndex());
 
-            for (int i = 0; i < Data.currentUser.getListSize(); i++) {
-                projectsPane.getTabs().get(i).setText(Data.currentUser.getSubItem(i).getName());
-            }
+        for (int i = 0; i < Data.currentUser.getListSize(); i++) {
+            projectsPane.getTabs().get(i).setText(Data.currentUser.getSubItem(i).getName());
         }
+
     }
 
     @FXML
-    protected void onDeleteProjectSelected() {
+    private void onDeleteProjectSelected() {
         String alertTitle = "Delete project";
         String projectName = getCurrentProject().getName();
         Alert deleteAlert = new Alert(Alert.AlertType.WARNING);
@@ -299,7 +303,7 @@ public class SBController implements Closable, Initializable {
     }
 
     @FXML
-    protected void showAboutInfo() {
+    private void showAboutInfo() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About Smart Board");
         alert.setHeaderText("""
@@ -310,7 +314,7 @@ public class SBController implements Closable, Initializable {
         alert.showAndWait();
     }
 
-    public void onDeleteColumnClicked(Column column) {
+    private void onDeleteColumnClicked(Column column) {
         String alertTitle = "Delete Column";
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(alertTitle);
@@ -324,6 +328,7 @@ public class SBController implements Closable, Initializable {
     }
 
     private void deleteBoardItem(BoardItem superItem, BoardItem itemToDelete, String alertTitle) {
+        String deleteClass = itemToDelete.getClass().getSimpleName();
         String itemName = itemToDelete.getName();
         if (superItem.removeSubItem(itemToDelete)) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -331,15 +336,15 @@ public class SBController implements Closable, Initializable {
             alert.setHeaderText(itemName + " successfully deleted.");
             alert.showAndWait();
 
-            if (superItem.getClass().getSimpleName().equals("User")) {
-                removeProjectsFromMenu();
-            }
-            projectsPane.getTabs().clear();
-
-            try {
-                displayProjects();
-            } catch (IOException e) {
-                e.printStackTrace();
+            switch (deleteClass) {
+                case "Project" -> {
+                    removeProjectsFromMenu();
+                    projectsPane.getTabs().clear();
+                    displayProjects();
+                }
+                case "Column" -> {
+                    reLoadColumns();
+                }
             }
 
         } else {

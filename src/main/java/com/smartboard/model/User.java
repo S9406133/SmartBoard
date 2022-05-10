@@ -20,7 +20,6 @@ public class User extends BoardItem<Project> {
 
         this.imagePath = "fry_avatar.jpg";
         this.subItems.add(new Project("Project1"));
-        this.subItems.get(0).setDefault(true);
     }
 
     @Override
@@ -30,17 +29,6 @@ public class User extends BoardItem<Project> {
         if ((getDefaultProject() == null)) {
             this.subItems.get(0).setDefault(true);
         }
-    }
-
-    @Override
-    public boolean removeSubItem(BoardItem item) {
-        boolean success = this.subItems.remove(item);
-
-        if (success && (getDefaultProject() == null) && (this.getListSize() > 0)) {
-            setDefaultProject(0);
-        }
-
-        return success;
     }
 
     public boolean validateLogin(String username, String password) {
@@ -60,13 +48,16 @@ public class User extends BoardItem<Project> {
         return defaultProject;
     }
 
-    public void setDefaultProject(int index) throws IndexOutOfBoundsException {
+    public void toggleDefaultProject(int index) throws IndexOutOfBoundsException {
 
         if (!this.subItems.get(index).isDefault()) {
             if (getDefaultProject() != null) {
                 getDefaultProject().setDefault(false);
             }
             this.subItems.get(index).setDefault(true);
+
+        }else {
+            this.subItems.get(index).setDefault(false);
         }
     }
 

@@ -447,7 +447,7 @@ public class Menu {
 		for (int i = 0; i < user.getListSize(); i++) {
 			if (newDefaultName.equalsIgnoreCase(user.getSubItem(i).getName())) {
 				try {
-					user.setDefaultProject(i);
+					user.toggleDefaultProject(i);
 					newDefaultSet = true;
 					break;
 				} catch (IndexOutOfBoundsException e) {
