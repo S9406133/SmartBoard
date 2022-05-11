@@ -1,7 +1,7 @@
 package com.smartboard.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Task extends BoardItem<ChecklistItem> {
 
@@ -12,9 +12,13 @@ public class Task extends BoardItem<ChecklistItem> {
     public Task(String name) throws StringLengthException {
         super(name);
 
-        this.description = "Provide a description";
-        this.dueDate = LocalDate.now();
+        this.description = "Provide a description...";
         this.isCompleted = false;
+
+        this.subItems.add(new ChecklistItem("A list item"));
+        this.getSubItem(0).setChecked(true);
+        this.subItems.add(new ChecklistItem("B list item"));
+        this.subItems.add(new ChecklistItem("C list item"));
     }
 
     @Override
@@ -23,14 +27,16 @@ public class Task extends BoardItem<ChecklistItem> {
         return this.subItems.get(this.subItems.size() - 1);
     }
 
+    public void replaceEntireChecklist(ArrayList<ChecklistItem> newList){
+        this.subItems = new ArrayList<>(newList);
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
-        if (!description.isBlank()) {
-            this.description = description;
-        }
+        this.description = description;
     }
 
     public LocalDate getDueDate() {
@@ -43,7 +49,7 @@ public class Task extends BoardItem<ChecklistItem> {
         }
     }
 
-    public void nullDueDate(){
+    public void nullDueDate() {
         this.dueDate = null;
     }
 
@@ -53,5 +59,17 @@ public class Task extends BoardItem<ChecklistItem> {
 
     public void setCompleted(boolean completed) {
         isCompleted = completed;
+    }
+
+    public int getNumChecklistCompleted() {
+        int returnVal = 0;
+
+        for (ChecklistItem item : this.subItems) {
+            if (item.isChecked()) {
+                returnVal++;
+            }
+        }
+
+        return returnVal;
     }
 }

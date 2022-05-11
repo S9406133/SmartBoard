@@ -14,7 +14,7 @@ public class Utility {
         alert.showAndWait();
     }
 
-    public static File displayFileChooser(Stage stage){
+    public static File displayImageFileChooser(Stage stage){
         FileChooser fileChooser = new FileChooser();
 
         fileChooser.getExtensionFilters().add(

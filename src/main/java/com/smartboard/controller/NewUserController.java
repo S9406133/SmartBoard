@@ -122,7 +122,7 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
     public void onImageClicked(@NotNull Event event) {
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
-        File imageFile = Utility.displayFileChooser(stage);
+        File imageFile = Utility.displayImageFileChooser(stage);
 
         if (imageFile != null) {
             System.out.println(imageFile);

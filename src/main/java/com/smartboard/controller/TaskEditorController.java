@@ -4,10 +4,13 @@ import com.smartboard.model.ChecklistItem;
 import com.smartboard.model.Data;
 import com.smartboard.model.StringLengthException;
 import com.smartboard.model.Task;
+import com.smartboard.view.TextInputDialog;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
@@ -47,10 +50,12 @@ public class TaskEditorController implements Closable, Initializable {
                 dueDateRadio.setSelected(true);
                 setDatePicker();
             }
+
             if (task.getListSize() > 0) {
                 checklistRadio.setSelected(true);
-                System.out.println("checklist: " + task.getListSize());
-                // Todo show checklist
+                checklistBox.visibleProperty().setValue(true);
+                checklistItemList = (ArrayList<ChecklistItem>) task.getSubItemList();
+                loadChecklistRows();
             }
         }
 
@@ -74,7 +79,6 @@ public class TaskEditorController implements Closable, Initializable {
             alertMessage = "Please enter a task name.";
         } else {
             try {
-                //TODO set values
                 Task task;
                 if (Data.currentTask == null) {
                     task = Data.currentColumn.addSubItem(taskName);
@@ -85,15 +89,21 @@ public class TaskEditorController implements Closable, Initializable {
                 error = false;
                 task.setDescription(taskDescriptionField.getText().strip());
                 task.setCompleted(completedCheckbox.isSelected());
+
                 if (dueDate != null) {
                     task.setDueDate(dueDate);
                 } else {
                     task.nullDueDate();
                 }
 
-                System.out.println("name " + task.getName() + "\ndate: " + task.getDueDate() + "\ndescr: " + task.getDescription());
+                if (checklistRadio.isSelected()) {
+                    task.replaceEntireChecklist(checklistItemList);
+                } else {
+                    task.getSubItemList().clear();
+                }
 
                 handleCloseButtonAction(event);
+
             } catch (StringLengthException sle) {
                 alertMessage = sle.getMessage();
             }
@@ -125,6 +135,81 @@ public class TaskEditorController implements Closable, Initializable {
     @FXML
     private void toggleChecklist() {
         checklistBox.visibleProperty().setValue(checklistRadio.isSelected());
+    }
+
+    @FXML
+    private void addChecklistItem() {
+        String description = TextInputDialog.show("Add a checklist item", "Description");
+
+        if (description != null) {
+            checklistItemList.add(new ChecklistItem(description));
+            reLoadChecklistRows();
+        }
+    }
+
+    private void editChecklistItem(ChecklistItem editItem) {
+        String description = TextInputDialog.show("Edit a checklist item", "New description");
+
+        if (description != null) {
+            for (ChecklistItem item : checklistItemList) {
+                if (item == editItem) {
+                    item.setDescription(description);
+                }
+            }
+
+            reLoadChecklistRows();
+        }
+    }
+
+    private void deleteChecklistItem(ChecklistItem deleteItem) {
+
+        for (int i = 0; i < checklistItemList.size(); i++) {
+            if (checklistItemList.get(i) == deleteItem) {
+                checklistItemList.remove(deleteItem);
+            }
+        }
+
+        reLoadChecklistRows();
+    }
+
+    private void loadChecklistRows() {
+        for (ChecklistItem item : checklistItemList) {
+            checklistBox.getChildren().add(createChecklistRow(item));
+        }
+    }
+
+
+    private void reLoadChecklistRows() {
+        checklistBox.getChildren().removeIf(node -> node instanceof HBox);
+        loadChecklistRows();
+    }
+
+    private HBox createChecklistRow(ChecklistItem checklistItem) {
+
+        CheckBox checkBox = new CheckBox(checklistItem.getDescription());
+        checkBox.setSelected(checklistItem.isChecked());
+        HBox.setMargin(checkBox, new Insets(4, 50, 0, 0));
+        checkBox.setOnAction(actionEvent ->
+                checklistItem.setChecked(checkBox.isSelected())
+        );
+        HBox cBox = new HBox(checkBox);
+        cBox.setMinWidth(200);
+
+        Hyperlink editLink = new Hyperlink("Edit");
+        HBox.setMargin(editLink, new Insets(0, 10, 0, 0));
+        editLink.setOnAction(actionEvent ->
+                editChecklistItem(checklistItem)
+        );
+
+        Hyperlink deleteLink = new Hyperlink("Delete");
+        deleteLink.setOnAction(actionEvent ->
+                deleteChecklistItem(checklistItem)
+        );
+
+        HBox rowBox = new HBox(cBox, editLink, deleteLink);
+        rowBox.setPrefWidth(540);
+
+        return rowBox;
     }
 
     @FXML
