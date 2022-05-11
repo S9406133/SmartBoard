@@ -27,7 +27,7 @@ public class Task extends BoardItem<ChecklistItem> {
         return this.subItems.get(this.subItems.size() - 1);
     }
 
-    public void replaceEntireChecklist(ArrayList<ChecklistItem> newList){
+    public void replaceEntireChecklist(ArrayList<ChecklistItem> newList) {
         this.subItems = new ArrayList<>(newList);
     }
 

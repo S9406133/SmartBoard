@@ -8,13 +8,13 @@ import java.io.File;
 
 public class Utility {
 
-    public static void errorAlert(String message){
+    public static void errorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(message);
         alert.showAndWait();
     }
 
-    public static File displayImageFileChooser(Stage stage){
+    public static File displayImageFileChooser(Stage stage) {
         FileChooser fileChooser = new FileChooser();
 
         fileChooser.getExtensionFilters().add(

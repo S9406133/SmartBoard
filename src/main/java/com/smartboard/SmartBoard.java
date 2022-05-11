@@ -1,10 +1,8 @@
 package com.smartboard;
 
-import com.smartboard.controller.LoginController;
 import com.smartboard.model.Data;
 import com.smartboard.model.StringLengthException;
 import com.smartboard.view.LoginView;
-import com.smartboard.view.SmartBoardView;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -21,8 +19,6 @@ public class SmartBoard extends Application {
         Data.createInitUser();
 
         LoginView.createLoginView();
-
-        //SmartBoardView.createSmartBoardStage();
     }
 
     public static void main(String[] args) {

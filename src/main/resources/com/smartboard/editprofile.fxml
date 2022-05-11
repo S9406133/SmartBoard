@@ -13,100 +13,107 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="600.0" style="-fx-background-color: lightsteelblue;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartboard.controller.EditProfileController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0"
+            prefWidth="600.0" style="-fx-background-color: lightsteelblue;" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartboard.controller.EditProfileController">
     <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3f2ff" height="110.0" layoutX="43.0" layoutY="82.0" stroke="TRANSPARENT" strokeType="INSIDE" width="237.0" />
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3f2ff" height="110.0" layoutX="43.0" layoutY="82.0"
+                   stroke="TRANSPARENT" strokeType="INSIDE" width="237.0"/>
         <VBox layoutX="300.0" layoutY="62.0" prefHeight="200.0" prefWidth="100.0">
             <children>
-                <ImageView fx:id="editUserImage" fitHeight="150.0" fitWidth="169.0" onMouseClicked="#onImageClicked" pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="editUserImage" fitHeight="150.0" fitWidth="169.0" onMouseClicked="#onImageClicked"
+                           pickOnBounds="true" preserveRatio="true">
                     <VBox.margin>
-                        <Insets left="50.0" right="50.0" top="20.0" />
+                        <Insets left="50.0" right="50.0" top="20.0"/>
                     </VBox.margin>
                     <image>
-                        <Image url="@../../fry_avatar.jpg" />
+                        <Image url="@../../fry_avatar.jpg"/>
                     </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
                 </ImageView>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Click image to update" textAlignment="CENTER">
                     <VBox.margin>
-                        <Insets bottom="10.0" left="70.0" right="70.0" top="10.0" />
+                        <Insets bottom="10.0" left="70.0" right="70.0" top="10.0"/>
                     </VBox.margin>
                 </Text>
             </children>
         </VBox>
         <VBox layoutX="42.0" layoutY="81.0" prefHeight="248.0" prefWidth="237.0">
             <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="10.0" top="5.0" />
-               </VBox.margin>
-            </Text>
-            <Label fx:id="currentUsername" text="Current username">
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="20.0" />
-               </VBox.margin>
-            </Label>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="10.0" top="10.0" />
-               </VBox.margin>
-            </Text>
-            <Label fx:id="currentName" text="Current full name">
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="20.0" />
-               </VBox.margin>
-            </Label>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enter your new details" textAlignment="CENTER">
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="10.0" top="5.0"/>
+                    </VBox.margin>
+                </Text>
+                <Label fx:id="currentUsername" text="Current username">
                     <font>
-                        <Font name="System Bold" size="13.0" />
+                        <Font name="System Italic" size="14.0"/>
                     </font>
                     <VBox.margin>
-                        <Insets left="50.0" right="50.0" top="35.0" />
+                        <Insets left="20.0"/>
+                    </VBox.margin>
+                </Label>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="10.0" top="10.0"/>
+                    </VBox.margin>
+                </Text>
+                <Label fx:id="currentName" text="Current full name">
+                    <font>
+                        <Font name="System Italic" size="14.0"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets left="20.0"/>
+                    </VBox.margin>
+                </Label>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enter your new details" textAlignment="CENTER">
+                    <font>
+                        <Font name="System Bold" size="13.0"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets left="50.0" right="50.0" top="35.0"/>
                     </VBox.margin>
                 </Text>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New First Name">
                     <VBox.margin>
-                        <Insets bottom="5.0" left="10.0" top="10.0" />
+                        <Insets bottom="5.0" left="10.0" top="10.0"/>
                     </VBox.margin>
                 </Text>
                 <TextField fx:id="editFirstnameField" promptText="First Name">
                     <font>
-                        <Font size="14.0" />
+                        <Font size="14.0"/>
                     </font>
                 </TextField>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New Last Name">
                     <VBox.margin>
-                        <Insets bottom="5.0" left="10.0" top="5.0" />
+                        <Insets bottom="5.0" left="10.0" top="5.0"/>
                     </VBox.margin>
                 </Text>
                 <TextField fx:id="editLastnameField" promptText="Last Name">
                     <font>
-                        <Font size="14.0" />
+                        <Font size="14.0"/>
                     </font>
                 </TextField>
             </children>
         </VBox>
-        <Text layoutX="209.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit your account" textAlignment="CENTER">
+        <Text layoutX="209.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit your account"
+              textAlignment="CENTER">
             <font>
-                <Font name="System Bold" size="24.0" />
+                <Font name="System Bold" size="24.0"/>
             </font>
         </Text>
-        <Button defaultButton="true" layoutX="308.0" layoutY="300.0" mnemonicParsing="false" onAction="#onUpdateClicked" prefWidth="90.0" text="Update" textAlignment="CENTER">
+        <Button defaultButton="true" layoutX="308.0" layoutY="300.0" mnemonicParsing="false" onAction="#onUpdateClicked"
+                prefWidth="90.0" text="Update" textAlignment="CENTER">
             <font>
-                <Font size="14.0" />
+                <Font size="14.0"/>
             </font>
         </Button>
-        <Button cancelButton="true" layoutX="456.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefWidth="90.0" text="Close" textAlignment="CENTER">
+        <Button cancelButton="true" layoutX="456.0" layoutY="300.0" mnemonicParsing="false"
+                onAction="#handleCloseButtonAction" prefWidth="90.0" text="Close" textAlignment="CENTER">
             <font>
-                <Font size="14.0" />
+                <Font size="14.0"/>
             </font>
         </Button>
     </children>

@@ -32,7 +32,6 @@ public class SBController implements Closable, Initializable {
 
     @FXML
     private TabPane projectsPane;
-    private AnchorPane taskPane;
     @FXML
     private Menu workspaceMenu;
     private final ArrayList<MenuItem> itemList;
@@ -195,7 +194,10 @@ public class SBController implements Closable, Initializable {
                 task.setCompleted(completed.isSelected())
         );
 
-        Label checklist = new Label("Checklist 0/3");
+        int numChecklistItems = task.getListSize();
+        int completedItems = task.getNumChecklistCompleted();
+        String summary = String.format("%d/%d", completedItems, numChecklistItems);
+        Label checklist = new Label("Checklist " + summary);
         checklist.setLayoutX(14);
         checklist.setLayoutY(46);
 
@@ -206,7 +208,7 @@ public class SBController implements Closable, Initializable {
         dueDateLabel.setLayoutX(14);
         dueDateLabel.setLayoutY(86);
 
-        taskPane = new AnchorPane(updateButton, deleteButton, taskNameLabel, completed, checklist, dueDateLabel);
+        AnchorPane taskPane = new AnchorPane(updateButton, deleteButton, taskNameLabel, completed, checklist, dueDateLabel);
         taskPane.setStyle("-fx-background-color: lightgreen; -fx-border-color: grey;");
         VBox.setMargin(taskPane, new Insets(5));
         taskPane.paddingProperty().setValue(new Insets(5));
@@ -396,13 +398,13 @@ public class SBController implements Closable, Initializable {
     @FXML
     @Override
     public void handleCloseButtonAction(@NotNull Event event) {
-        Button button = (Button) event.getTarget();
-        Stage stage = (Stage) button.getScene().getWindow();
-        stage.close();
         Alert exitAlert = new Alert(Alert.AlertType.CONFIRMATION);
         exitAlert.setTitle("Logout");
         exitAlert.setHeaderText("You're about to exit Smart Board!");
         exitAlert.setContentText("Press OK to exit, or cancel to return to Smart Board");
+
+        Button button = (Button) event.getTarget();
+        Stage stage = (Stage) button.getScene().getWindow();
 
         if (exitAlert.showAndWait().get() == ButtonType.OK) {
             stage.close();

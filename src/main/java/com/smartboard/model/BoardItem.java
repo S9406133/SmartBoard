@@ -29,19 +29,6 @@ public abstract class BoardItem<T> {
         return this.subItems.get(index);
     }
 
-    public T getSubItemByObject(T item){
-        T boardItem = null;
-
-        for (T subItem : this.subItems){
-            if (subItem == item){
-                boardItem = subItem;
-                break;
-            }
-        }
-
-        return boardItem;
-    }
-
     public List<T> getSubItemList() {
         return this.subItems;
     }
