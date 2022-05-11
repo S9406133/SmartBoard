@@ -23,8 +23,9 @@ public class User extends BoardItem<Project> {
     }
 
     @Override
-    public void addSubItem(String subItemName) throws StringLengthException {
+    public Project addSubItem(String subItemName) throws StringLengthException {
         this.subItems.add(new Project(subItemName));
+        return this.subItems.get(this.subItems.size() - 1);
     }
 
     public boolean validateLogin(String username, String password) {

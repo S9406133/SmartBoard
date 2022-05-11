@@ -6,13 +6,12 @@ public class Column extends BoardItem<Task> {
         super(name);
 
         addSubItem("Test task 1");
-        addSubItem("Test task 2");
-        addSubItem("Test task 3");
     }
 
     @Override
-    public void addSubItem(String subItemName) throws StringLengthException {
+    public Task addSubItem(String subItemName) throws StringLengthException {
         this.subItems.add(new Task(subItemName));
+        return this.subItems.get(this.subItems.size() - 1);
     }
 
 }

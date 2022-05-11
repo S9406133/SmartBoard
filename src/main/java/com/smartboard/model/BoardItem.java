@@ -19,7 +19,7 @@ public abstract class BoardItem<T> {
         this.subItems = new ArrayList<>();
     }
 
-    public abstract void addSubItem(String subItemName) throws StringLengthException;
+    public abstract T addSubItem(String subItemName) throws StringLengthException;
 
     public boolean removeSubItem(T item) {
         return this.subItems.remove(item);

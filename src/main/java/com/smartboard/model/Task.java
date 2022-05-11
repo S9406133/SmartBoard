@@ -7,17 +7,20 @@ public class Task extends BoardItem<ChecklistItem> {
 
     private String description;
     private LocalDate dueDate;
+    private boolean isCompleted;
 
     public Task(String name) throws StringLengthException {
         super(name);
 
         this.description = "Provide a description";
         this.dueDate = LocalDate.now();
+        this.isCompleted = false;
     }
 
     @Override
-    public void addSubItem(String subItemName) {
+    public ChecklistItem addSubItem(String subItemName) {
         this.subItems.add(new ChecklistItem(subItemName));
+        return this.subItems.get(this.subItems.size() - 1);
     }
 
     public String getDescription() {
@@ -40,4 +43,15 @@ public class Task extends BoardItem<ChecklistItem> {
         }
     }
 
+    public void nullDueDate(){
+        this.dueDate = null;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
+    }
 }

@@ -103,7 +103,7 @@ public class SBController implements Closable, Initializable {
     }
 
     private VBox createColumnView(Column column) {
-        int columnWidth = 300;
+        int columnWidth = 310;
         int iconHeight = 17;
 
         // Column Header
@@ -116,12 +116,12 @@ public class SBController implements Closable, Initializable {
             try {
                 Data.currentColumn = column;
                 Data.currentTask = null;
-                TaskEditorView.createTaskEditorView();
+                TaskEditorView.createTaskEditorView("Add");
+                reLoadColumns();
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
         });
-        // TODO addTask event
 
         Button deleteButton = new Button();
         ImageView deleteIcon = new ImageView(new Image("delete_f_icon.png"));
@@ -147,44 +147,66 @@ public class SBController implements Closable, Initializable {
         VBox columnBox = new VBox(columnHeader);
 
         for (Task task : column.getSubItemList()) {
-            columnBox.getChildren().add(createTaskView(task));
+            columnBox.getChildren().add(createTaskView(column, task));
         }
         // ALT column.getSubItemList().forEach(task -> columnBox.getChildren().add(createTaskView(task)));
 
         columnBox.setSpacing(10);
         columnBox.setMaxWidth(columnWidth);
+        columnBox.setMinWidth(columnWidth);
 
         return columnBox;
     }
 
-    private AnchorPane createTaskView(Task task) {
+    private AnchorPane createTaskView(Column column, Task task) {
         // Task pane
-        Button update = new Button("Update");
-        //TODO
-        update.setPrefWidth(65);
-        update.setLayoutX(225);
-        update.setLayoutY(44);
+        Button updateButton = new Button("Update");
+        updateButton.setPrefWidth(65);
+        updateButton.setLayoutX(225);
+        updateButton.setLayoutY(44);
+        updateButton.setOnAction(actionEvent -> {
+            try {
+                Data.currentTask = task;
+                TaskEditorView.createTaskEditorView("Update");
+                reLoadColumns();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        });
 
-        Button delete = new Button("Delete");
-        //TODO
-        delete.setPrefWidth(65);
-        delete.setLayoutX(225);
-        delete.setLayoutY(74);
+        Button deleteButton = new Button("Delete");
+        deleteButton.setPrefWidth(65);
+        deleteButton.setLayoutX(225);
+        deleteButton.setLayoutY(74);
+        deleteButton.setOnAction(
+                actionEvent -> onDeleteTaskClicked(column, task)
+        );
 
-        Label taskName = new Label(task.getName());
-        taskName.setFont(HEAD_FONT_SIZE);
-        taskName.setLayoutX(14);
-        taskName.setLayoutY(6);
+        Label taskNameLabel = new Label(task.getName());
+        taskNameLabel.setFont(HEAD_FONT_SIZE);
+        taskNameLabel.setLayoutX(14);
+        taskNameLabel.setLayoutY(6);
+
+        CheckBox completed = new CheckBox("Completed");
+        completed.setSelected(task.isCompleted());
+        completed.setLayoutX(200);
+        completed.setLayoutY(8);
+        completed.setOnAction(actionEvent ->
+                task.setCompleted(completed.isSelected())
+        );
 
         Label checklist = new Label("Checklist 0/3");
         checklist.setLayoutX(14);
         checklist.setLayoutY(46);
 
-        Label dueDate = new Label("Due Date: " + task.getDueDate());
-        dueDate.setLayoutX(14);
-        dueDate.setLayoutY(86);
+        Label dueDateLabel = new Label("Due Date: None");
+        if (task.getDueDate() != null) {
+            dueDateLabel.setText("Due Date: " + task.getDueDate());
+        }
+        dueDateLabel.setLayoutX(14);
+        dueDateLabel.setLayoutY(86);
 
-        taskPane = new AnchorPane(update, delete, taskName, checklist, dueDate);
+        taskPane = new AnchorPane(updateButton, deleteButton, taskNameLabel, completed, checklist, dueDateLabel);
         taskPane.setStyle("-fx-background-color: lightgreen; -fx-border-color: grey;");
         VBox.setMargin(taskPane, new Insets(5));
         taskPane.paddingProperty().setValue(new Insets(5));
@@ -233,8 +255,7 @@ public class SBController implements Closable, Initializable {
         String name = TextInputDialog.show("Create a new project", "Project title");
 
         if (name != null) {
-            Data.currentUser.addSubItem(name);
-            Project newProject = Data.currentUser.getSubItem(Data.currentUser.getListSize() - 1);
+            Project newProject = Data.currentUser.addSubItem(name);
             createProjectView(newProject);
             projectsPane.getSelectionModel().selectLast();
             addProjectToMenu(newProject, projectsPane.getTabs().get(Data.currentUser.getListSize() - 1));
@@ -334,6 +355,18 @@ public class SBController implements Closable, Initializable {
         }
     }
 
+    private void onDeleteTaskClicked(Column column, Task task) {
+        String alertTitle = "Delete Task";
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(alertTitle);
+        alert.setHeaderText("You're about to delete task - " + task.getName());
+        alert.setContentText("Press OK to delete, or cancel to return to Smart Board");
+
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            deleteBoardItem(column, task, alertTitle);
+        }
+    }
+
     private void deleteBoardItem(BoardItem superItem, BoardItem itemToDelete, String alertTitle) {
         String deleteClass = itemToDelete.getClass().getSimpleName();
         String itemName = itemToDelete.getName();
@@ -349,9 +382,7 @@ public class SBController implements Closable, Initializable {
                     projectsPane.getTabs().clear();
                     displayProjects();
                 }
-                case "Column" -> {
-                    reLoadColumns();
-                }
+                case "Column", "Task" -> reLoadColumns();
             }
 
         } else {

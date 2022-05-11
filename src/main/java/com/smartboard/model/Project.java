@@ -15,8 +15,9 @@ public class Project extends BoardItem<Column> {
     }
 
     @Override
-    public void addSubItem(String subItemName) throws StringLengthException {
+    public Column addSubItem(String subItemName) throws StringLengthException {
         this.subItems.add(new Column(subItemName));
+        return this.subItems.get(this.subItems.size() - 1);
     }
 
     @Override

@@ -11,13 +11,13 @@ import java.io.IOException;
 
 public class TaskEditorView {
 
-    public static void createTaskEditorView() throws IOException {
+    public static void createTaskEditorView(String title) throws IOException {
         String fxmlName = "taskeditor.fxml";
         FXMLLoader fxmlLoader = new FXMLLoader(SmartBoard.class.getResource(fxmlName));
         Scene taskScene = new Scene(fxmlLoader.load());
         Stage taskStage = new Stage(StageStyle.UTILITY);
         taskStage.initModality(Modality.APPLICATION_MODAL);
-        taskStage.setTitle("Task editor");
+        taskStage.setTitle("Task editor - " + title + " task");
         taskStage.getIcons().add(SmartBoard.icon);
         taskStage.setScene(taskScene);
         taskStage.setResizable(false);

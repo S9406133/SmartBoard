@@ -84,9 +84,7 @@ public class EditProfileController implements Closable, Initializable, Updatable
         }
 
         if (!updated) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(alertMessage);
-            alert.showAndWait();
+            Utility.errorAlert(alertMessage);
         } else {
             SBController.staticToolbarName.setText(
                     Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName()
