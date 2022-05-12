@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class SmartBoard extends Application {
 
-    public static Image icon = new Image("icon.png");
+    public static final Image icon = new Image("icon.png");
 
     @Override
     public void start(Stage stage) throws IOException, StringLengthException {

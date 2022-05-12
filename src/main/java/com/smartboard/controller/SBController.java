@@ -24,6 +24,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -46,6 +49,7 @@ public class SBController implements Closable, Initializable {
     protected Label toolbarName;
     public static Label staticToolbarName;
     private final Font HEAD_FONT_SIZE = new Font(14);
+    private String taskColor = "";
 
     public SBController() {
         itemList = new ArrayList<>();
@@ -158,7 +162,7 @@ public class SBController implements Closable, Initializable {
     }
 
     private AnchorPane createTaskView(Column column, Task task) {
-        // Task pane
+        // Update Button
         Button updateButton = new Button("Update");
         updateButton.setPrefWidth(65);
         updateButton.setLayoutX(225);
@@ -173,6 +177,7 @@ public class SBController implements Closable, Initializable {
             }
         });
 
+        // Delete Button
         Button deleteButton = new Button("Delete");
         deleteButton.setPrefWidth(65);
         deleteButton.setLayoutX(225);
@@ -181,39 +186,76 @@ public class SBController implements Closable, Initializable {
                 actionEvent -> onDeleteTaskClicked(column, task)
         );
 
+        // Task name label
         Label taskNameLabel = new Label(task.getName());
         taskNameLabel.setFont(HEAD_FONT_SIZE);
         taskNameLabel.setLayoutX(14);
         taskNameLabel.setLayoutY(6);
 
+        // Completed checkbox
         CheckBox completed = new CheckBox("Completed");
         completed.setSelected(task.isCompleted());
-        completed.setLayoutX(200);
-        completed.setLayoutY(8);
+        completed.setLayoutX(14);
+        completed.setLayoutY(46);
         completed.setOnAction(actionEvent ->
-                task.setCompleted(completed.isSelected())
+                {
+                    task.setCompleted(completed.isSelected());
+                    taskColor = getPaneColor(task);
+                    reLoadColumns();
+                }
         );
 
+        // Checklist summary
         int numChecklistItems = task.getListSize();
         int completedItems = task.getNumChecklistCompleted();
-        String summary = String.format("%d/%d", completedItems, numChecklistItems);
-        Label checklist = new Label("Checklist " + summary);
-        checklist.setLayoutX(14);
-        checklist.setLayoutY(46);
+        String summary = String.format("  %d/%d", completedItems, numChecklistItems);
+        Label checklistLabel = new Label(summary);
+        ImageView clImage = new ImageView(new Image("checklist_icon.png"));
+        clImage.preserveRatioProperty().setValue(true);
+        clImage.setFitHeight(22);
+        checklistLabel.graphicProperty().setValue(clImage);
+        checklistLabel.setLayoutX(14);
+        checklistLabel.setLayoutY(86);
 
-        Label dueDateLabel = new Label("Due Date: None");
+        // Due date label
+        Label dueDateLabel = new Label("  Not set");
+        ImageView ddImage = new ImageView(new Image("alarm_icon.png"));
+        ddImage.preserveRatioProperty().setValue(true);
+        ddImage.setFitHeight(22);
+        dueDateLabel.graphicProperty().setValue(ddImage);
         if (task.getDueDate() != null) {
-            dueDateLabel.setText("Due Date: " + task.getDueDate());
+            dueDateLabel.setText("  " + task.getDueDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
-        dueDateLabel.setLayoutX(14);
+        dueDateLabel.setLayoutX(100);
         dueDateLabel.setLayoutY(86);
 
-        AnchorPane taskPane = new AnchorPane(updateButton, deleteButton, taskNameLabel, completed, checklist, dueDateLabel);
-        taskPane.setStyle("-fx-background-color: lightgreen; -fx-border-color: grey;");
+        // Task pane
+        taskColor = getPaneColor(task);
+        AnchorPane taskPane = new AnchorPane(updateButton, deleteButton, taskNameLabel, completed, checklistLabel, dueDateLabel);
+        taskPane.setStyle("-fx-background-color: " + taskColor + "; -fx-border-color: grey;");
         VBox.setMargin(taskPane, new Insets(5));
         taskPane.paddingProperty().setValue(new Insets(5));
 
         return taskPane;
+    }
+
+    private String getPaneColor(Task task) {
+        final String NOT_SET = "azure";
+        final String APPROACHING = "khaki";
+        final String OVERDUE = "orangered";
+        final String COMPLETED = "lightgreen";
+        final String COMPLETED_LATE = "lightpink";
+        String retColor = NOT_SET;
+
+        switch (task.getStatus()){
+            case DATE_NOT_SET -> retColor = NOT_SET;
+            case APPROACHING -> retColor = APPROACHING;
+            case COMPLETED_ON_TIME -> retColor = COMPLETED;
+            case OVERDUE -> retColor = OVERDUE;
+            case COMPLETED_LATE -> retColor = COMPLETED_LATE;
+        }
+
+        return retColor;
     }
 
     private void addProjectToMenu(@NotNull Project project, Tab tab) {
