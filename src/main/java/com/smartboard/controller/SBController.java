@@ -5,16 +5,20 @@ import com.smartboard.view.EditProfileView;
 import com.smartboard.view.LoginView;
 import com.smartboard.view.TaskEditorView;
 import com.smartboard.view.TextInputDialog;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Menu;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -24,8 +28,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.DateFormat;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Random;
@@ -50,6 +52,8 @@ public class SBController implements Closable, Initializable {
     public static Label staticToolbarName;
     private final Font HEAD_FONT_SIZE = new Font(14);
     private String taskColor = "";
+    private double startX = 0;
+    private double startY = 0;
 
     public SBController() {
         itemList = new ArrayList<>();
@@ -155,8 +159,30 @@ public class SBController implements Closable, Initializable {
         // ALT column.getSubItemList().forEach(task -> columnBox.getChildren().add(createTaskView(task)));
 
         columnBox.setSpacing(10);
+        columnBox.setMinHeight(500);
         columnBox.setMaxWidth(columnWidth);
         columnBox.setMinWidth(columnWidth);
+
+        // Credit https://jenkov.com/tutorials/javafx/drag-and-drop.html
+        columnBox.setOnDragOver(event -> {
+            if (event.getGestureSource() != columnBox && event.getDragboard().hasString()) {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            }
+            event.consume();
+        });
+
+        columnBox.setOnDragDropped((DragEvent event) -> {
+            Dragboard db = event.getDragboard();
+            if (db.hasString()) {
+                System.out.println("Dropped: " + db.getString());
+                event.setDropCompleted(true);
+                moveTask(column, Data.currentColumn, Data.currentTask);
+                reLoadColumns();
+            } else {
+                event.setDropCompleted(false);
+            }
+            event.consume();
+        });
 
         return columnBox;
     }
@@ -229,15 +255,67 @@ public class SBController implements Closable, Initializable {
         dueDateLabel.setLayoutX(100);
         dueDateLabel.setLayoutY(86);
 
-        // Task pane
-        taskColor = getPaneColor(task);
+        // Task pane`
         AnchorPane taskPane = new AnchorPane(updateButton, deleteButton, taskNameLabel, completed, checklistLabel, dueDateLabel);
+        taskColor = getPaneColor(task);
         taskPane.setStyle("-fx-background-color: " + taskColor + "; -fx-border-color: grey;");
         VBox.setMargin(taskPane, new Insets(5));
         taskPane.paddingProperty().setValue(new Insets(5));
+        taskPane.setCursor(Cursor.HAND);
+
+        // Credit https://jenkov.com/tutorials/javafx/drag-and-drop.html
+        taskPane.setOnDragDetected((MouseEvent event) -> {
+            System.out.println("Task drag detected");
+            Dragboard db = taskPane.startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            Data.currentColumn = column;
+            Data.currentTask = task;
+            content.putString(task.getName());
+            db.setContent(content);
+        });
 
         return taskPane;
     }
+
+//    private void draggable(Node node) {
+//    System.out.println("draggable "+ node);
+//        //Prompt the user that the node can be clicked
+//
+//
+//        //Prompt the user that the node can be dragged
+//        node.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+//            node.setCursor(Cursor.MOVE);
+//
+//            //When a press event occurs, the location coordinates of the event are cached
+//            startX = event.getX();
+//            startY = event.getY();
+//        });
+//        node.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> node.setCursor(Cursor.DEFAULT));
+//
+//        //Realize drag and drop function
+//        node.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
+//            double distanceX = event.getX() - startX;
+//            double distanceY = event.getY() - startY;
+//
+//            double x = node.getLayoutX() + distanceX;
+//            double y = node.getLayoutY() + distanceY;
+//
+//            //After calculating X and y, relocate the node to the specified coordinate point (x, y)
+//            node.relocate(x, y);
+//        });
+//    }
+//
+//    private void makeDraggable(Node node) {
+//        node.setOnMousePressed(mouseEvent -> {
+//            startX = mouseEvent.getSceneX() - node.getTranslateX();
+//            startY = mouseEvent.getSceneY() - node.getTranslateY();
+//        });
+//
+//        node.setOnDragDetected(mouseEvent -> {
+//            node.setTranslateX(mouseEvent.getSceneX() - startX);
+//            node.setTranslateY(mouseEvent.getSceneY() - startY);
+//        });
+//    }
 
     private String getPaneColor(Task task) {
         final String NOT_SET = "azure";
@@ -247,7 +325,7 @@ public class SBController implements Closable, Initializable {
         final String COMPLETED_LATE = "lightpink";
         String retColor = NOT_SET;
 
-        switch (task.getStatus()){
+        switch (task.getStatus()) {
             case DATE_NOT_SET -> retColor = NOT_SET;
             case APPROACHING -> retColor = APPROACHING;
             case COMPLETED_ON_TIME -> retColor = COMPLETED;
@@ -409,6 +487,11 @@ public class SBController implements Closable, Initializable {
         if (alert.showAndWait().get() == ButtonType.OK) {
             deleteBoardItem(column, task, alertTitle);
         }
+    }
+
+    private void moveTask(Column newColumn, Column currentColumn, Task task) {
+        newColumn.getSubItemList().add(task);
+        currentColumn.removeSubItem(task);
     }
 
     private void deleteBoardItem(BoardItem superItem, BoardItem itemToDelete, String alertTitle) {

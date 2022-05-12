@@ -58,7 +58,6 @@ public class TaskEditorController implements Closable, Initializable {
                 loadChecklistRows();
             }
         }
-
     }
 
     @FXML
@@ -177,7 +176,6 @@ public class TaskEditorController implements Closable, Initializable {
             checklistBox.getChildren().add(createChecklistRow(item));
         }
     }
-
 
     private void reLoadChecklistRows() {
         checklistBox.getChildren().removeIf(node -> node instanceof HBox);
