@@ -29,6 +29,21 @@ public abstract class BoardItem<T> {
         return this.subItems.get(index);
     }
 
+    public int getSubItemIndexByObject(T item){
+        int index = -1;
+        int i = 0;
+
+        for (T subItem : this.subItems){
+            if (subItem == item){
+                index = i;
+                break;
+            }
+            i++;
+        }
+
+        return index;
+    }
+
     public List<T> getSubItemList() {
         return this.subItems;
     }

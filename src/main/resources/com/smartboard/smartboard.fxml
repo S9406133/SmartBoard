@@ -64,7 +64,7 @@
                         <SeparatorMenuItem mnemonicParsing="false"/>
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Project">
+                <Menu fx:id="projectMenu" mnemonicParsing="false" text="Project">
                     <items>
                         <MenuItem id="newColumn" mnemonicParsing="false" onAction="#showInputDialog" text="Add Column"/>
                         <MenuItem id="renameProject" mnemonicParsing="false" onAction="#showInputDialog"
@@ -88,6 +88,7 @@
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
                         <MenuItem id="about" mnemonicParsing="false" onAction="#showAboutInfo" text="About"/>
+                        <MenuItem mnemonicParsing="false" onAction="#showVersionInfo" text="Version"/>
                     </items>
                 </Menu>
             </menus>

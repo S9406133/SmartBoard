@@ -42,7 +42,7 @@ public class EditProfileController implements Closable, Initializable, Updatable
     @FXML
     @Override
     public void handleCloseButtonAction(@NotNull Event event) {
-        Button button = (Button) event.getTarget();
+        Node button = (Node) event.getTarget();
         Stage stage = (Stage) button.getScene().getWindow();
         stage.close();
     }

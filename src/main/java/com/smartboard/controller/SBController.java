@@ -5,7 +5,6 @@ import com.smartboard.view.EditProfileView;
 import com.smartboard.view.LoginView;
 import com.smartboard.view.TaskEditorView;
 import com.smartboard.view.TextInputDialog;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -13,7 +12,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Menu;
 import javafx.scene.image.Image;
@@ -30,6 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -39,6 +38,8 @@ public class SBController implements Closable, Initializable {
     private TabPane projectsPane;
     @FXML
     private Menu workspaceMenu;
+    @FXML
+    private Menu projectMenu;
     private final ArrayList<MenuItem> itemList;
     @FXML
     private Button mainExitButton;
@@ -69,6 +70,8 @@ public class SBController implements Closable, Initializable {
         toolbarQuote.setText(getRandomQuote().toString());
 
         displayProjects();
+
+        setProjectMenuDisable();
     }
 
     private void displayProjects() {
@@ -80,6 +83,14 @@ public class SBController implements Closable, Initializable {
             }
             addProjectToMenu(project, projectsPane.getTabs().get(i));
             i++;
+        }
+    }
+
+    private void setProjectMenuDisable() {
+        if (Data.currentUser.getListSize() == 0) {
+            projectMenu.disableProperty().setValue(true);
+        } else {
+            projectMenu.disableProperty().setValue(false);
         }
     }
 
@@ -95,7 +106,6 @@ public class SBController implements Closable, Initializable {
         for (Column column : project.getSubItemList()) {
             columnHolder.getChildren().add(createColumnView(column));
         }
-        // ALT project.getSubItemList().forEach(column -> hBox.getChildren().add(createColumnView(column)));
     }
 
     private void reLoadColumns() {
@@ -105,7 +115,7 @@ public class SBController implements Closable, Initializable {
             hBox.getChildren().clear();
             loadColumns(hBox, getCurrentProject());
         } catch (ClassCastException cce) {
-            System.out.println(cce.getMessage());
+            cce.printStackTrace();
         }
     }
 
@@ -142,10 +152,23 @@ public class SBController implements Closable, Initializable {
         Label columnLabel = new Label(column.getName());
         columnLabel.setFont(HEAD_FONT_SIZE);
         columnLabel.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-        columnLabel.setMaxWidth(200);
-        columnLabel.setPrefWidth(200);
+        columnLabel.setPadding(new Insets(0, 0, 0, 10));
+        columnLabel.setMaxWidth(152);
+        columnLabel.setPrefWidth(152);
 
-        ToolBar columnHeader = new ToolBar(addTaskButton, deleteButton, columnLabel);
+        Button leftButton = new Button("<");
+        leftButton.setOnAction(actionEvent -> {
+            moveColumn(column, "<");
+            reLoadColumns();
+        });
+
+        Button rightButton = new Button(">");
+        rightButton.setOnAction(actionEvent -> {
+            moveColumn(column, ">");
+            reLoadColumns();
+        });
+
+        ToolBar columnHeader = new ToolBar(rightButton, addTaskButton, deleteButton, columnLabel, leftButton);
         columnHeader.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         columnHeader.setStyle("-fx-background-color: lightblue; -fx-border-color: grey;");
         VBox.setMargin(columnHeader, new Insets(5));
@@ -156,7 +179,6 @@ public class SBController implements Closable, Initializable {
         for (Task task : column.getSubItemList()) {
             columnBox.getChildren().add(createTaskView(column, task));
         }
-        // ALT column.getSubItemList().forEach(task -> columnBox.getChildren().add(createTaskView(task)));
 
         columnBox.setSpacing(10);
         columnBox.setMinHeight(500);
@@ -174,7 +196,6 @@ public class SBController implements Closable, Initializable {
         columnBox.setOnDragDropped((DragEvent event) -> {
             Dragboard db = event.getDragboard();
             if (db.hasString()) {
-                System.out.println("Dropped: " + db.getString());
                 event.setDropCompleted(true);
                 moveTask(column, Data.currentColumn, Data.currentTask);
                 reLoadColumns();
@@ -265,7 +286,6 @@ public class SBController implements Closable, Initializable {
 
         // Credit https://jenkov.com/tutorials/javafx/drag-and-drop.html
         taskPane.setOnDragDetected((MouseEvent event) -> {
-            System.out.println("Task drag detected");
             Dragboard db = taskPane.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();
             Data.currentColumn = column;
@@ -381,6 +401,7 @@ public class SBController implements Closable, Initializable {
             createProjectView(newProject);
             projectsPane.getSelectionModel().selectLast();
             addProjectToMenu(newProject, projectsPane.getTabs().get(Data.currentUser.getListSize() - 1));
+            setProjectMenuDisable();
         }
     }
 
@@ -452,18 +473,6 @@ public class SBController implements Closable, Initializable {
         }
     }
 
-    @FXML
-    private void showAboutInfo() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("About Smart Board");
-        alert.setHeaderText("""
-                Smart Board version 1.1
-                Developer: Simon Mckindley
-                Created for Further Programming A2
-                May 2022""");
-        alert.showAndWait();
-    }
-
     private void onDeleteColumnClicked(Column column) {
         String alertTitle = "Delete Column";
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -474,6 +483,26 @@ public class SBController implements Closable, Initializable {
         if (alert.showAndWait().get() == ButtonType.OK) {
             Project currProject = getCurrentProject();
             deleteBoardItem(currProject, column, alertTitle);
+        }
+    }
+
+    private void moveColumn(Column column, String direction) {
+        Project project = getCurrentProject();
+        int colIndex = project.getSubItemIndexByObject(column);
+        int minIndex = 0;
+        int maxIndex = project.getListSize() - 1;
+
+        switch (direction) {
+            case "<" -> {
+                if (colIndex > minIndex) {
+                    Collections.swap(project.getSubItemList(), colIndex, colIndex - 1);
+                }
+            }
+            case ">" -> {
+                if (colIndex < maxIndex) {
+                    Collections.swap(project.getSubItemList(), colIndex, colIndex + 1);
+                }
+            }
         }
     }
 
@@ -508,6 +537,7 @@ public class SBController implements Closable, Initializable {
                     removeProjectsFromMenu();
                     projectsPane.getTabs().clear();
                     displayProjects();
+                    setProjectMenuDisable();
                 }
                 case "Column", "Task" -> reLoadColumns();
             }
@@ -534,6 +564,27 @@ public class SBController implements Closable, Initializable {
         if (exitAlert.showAndWait().get() == ButtonType.OK) {
             stage.close();
         }
+    }
+
+    @FXML
+    private void showVersionInfo() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Smart Board Version");
+        alert.setHeaderText("""
+                Smart Board version 1.1
+                Developer: Simon Mckindley
+                Created for Further Programming A2
+                May 2022""");
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void showAboutInfo() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("About Smart Board");
+        alert.setHeaderText("""
+                Include instructions here""");
+        alert.showAndWait();
     }
 
     private Quote getRandomQuote() {
