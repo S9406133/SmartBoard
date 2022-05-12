@@ -83,24 +83,27 @@ public class Task extends BoardItem<ChecklistItem> {
     }
 
     public void setStatus() {
-        LocalDate today = LocalDate.of(2022, 05, 14);//.now();
+        LocalDate today = LocalDate.of(2022, 5, 14);//.now();
 
-        if (this.dueDate == null){
-            this.status = Status.DATE_NOT_SET;
-
-        } else if (this.isCompleted) {
-            if (today.isAfter(this.dueDate)){
-                this.status = Status.COMPLETED_LATE;
-            } else {
+        if (this.isCompleted){
+            if (this.dueDate == null) {
                 this.status = Status.COMPLETED_ON_TIME;
-
-            }
-
-        } else {
-            if (today.isAfter(this.dueDate)){
-                this.status = Status.OVERDUE;
             } else {
-                this.status = Status.APPROACHING;
+                if (today.isAfter(this.dueDate)) {
+                    this.status = Status.COMPLETED_LATE;
+                } else {
+                    this.status = Status.COMPLETED_ON_TIME;
+                }
+            }
+        } else {
+            if (this.dueDate == null) {
+                this.status = Status.DATE_NOT_SET;
+            } else {
+                if (today.isAfter(this.dueDate)) {
+                    this.status = Status.OVERDUE;
+                } else {
+                    this.status = Status.APPROACHING;
+                }
             }
         }
     }
