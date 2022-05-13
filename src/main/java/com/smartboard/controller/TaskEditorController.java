@@ -23,7 +23,9 @@ import java.util.ResourceBundle;
 public class TaskEditorController implements Closable, Initializable {
 
     @FXML
-    public CheckBox completedCheckbox;
+    private CheckBox completedCheckbox;
+    @FXML
+    private ProgressBar checklistProgress;
     @FXML
     private TextField taskNameField;
     @FXML
@@ -53,6 +55,7 @@ public class TaskEditorController implements Closable, Initializable {
 
             if (task.getListSize() > 0) {
                 checklistRadio.setSelected(true);
+                setChecklistProgress();
                 checklistBox.visibleProperty().setValue(true);
                 checklistItemList = (ArrayList<ChecklistItem>) task.getSubItemList();
                 loadChecklistRows();
@@ -69,8 +72,7 @@ public class TaskEditorController implements Closable, Initializable {
 
         if (dueDate != null) {
             if (dueDate.isBefore(LocalDate.now())) {
-                alertMessage = "Due date is in the past - not updated";
-                Utility.errorAlert(alertMessage);
+                Utility.errorAlert("Due date is in the past - not updated");
             }
         }
 
@@ -85,6 +87,7 @@ public class TaskEditorController implements Closable, Initializable {
                     task = Data.currentTask;
                     task.setName(taskName);
                 }
+
                 error = false;
                 task.setDescription(taskDescriptionField.getText().strip());
                 task.setCompleted(completedCheckbox.isSelected());
@@ -134,6 +137,11 @@ public class TaskEditorController implements Closable, Initializable {
     @FXML
     private void toggleChecklist() {
         checklistBox.visibleProperty().setValue(checklistRadio.isSelected());
+    }
+
+    private void setChecklistProgress() {
+        checklistProgress.setProgress(
+                (double) Data.currentTask.getNumChecklistCompleted() / Data.currentTask.getListSize());
     }
 
     @FXML
@@ -188,18 +196,23 @@ public class TaskEditorController implements Closable, Initializable {
         checkBox.setSelected(checklistItem.isChecked());
         HBox.setMargin(checkBox, new Insets(4, 50, 0, 0));
         checkBox.setOnAction(actionEvent ->
-                checklistItem.setChecked(checkBox.isSelected())
+                {
+                    checklistItem.setChecked(checkBox.isSelected());
+                    setChecklistProgress();
+                }
         );
         HBox cBox = new HBox(checkBox);
         cBox.setMinWidth(200);
 
         Hyperlink editLink = new Hyperlink("Edit");
+        editLink.setStyle("-fx-underline: false");
         HBox.setMargin(editLink, new Insets(0, 10, 0, 0));
         editLink.setOnAction(actionEvent ->
                 editChecklistItem(checklistItem)
         );
 
         Hyperlink deleteLink = new Hyperlink("Delete");
+        deleteLink.setStyle("-fx-underline: false");
         deleteLink.setOnAction(actionEvent ->
                 deleteChecklistItem(checklistItem)
         );

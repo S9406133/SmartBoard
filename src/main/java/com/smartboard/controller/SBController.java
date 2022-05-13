@@ -52,7 +52,7 @@ public class SBController implements Closable, Initializable {
     protected Label toolbarName;
     public static Label staticToolbarName;
     private final Font HEAD_FONT_SIZE = new Font(14);
-    private String taskColor = "";
+    private String dueDateColor = "";
     private double startX = 0;
     private double startY = 0;
 
@@ -87,11 +87,7 @@ public class SBController implements Closable, Initializable {
     }
 
     private void setProjectMenuDisable() {
-        if (Data.currentUser.getListSize() == 0) {
-            projectMenu.disableProperty().setValue(true);
-        } else {
-            projectMenu.disableProperty().setValue(false);
-        }
+        projectMenu.disableProperty().setValue(Data.currentUser.getListSize() == 0);
     }
 
     private void createProjectView(Project project) {
@@ -122,6 +118,7 @@ public class SBController implements Closable, Initializable {
     private VBox createColumnView(Column column) {
         int columnWidth = 310;
         int iconHeight = 17;
+        String directionButtonStyle = "-fx-text-fill: black; -fx-underline: false; -fx-font-weight: bold";
 
         // Column Header
         Button addTaskButton = new Button();
@@ -153,16 +150,18 @@ public class SBController implements Closable, Initializable {
         columnLabel.setFont(HEAD_FONT_SIZE);
         columnLabel.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
         columnLabel.setPadding(new Insets(0, 0, 0, 10));
-        columnLabel.setMaxWidth(152);
-        columnLabel.setPrefWidth(152);
+        columnLabel.setMaxWidth(170);
+        columnLabel.setPrefWidth(170);
 
-        Button leftButton = new Button("<");
+        Hyperlink leftButton = new Hyperlink("<");
+        leftButton.setStyle(directionButtonStyle);
         leftButton.setOnAction(actionEvent -> {
             moveColumn(column, "<");
             reLoadColumns();
         });
 
-        Button rightButton = new Button(">");
+        Hyperlink rightButton = new Hyperlink(">");
+        rightButton.setStyle(directionButtonStyle);
         rightButton.setOnAction(actionEvent -> {
             moveColumn(column, ">");
             reLoadColumns();
@@ -197,7 +196,7 @@ public class SBController implements Closable, Initializable {
             Dragboard db = event.getDragboard();
             if (db.hasString()) {
                 event.setDropCompleted(true);
-                moveTask(column, Data.currentColumn, Data.currentTask);
+                moveTaskToColumn(column, Data.currentColumn, Data.currentTask);
                 reLoadColumns();
             } else {
                 event.setDropCompleted(false);
@@ -236,6 +235,7 @@ public class SBController implements Closable, Initializable {
         // Task name label
         Label taskNameLabel = new Label(task.getName());
         taskNameLabel.setFont(HEAD_FONT_SIZE);
+        taskNameLabel.setMaxWidth(280);
         taskNameLabel.setLayoutX(14);
         taskNameLabel.setLayoutY(6);
 
@@ -247,7 +247,7 @@ public class SBController implements Closable, Initializable {
         completed.setOnAction(actionEvent ->
                 {
                     task.setCompleted(completed.isSelected());
-                    taskColor = getPaneColor(task);
+                    dueDateColor = getStatusColor(task);
                     reLoadColumns();
                 }
         );
@@ -255,21 +255,28 @@ public class SBController implements Closable, Initializable {
         // Checklist summary
         int numChecklistItems = task.getListSize();
         int completedItems = task.getNumChecklistCompleted();
+        String clLabelColor = (numChecklistItems == completedItems) ? "lightgreen" : "khaki";
         String summary = String.format("  %d/%d", completedItems, numChecklistItems);
         Label checklistLabel = new Label(summary);
+        checklistLabel.setVisible(numChecklistItems > 0);
         ImageView clImage = new ImageView(new Image("checklist_icon.png"));
         clImage.preserveRatioProperty().setValue(true);
         clImage.setFitHeight(22);
         checklistLabel.graphicProperty().setValue(clImage);
+        checklistLabel.paddingProperty().setValue(new Insets(0, 5, 0, 5));
+        checklistLabel.setStyle("-fx-background-color: " + clLabelColor + "; -fx-border-color: lightgrey;");
         checklistLabel.setLayoutX(14);
         checklistLabel.setLayoutY(86);
 
         // Due date label
+        dueDateColor = getStatusColor(task);
         Label dueDateLabel = new Label("  Not set");
         ImageView ddImage = new ImageView(new Image("alarm_icon.png"));
         ddImage.preserveRatioProperty().setValue(true);
         ddImage.setFitHeight(22);
         dueDateLabel.graphicProperty().setValue(ddImage);
+        dueDateLabel.paddingProperty().setValue(new Insets(0, 5, 0, 5));
+        dueDateLabel.setStyle("-fx-background-color: " + dueDateColor + "; -fx-border-color: lightgrey;");
         if (task.getDueDate() != null) {
             dueDateLabel.setText("  " + task.getDueDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
@@ -278,8 +285,7 @@ public class SBController implements Closable, Initializable {
 
         // Task pane`
         AnchorPane taskPane = new AnchorPane(updateButton, deleteButton, taskNameLabel, completed, checklistLabel, dueDateLabel);
-        taskColor = getPaneColor(task);
-        taskPane.setStyle("-fx-background-color: " + taskColor + "; -fx-border-color: grey;");
+        taskPane.setStyle("-fx-background-color: azure; -fx-border-color: grey;");
         VBox.setMargin(taskPane, new Insets(5));
         taskPane.paddingProperty().setValue(new Insets(5));
         taskPane.setCursor(Cursor.HAND);
@@ -337,10 +343,10 @@ public class SBController implements Closable, Initializable {
 //        });
 //    }
 
-    private String getPaneColor(Task task) {
+    private String getStatusColor(Task task) {
         final String NOT_SET = "azure";
         final String APPROACHING = "khaki";
-        final String OVERDUE = "orangered";
+        final String OVERDUE = "red";
         final String COMPLETED = "lightgreen";
         final String COMPLETED_LATE = "lightpink";
         String retColor = NOT_SET;
@@ -518,7 +524,7 @@ public class SBController implements Closable, Initializable {
         }
     }
 
-    private void moveTask(Column newColumn, Column currentColumn, Task task) {
+    private void moveTaskToColumn(Column newColumn, Column currentColumn, Task task) {
         newColumn.getSubItemList().add(task);
         currentColumn.removeSubItem(task);
     }

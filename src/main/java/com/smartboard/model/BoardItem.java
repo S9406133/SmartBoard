@@ -6,7 +6,7 @@ import java.util.List;
 public abstract class BoardItem<T> {
 
     protected String name;
-    protected List<T> subItems;
+    protected ArrayList<T> subItems;
 
     public BoardItem(String name) throws StringLengthException {
 
@@ -21,20 +21,16 @@ public abstract class BoardItem<T> {
 
     public abstract T addSubItem(String subItemName) throws StringLengthException;
 
-    public boolean removeSubItem(T item) {
-        return this.subItems.remove(item);
-    }
+    public boolean removeSubItem(T item) { return this.subItems.remove(item); }
 
-    public T getSubItem(int index) throws IndexOutOfBoundsException {
-        return this.subItems.get(index);
-    }
+    public T getSubItem(int index) throws IndexOutOfBoundsException { return this.subItems.get(index); }
 
-    public int getSubItemIndexByObject(T item){
+    public int getSubItemIndexByObject(T item) {
         int index = -1;
         int i = 0;
 
-        for (T subItem : this.subItems){
-            if (subItem == item){
+        for (T subItem : this.subItems) {
+            if (subItem == item) {
                 index = i;
                 break;
             }
