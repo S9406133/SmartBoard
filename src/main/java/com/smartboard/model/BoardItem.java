@@ -1,7 +1,6 @@
 package com.smartboard.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class BoardItem<T> {
 
@@ -21,7 +20,7 @@ public abstract class BoardItem<T> {
 
     public abstract T addSubItem(String subItemName) throws StringLengthException;
 
-    public boolean removeSubItem(T item) { return this.subItems.remove(item); }
+    public boolean removeSubItem(BoardItem<?> item) { return this.subItems.remove(item); }
 
     public T getSubItem(int index) throws IndexOutOfBoundsException { return this.subItems.get(index); }
 
@@ -40,7 +39,7 @@ public abstract class BoardItem<T> {
         return index;
     }
 
-    public List<T> getSubItemList() {
+    public ArrayList<T> getSubItemList() {
         return this.subItems;
     }
 

@@ -57,7 +57,7 @@ public class TaskEditorController implements Closable, Initializable {
                 checklistRadio.setSelected(true);
                 setChecklistProgress();
                 checklistBox.visibleProperty().setValue(true);
-                checklistItemList = (ArrayList<ChecklistItem>) task.getSubItemList();
+                checklistItemList = task.getSubItemList();
                 loadChecklistRows();
             }
         }
