@@ -6,11 +6,12 @@ public class User extends BoardItem<Project> {
     private String firstName;
     private String lastName;
     private String imagePath;
+    private final int MIN_NAME_LENGTH = 2;
 
     public User(String userName, String password, String firstName, String lastName) throws StringLengthException {
         super(userName);
 
-        if (password.length() > 0 && firstName.length() > 1 && lastName.length() > 1) {
+        if (password.length() > 0 && firstName.length() > MIN_NAME_LENGTH && lastName.length() > MIN_NAME_LENGTH) {
             this.password = password;
             this.firstName = firstName;
             this.lastName = lastName;
@@ -19,7 +20,6 @@ public class User extends BoardItem<Project> {
         }
 
         this.imagePath = "fry_avatar.jpg";
-        this.subItems.add(new Project("Project1"));
     }
 
     @Override
@@ -63,7 +63,7 @@ public class User extends BoardItem<Project> {
     }
 
     public void setFirstName(String firstName) throws StringLengthException {
-        if (firstName.length() > 2) {
+        if (firstName.length() > MIN_NAME_LENGTH) {
             this.firstName = firstName;
         } else {
             throw new StringLengthException("Invalid name length - Name not changed");
@@ -75,7 +75,7 @@ public class User extends BoardItem<Project> {
     }
 
     public void setLastName(String lastName) throws StringLengthException {
-        if (lastName.length() > 2) {
+        if (lastName.length() > MIN_NAME_LENGTH) {
             this.lastName = lastName;
         } else {
             throw new StringLengthException("Invalid name length - Name not changed");

@@ -9,9 +9,6 @@ public class Project extends BoardItem<Column> {
         super(name);
 
         this.isDefault = false;
-        this.subItems.add(new Column("To Do"));
-        this.subItems.add(new Column("Doing"));
-        this.subItems.add(new Column("Done"));
     }
 
     @Override

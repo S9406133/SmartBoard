@@ -4,8 +4,6 @@ public class Column extends BoardItem<Task> {
 
     public Column(String name) throws StringLengthException {
         super(name);
-
-        addSubItem("Test task 1");
     }
 
     @Override

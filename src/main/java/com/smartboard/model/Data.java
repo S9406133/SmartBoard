@@ -18,9 +18,17 @@ public class Data {
     public static Task currentTask = null;
 
     public static void createInitUser() throws StringLengthException {
-        users.add(new User("Simo", "a", "Simon", "James"));
-
-        //currentUser = users.get(0); // Only for testing - no login required
+        users.add(new User("Sim", "a", "Simon", "James"));
+        users.get(0).addSubItem("New Project");
+        users.get(0).getSubItem(0).addSubItem("To Do");
+        users.get(0).getSubItem(0).addSubItem("Doing");
+        users.get(0).getSubItem(0).addSubItem("Done");
+        users.get(0).getSubItem(0).getSubItem(0).addSubItem("First Task");
+        users.get(0).getSubItem(0).getSubItem(0).addSubItem("Second Task");
+        users.get(0).getSubItem(0).getSubItem(0).addSubItem("Third Task");
+        users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("First item");
+        users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("Second item");
+        users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("Third item");
     }
 
 }

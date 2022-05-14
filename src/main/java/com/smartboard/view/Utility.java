@@ -1,4 +1,4 @@
-package com.smartboard.controller;
+package com.smartboard.view;
 
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;

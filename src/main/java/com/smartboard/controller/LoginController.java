@@ -4,6 +4,7 @@ import com.smartboard.model.Data;
 import com.smartboard.model.User;
 import com.smartboard.view.NewUserView;
 import com.smartboard.view.SmartBoardView;
+import com.smartboard.view.Utility;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

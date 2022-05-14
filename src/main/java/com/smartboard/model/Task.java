@@ -16,11 +16,6 @@ public class Task extends BoardItem<ChecklistItem> {
         this.description = "Provide a description...";
         this.isCompleted = false;
         this.status = Status.DATE_NOT_SET;
-
-        this.subItems.add(new ChecklistItem("A list item"));
-        this.getSubItem(0).setChecked(true);
-        this.subItems.add(new ChecklistItem("B list item"));
-        this.subItems.add(new ChecklistItem("C list item"));
     }
 
     @Override
@@ -83,9 +78,9 @@ public class Task extends BoardItem<ChecklistItem> {
     }
 
     public void setStatus() {
-        LocalDate today = LocalDate.of(2022, 5, 14);//.now();
+        LocalDate today = LocalDate.now();
 
-        if (this.isCompleted){
+        if (this.isCompleted) {
             if (this.dueDate == null) {
                 this.status = Status.COMPLETED_ON_TIME;
             } else {

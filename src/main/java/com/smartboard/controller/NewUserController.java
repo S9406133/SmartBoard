@@ -5,6 +5,7 @@ import com.smartboard.model.StringLengthException;
 import com.smartboard.model.User;
 import com.smartboard.view.LoginView;
 import com.smartboard.view.SmartBoardView;
+import com.smartboard.view.Utility;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -125,7 +126,6 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
         File imageFile = Utility.displayImageFileChooser(stage);
 
         if (imageFile != null) {
-            System.out.println(imageFile);
             imagePath = imageFile.getPath();
             userImage.setImage(new Image(imagePath));
         }

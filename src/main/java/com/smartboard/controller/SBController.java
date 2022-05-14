@@ -39,7 +39,7 @@ public class SBController implements Closable, Initializable {
     private Menu workspaceMenu;
     @FXML
     private Menu projectMenu;
-    private final ArrayList<MenuItem> itemList;
+    private final ArrayList<MenuItem> menuItemList;
     @FXML
     private Button mainExitButton;
     @FXML
@@ -54,7 +54,7 @@ public class SBController implements Closable, Initializable {
     private String dueDateColor = "";
 
     public SBController() {
-        itemList = new ArrayList<>();
+        menuItemList = new ArrayList<>();
     }
 
     @Override
@@ -350,8 +350,8 @@ public class SBController implements Closable, Initializable {
     }
 
     private void addProjectToMenu(@NotNull Project project, Tab tab) {
-        itemList.add(new MenuItem(project.getName()));
-        MenuItem currItem = itemList.get(itemList.size() - 1);
+        menuItemList.add(new MenuItem(project.getName()));
+        MenuItem currItem = menuItemList.get(menuItemList.size() - 1);
         currItem.setId(project.getName());
         currItem.setOnAction(actionEvent -> projectsPane.getSelectionModel().select(tab));
 
@@ -359,12 +359,21 @@ public class SBController implements Closable, Initializable {
     }
 
     private void removeProjectsFromMenu() {
-        for (MenuItem item : workspaceMenu.getItems()) {
-            if (item.getId() != null) {
-                if (!item.getId().equals("newProject")) {
-                    item.setVisible(false);
-                }
+        workspaceMenu.getItems().removeIf(menuItem -> {
+            if (menuItem.getId() != null) {
+                return !menuItem.getId().equals("newProject");
             }
+            return false;
+        });
+    }
+
+    private void reLoadWorkspaceMenu() {
+        removeProjectsFromMenu();
+
+        int i = 0;
+        for (Project project : Data.currentUser.getSubItemList()) {
+            addProjectToMenu(project, projectsPane.getTabs().get(i));
+            i++;
         }
     }
 
@@ -402,9 +411,7 @@ public class SBController implements Closable, Initializable {
         String name = TextInputDialog.show("Add a new column", "Column name");
 
         if (name != null) {
-            Project currentProject = getCurrentProject();
-            currentProject.addSubItem(name);
-
+            getCurrentProject().addSubItem(name);
             reLoadColumns();
         }
     }
@@ -417,6 +424,7 @@ public class SBController implements Closable, Initializable {
             Project currentProject = getCurrentProject();
             currentProject.setName(newName);
             projectsPane.getTabs().get(currentTabIndex).setText(currentProject.getName());
+            reLoadWorkspaceMenu();
         }
     }
 
@@ -449,6 +457,7 @@ public class SBController implements Closable, Initializable {
             projectsPane.getTabs().get(i).setText(Data.currentUser.getSubItem(i).getName());
         }
 
+        reLoadWorkspaceMenu();
     }
 
     @FXML
@@ -479,37 +488,6 @@ public class SBController implements Closable, Initializable {
         }
     }
 
-    private void moveColumn(Column column, String direction) {
-        Project project = getCurrentProject();
-        int colIndex = project.getSubItemIndexByObject(column);
-
-        moveItem(project.getSubItemList(), colIndex, direction);
-    }
-
-    private void moveTask(Task task, String direction) {
-        int taskIndex = Data.currentColumn.getSubItemIndexByObject(task);
-
-        moveItem(Data.currentColumn.getSubItemList(), taskIndex, direction);
-    }
-
-    private void moveItem(ArrayList<?> itemList, int itemIndex, String direction) {
-        int minIndex = 0;
-        int maxIndex = itemList.size() - 1;
-
-        switch (direction) {
-            case "left", "down" -> {
-                if (itemIndex > minIndex) {
-                    Collections.swap(itemList, itemIndex, itemIndex - 1);
-                }
-            }
-            case "right", "up" -> {
-                if (itemIndex < maxIndex) {
-                    Collections.swap(itemList, itemIndex, itemIndex + 1);
-                }
-            }
-        }
-    }
-
     private void onDeleteTaskClicked(Column column, Task task) {
         String alertTitle = "Delete Task";
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -520,11 +498,6 @@ public class SBController implements Closable, Initializable {
         if (alert.showAndWait().get() == ButtonType.OK) {
             deleteBoardItem(column, task, alertTitle);
         }
-    }
-
-    private void moveTaskToNewColumn(Column newColumn, Column currentColumn, Task task) {
-        newColumn.getSubItemList().add(task);
-        currentColumn.removeSubItem(task);
     }
 
     private void deleteBoardItem(BoardItem<?> superItem, BoardItem<?> itemToDelete, String alertTitle) {
@@ -552,6 +525,42 @@ public class SBController implements Closable, Initializable {
             alert.setTitle(alertTitle);
             alert.setHeaderText("Error deleting - " + itemName);
             alert.showAndWait();
+        }
+    }
+
+    private void moveTaskToNewColumn(Column newColumn, Column currentColumn, Task task) {
+        newColumn.getSubItemList().add(task);
+        currentColumn.removeSubItem(task);
+    }
+
+    private void moveColumn(Column column, String direction) {
+        Project project = getCurrentProject();
+        int colIndex = project.getSubItemIndex(column);
+
+        moveItem(project.getSubItemList(), colIndex, direction);
+    }
+
+    private void moveTask(Task task, String direction) {
+        int taskIndex = Data.currentColumn.getSubItemIndex(task);
+
+        moveItem(Data.currentColumn.getSubItemList(), taskIndex, direction);
+    }
+
+    private void moveItem(ArrayList<?> itemList, int itemIndex, String direction) {
+        int minIndex = 0;
+        int maxIndex = itemList.size() - 1;
+
+        switch (direction) {
+            case "left", "down" -> {
+                if (itemIndex > minIndex) {
+                    Collections.swap(itemList, itemIndex, itemIndex - 1);
+                }
+            }
+            case "right", "up" -> {
+                if (itemIndex < maxIndex) {
+                    Collections.swap(itemList, itemIndex, itemIndex + 1);
+                }
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import com.smartboard.model.Data;
 import com.smartboard.model.StringLengthException;
 import com.smartboard.model.Task;
 import com.smartboard.view.TextInputDialog;
+import com.smartboard.view.Utility;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

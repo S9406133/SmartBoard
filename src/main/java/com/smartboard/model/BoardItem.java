@@ -8,35 +8,22 @@ public abstract class BoardItem<T> {
     protected ArrayList<T> subItems;
 
     public BoardItem(String name) throws StringLengthException {
-
-        if (name.length() > 2) {
-            this.name = name;
-        } else {
-            throw new StringLengthException("Invalid Name Length - Item not created");
-        }
-
+        setName(name);
         this.subItems = new ArrayList<>();
     }
 
     public abstract T addSubItem(String subItemName) throws StringLengthException;
 
-    public boolean removeSubItem(BoardItem<?> item) { return this.subItems.remove(item); }
+    public boolean removeSubItem(BoardItem<?> item) {
+        return this.subItems.remove(item);
+    }
 
-    public T getSubItem(int index) throws IndexOutOfBoundsException { return this.subItems.get(index); }
+    public T getSubItem(int index) throws IndexOutOfBoundsException {
+        return this.subItems.get(index);
+    }
 
-    public int getSubItemIndexByObject(T item) {
-        int index = -1;
-        int i = 0;
-
-        for (T subItem : this.subItems) {
-            if (subItem == item) {
-                index = i;
-                break;
-            }
-            i++;
-        }
-
-        return index;
+    public int getSubItemIndex(T item) {
+        return this.subItems.indexOf(item);
     }
 
     public ArrayList<T> getSubItemList() {
@@ -52,7 +39,9 @@ public abstract class BoardItem<T> {
     }
 
     public void setName(String name) throws StringLengthException {
-        if (name.length() > 2) {
+        final int NAME_LENGTH_MIN = 2;
+
+        if (name.length() > NAME_LENGTH_MIN) {
             this.name = name;
         } else {
             throw new StringLengthException("Invalid name length - Name not changed");
