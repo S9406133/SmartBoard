@@ -39,9 +39,10 @@ public abstract class BoardItem<T> {
     }
 
     public void setName(String name) throws StringLengthException {
-        final int NAME_LENGTH_MIN = 2;
+        final int MIN_NAME_LENGTH = 2;
+        final int MAX_NAME_LENGTH = 30;
 
-        if (name.length() > NAME_LENGTH_MIN) {
+        if ((name.length() >= MIN_NAME_LENGTH) && (name.length() <= MAX_NAME_LENGTH)) {
             this.name = name;
         } else {
             throw new StringLengthException("Invalid name length - Name not changed");

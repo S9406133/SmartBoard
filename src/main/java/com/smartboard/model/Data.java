@@ -19,7 +19,7 @@ public class Data {
 
     public static void createInitUser() throws StringLengthException {
         users.add(new User("Sim", "a", "Simon", "James"));
-        users.get(0).addSubItem("New Project");
+        users.get(0).addSubItem("Test Project");
         users.get(0).getSubItem(0).addSubItem("To Do");
         users.get(0).getSubItem(0).addSubItem("Doing");
         users.get(0).getSubItem(0).addSubItem("Done");

@@ -57,7 +57,7 @@ public class TextInputDialog {
         dialogStage.showAndWait();
 
         if (textField.getText() != null) {
-            returnVal = textField.getText().trim();
+            returnVal = textField.getText().strip();
         }
 
         return returnVal;

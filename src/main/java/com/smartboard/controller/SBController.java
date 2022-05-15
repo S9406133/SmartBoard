@@ -48,7 +48,7 @@ public class SBController implements Closable, Initializable {
     private ImageView toolbarImage;
     public static ImageView staticToolbarImage;
     @FXML
-    protected Label toolbarName;
+    private Label toolbarName;
     public static Label staticToolbarName;
     private final Font HEAD_FONT_SIZE = new Font(14);
     private String dueDateColor = "";
