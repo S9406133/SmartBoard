@@ -56,7 +56,6 @@ public class TaskEditorController implements Closable, Initializable {
 
             if (task.getListSize() > 0) {
                 checklistRadio.setSelected(true);
-                setChecklistProgress();
                 checklistBox.visibleProperty().setValue(true);
                 checklistItemList = task.getSubItemList();
                 loadChecklistRows();
@@ -191,12 +190,12 @@ public class TaskEditorController implements Closable, Initializable {
         for (ChecklistItem item : checklistItemList) {
             checklistBox.getChildren().add(createChecklistRow(item));
         }
+        setChecklistProgress();
     }
 
     private void reLoadChecklistRows() {
         checklistBox.getChildren().removeIf(node -> node instanceof HBox);
         loadChecklistRows();
-        setChecklistProgress();
     }
 
     private HBox createChecklistRow(ChecklistItem checklistItem) {
