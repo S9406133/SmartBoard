@@ -141,8 +141,15 @@ public class TaskEditorController implements Closable, Initializable {
     }
 
     private void setChecklistProgress() {
-        checklistProgress.setProgress(
-                (double) Data.currentTask.getNumChecklistCompleted() / Data.currentTask.getListSize());
+        double numChecklistCompleted = 0;
+
+        for (ChecklistItem item : checklistItemList) {
+            if (item.isChecked()) {
+                numChecklistCompleted++;
+            }
+        }
+
+        checklistProgress.setProgress(numChecklistCompleted / checklistItemList.size());
     }
 
     @FXML
@@ -189,6 +196,7 @@ public class TaskEditorController implements Closable, Initializable {
     private void reLoadChecklistRows() {
         checklistBox.getChildren().removeIf(node -> node instanceof HBox);
         loadChecklistRows();
+        setChecklistProgress();
     }
 
     private HBox createChecklistRow(ChecklistItem checklistItem) {

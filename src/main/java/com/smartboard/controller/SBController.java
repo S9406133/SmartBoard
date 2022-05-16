@@ -586,7 +586,7 @@ public class SBController implements Closable, Initializable {
         alert.setTitle("Smart Board Version");
         alert.setHeaderText("""
                 Smart Board version 1.1
-                Developer: Simon Mckindley
+                Developer: Simon Mckindley S9406133
                 Created for Further Programming A2
                 May 2022""");
         alert.showAndWait();

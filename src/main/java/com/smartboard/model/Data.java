@@ -9,7 +9,11 @@ public class Data {
             new Quote("You must unlearn what you have learned.", "Yoda"),
             new Quote("Named must be your fear before banish it you can.", "Yoda"),
             new Quote("Fear is the path to the dark side. Fear leads to anger. Anger leads to hate. Hate leads to suffering.", "Yoda"),
-            new Quote("Who's the more foolish: the fool or the fool who follows him?", "Obi-Wan Kenobi")
+            new Quote("Who's the more foolish: the fool or the fool who follows him?", "Obi-Wan Kenobi"),
+            new Quote("Never tell me the odds!", "Han Solo"),
+            new Quote("May the Force be with you.", "Obi-Wan Kenobi"),
+            new Quote("Never tell me the odds!", "Han Solo"),
+            new Quote("Your focus determines your reality.", "Qui-Gon Jinn")
     };
     public static String defPicturePath = "fry_avatar.jpg";
     public static User currentUser = null;
