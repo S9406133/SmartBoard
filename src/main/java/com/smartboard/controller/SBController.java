@@ -5,6 +5,7 @@ import com.smartboard.view.*;
 import com.smartboard.view.TextInputDialog;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -39,7 +40,6 @@ public class SBController implements Closable, Initializable {
     private Menu workspaceMenu;
     @FXML
     private Menu projectMenu;
-    private final ArrayList<MenuItem> menuItemList;
     @FXML
     private Button mainExitButton;
     @FXML
@@ -52,10 +52,6 @@ public class SBController implements Closable, Initializable {
     public static Label staticToolbarName;
     private final Font HEAD_FONT_SIZE = new Font(14);
     private String dueDateColor = "";
-
-    public SBController() {
-        menuItemList = new ArrayList<>();
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -143,11 +139,16 @@ public class SBController implements Closable, Initializable {
         );
 
         Label columnLabel = new Label(column.getName());
+        columnLabel.setId("columnLabel");
         columnLabel.setFont(HEAD_FONT_SIZE);
         columnLabel.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
         columnLabel.setPadding(new Insets(0, 0, 0, 10));
         columnLabel.setMaxWidth(170);
         columnLabel.setPrefWidth(170);
+        columnLabel.setOnMouseClicked(mouseEvent -> {
+            Data.currentColumn = column;
+            showInputDialog(mouseEvent);
+        });
 
         DirectionButton leftButton = new DirectionButton();
         leftButton.setToLeft();
@@ -350,8 +351,7 @@ public class SBController implements Closable, Initializable {
     }
 
     private void addProjectToMenu(@NotNull Project project, Tab tab) {
-        menuItemList.add(new MenuItem(project.getName()));
-        MenuItem currItem = menuItemList.get(menuItemList.size() - 1);
+        MenuItem currItem = new MenuItem(project.getName());
         currItem.setId(project.getName());
         currItem.setOnAction(actionEvent -> projectsPane.getSelectionModel().select(tab));
 
@@ -378,14 +378,22 @@ public class SBController implements Closable, Initializable {
     }
 
     @FXML
-    private void showInputDialog(@NotNull ActionEvent event) {
+    private void showInputDialog(@NotNull Event event) {
         try {
-            String id = ((MenuItem) event.getTarget()).getId();
+            EventTarget target = event.getTarget();
+            String id = "";
+
+            if (target instanceof MenuItem) {
+                id = ((MenuItem) target).getId();
+            } else if (target instanceof Label) {
+                id = ((Label) target).getId();
+            }
 
             switch (id) {
                 case "newProject" -> addProject();
                 case "newColumn" -> addColumn();
                 case "renameProject" -> renameProject();
+                case "columnLabel" -> renameColumn();
             }
 
         } catch (ClassCastException cce) {
@@ -425,6 +433,15 @@ public class SBController implements Closable, Initializable {
             currentProject.setName(newName);
             projectsPane.getTabs().get(currentTabIndex).setText(currentProject.getName());
             reLoadWorkspaceMenu();
+        }
+    }
+
+    private void renameColumn() throws StringLengthException {
+        String newName = TextInputDialog.show("Rename column", "Column title");
+
+        if (newName != null) {
+            Data.currentColumn.setName(newName);
+            reLoadColumns();
         }
     }
 

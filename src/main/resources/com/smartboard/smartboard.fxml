@@ -11,6 +11,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
@@ -60,18 +61,38 @@
                 <Menu fx:id="workspaceMenu" mnemonicParsing="false" text="Workspace">
                     <items>
                         <MenuItem id="newProject" mnemonicParsing="false" onAction="#showInputDialog"
-                                  text="New Project"/>
+                                  text="New Project">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                        </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false"/>
                     </items>
                 </Menu>
                 <Menu fx:id="projectMenu" mnemonicParsing="false" text="Project">
                     <items>
-                        <MenuItem id="newColumn" mnemonicParsing="false" onAction="#showInputDialog" text="Add Column"/>
+                        <MenuItem id="newColumn" mnemonicParsing="false" onAction="#showInputDialog" text="Add Column">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                        </MenuItem>
                         <MenuItem id="renameProject" mnemonicParsing="false" onAction="#showInputDialog"
-                                  text="Rename Project"/>
+                                  text="Rename Project">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="R" control="DOWN" meta="UP" shift="UP"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                        </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem id="setDefault" mnemonicParsing="false" onAction="#toggleDefaultSetting"
-                                  text="Set/Unset as Default"/>
+                                  text="Set/Unset as Default">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="UP"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                        </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem id="deleteProject" mnemonicParsing="false" onAction="#onDeleteProjectSelected"
                                   text="Delete Project"/>
