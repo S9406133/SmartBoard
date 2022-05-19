@@ -155,7 +155,7 @@ public class TaskEditorController implements Closable, Initializable {
     private void addChecklistItem() {
         String description = TextInputDialog.show("Add a checklist item", "Description");
 
-        if (description != null) {
+        if (!description.isBlank()) {
             checklistItemList.add(new ChecklistItem(description));
             reLoadChecklistRows();
         }
@@ -164,7 +164,7 @@ public class TaskEditorController implements Closable, Initializable {
     private void editChecklistItem(ChecklistItem editItem) {
         String description = TextInputDialog.show("Edit a checklist item", "New description");
 
-        if (description != null) {
+        if (!description.isBlank()) {
             for (ChecklistItem item : checklistItemList) {
                 if (item == editItem) {
                     item.setDescription(description);

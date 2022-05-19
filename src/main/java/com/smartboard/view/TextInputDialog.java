@@ -16,14 +16,13 @@ import javafx.stage.StageStyle;
 public class TextInputDialog {
 
     public static String show(String title, String prompt) {
-        String returnVal = null;
+        String returnVal = "";
         Stage dialogStage = new Stage(StageStyle.UTILITY);
 
         TextField textField = new TextField();
         textField.setPromptText(prompt);
         textField.setFont(new Font(12));
         textField.paddingProperty().setValue(new Insets(5));
-        textField.isFocused();
 
         VBox vBox = new VBox(textField);
         vBox.paddingProperty().setValue(new Insets(20, 0, 20, 0));
@@ -43,7 +42,7 @@ public class TextInputDialog {
 
         dialogPane.lookupButton(ButtonType.CANCEL).setOnMouseClicked(
                 mouseEvent -> {
-                    textField.setText(null);
+                    textField.setText("");
                     dialogStage.close();
                 });
 
@@ -54,11 +53,12 @@ public class TextInputDialog {
         dialogStage.getIcons().add(SmartBoard.icon);
         dialogStage.setResizable(false);
         dialogStage.setScene(dialogScene);
+        dialogStage.setOnCloseRequest(windowEvent -> textField.setText(""));
         dialogStage.showAndWait();
 
-        if (textField.getText() != null) {
-            returnVal = textField.getText().strip();
-        }
+        textField.requestFocus(); // ??
+
+        returnVal = textField.getText().strip();
 
         return returnVal;
     }

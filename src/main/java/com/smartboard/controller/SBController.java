@@ -3,7 +3,6 @@ package com.smartboard.controller;
 import com.smartboard.model.*;
 import com.smartboard.view.*;
 import com.smartboard.view.TextInputDialog;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
@@ -406,7 +405,7 @@ public class SBController implements Closable, Initializable {
     private void addProject() throws StringLengthException {
         String name = TextInputDialog.show("Create a new project", "Project title");
 
-        if (name != null) {
+        if (!name.isBlank()) {
             Project newProject = Data.currentUser.addSubItem(name);
             createProjectView(newProject);
             projectsPane.getSelectionModel().selectLast();
@@ -418,7 +417,7 @@ public class SBController implements Closable, Initializable {
     private void addColumn() throws StringLengthException {
         String name = TextInputDialog.show("Add a new column", "Column name");
 
-        if (name != null) {
+        if (!name.isBlank()) {
             getCurrentProject().addSubItem(name);
             reLoadColumns();
         }
@@ -427,7 +426,7 @@ public class SBController implements Closable, Initializable {
     private void renameProject() throws StringLengthException {
         String newName = TextInputDialog.show("Rename project", "Project title");
 
-        if (newName != null) {
+        if (!newName.isBlank()) {
             int currentTabIndex = getCurrentTabIndex();
             Project currentProject = getCurrentProject();
             currentProject.setName(newName);
@@ -439,7 +438,7 @@ public class SBController implements Closable, Initializable {
     private void renameColumn() throws StringLengthException {
         String newName = TextInputDialog.show("Rename column", "Column title");
 
-        if (newName != null) {
+        if (!newName.isBlank()) {
             Data.currentColumn.setName(newName);
             reLoadColumns();
         }

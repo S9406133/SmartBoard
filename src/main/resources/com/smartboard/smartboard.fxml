@@ -10,6 +10,7 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
@@ -25,9 +26,17 @@
     <bottom>
         <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="646.0" BorderPane.alignment="CENTER">
             <items>
-                <Button fx:id="mainExitButton" alignment="CENTER" cancelButton="true" mnemonicParsing="false"
-                        onAction="#handleCloseButtonAction" prefHeight="25.0" prefWidth="65.0" text="Exit"
-                        textAlignment="CENTER"/>
+                <Button fx:id="mainExitButton" alignment="CENTER" cancelButton="true" contentDisplay="RIGHT"
+                        mnemonicParsing="false" onAction="#handleCloseButtonAction" prefHeight="28.0" prefWidth="76.0"
+                        text="Exit" textAlignment="CENTER">
+                    <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@close_icon.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
                 <Label fx:id="toolbarName" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#onEditProfileSelected"
                        text="Name">
                     <font>
@@ -36,6 +45,9 @@
                     <padding>
                         <Insets left="5.0" right="10.0"/>
                     </padding>
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
                 </Label>
                 <ImageView fx:id="toolbarImage" fitHeight="32.0" fitWidth="40.0" onMouseClicked="#onEditProfileSelected"
                            pickOnBounds="true" preserveRatio="true">
