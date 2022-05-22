@@ -117,6 +117,7 @@ public class SBController implements Closable, Initializable {
         addIcon.preserveRatioProperty().setValue(true);
         addIcon.setFitHeight(iconHeight);
         addTaskButton.setGraphic(addIcon);
+        addTaskButton.setTooltip(new Tooltip("Add a new task to this column"));
         addTaskButton.setOnAction(actionEvent -> {
             try {
                 Data.currentColumn = column;
@@ -133,6 +134,7 @@ public class SBController implements Closable, Initializable {
         deleteIcon.preserveRatioProperty().setValue(true);
         deleteIcon.setFitHeight(iconHeight);
         deleteButton.setGraphic(deleteIcon);
+        deleteButton.setTooltip(new Tooltip("Delete this column"));
         deleteButton.setOnAction(
                 actionEvent -> onDeleteColumnClicked(column)
         );
@@ -151,6 +153,7 @@ public class SBController implements Closable, Initializable {
 
         DirectionButton leftButton = new DirectionButton();
         leftButton.setToLeft();
+        leftButton.setTooltip(new Tooltip("Move the column left"));
         leftButton.setOnAction(actionEvent -> {
             moveColumn(column, leftButton.getDirection());
             reLoadColumns();
@@ -158,6 +161,7 @@ public class SBController implements Closable, Initializable {
 
         DirectionButton rightButton = new DirectionButton();
         rightButton.setToRight();
+        rightButton.setTooltip(new Tooltip("Move the column right"));
         rightButton.setOnAction(actionEvent -> {
             moveColumn(column, rightButton.getDirection());
             reLoadColumns();
@@ -237,6 +241,7 @@ public class SBController implements Closable, Initializable {
         upButton.setToUp();
         upButton.setLayoutX(235);
         upButton.setLayoutY(6);
+        upButton.setTooltip(new Tooltip("Move up the column"));
         upButton.setOnAction(actionEvent -> {
             Data.currentColumn = column;
             moveTask(task, upButton.getDirection());
@@ -247,6 +252,7 @@ public class SBController implements Closable, Initializable {
         downButton.setToDown();
         downButton.setLayoutX(265);
         downButton.setLayoutY(6);
+        downButton.setTooltip(new Tooltip("Move down the column"));
         downButton.setOnAction(actionEvent -> {
             Data.currentColumn = column;
             moveTask(task, downButton.getDirection());
@@ -454,7 +460,7 @@ public class SBController implements Closable, Initializable {
     }
 
     @FXML
-    private void onLogoutMenuItemSelected() {
+    private void onLogoutSelected() {
         try {
             LoginView.createLoginView();
             Stage stage = (Stage) mainExitButton.getScene().getWindow();
@@ -567,12 +573,12 @@ public class SBController implements Closable, Initializable {
         int maxIndex = itemList.size() - 1;
 
         switch (direction) {
-            case "left", "down" -> {
+            case "left", "up" -> {
                 if (itemIndex > minIndex) {
                     Collections.swap(itemList, itemIndex, itemIndex - 1);
                 }
             }
-            case "right", "up" -> {
+            case "right", "down" -> {
                 if (itemIndex < maxIndex) {
                     Collections.swap(itemList, itemIndex, itemIndex + 1);
                 }

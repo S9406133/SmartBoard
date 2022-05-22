@@ -16,7 +16,6 @@ import javafx.stage.StageStyle;
 public class TextInputDialog {
 
     public static String show(String title, String prompt) {
-        String returnVal = "";
         Stage dialogStage = new Stage(StageStyle.UTILITY);
 
         TextField textField = new TextField();
@@ -58,8 +57,6 @@ public class TextInputDialog {
 
         textField.requestFocus(); // ??
 
-        returnVal = textField.getText().strip();
-
-        return returnVal;
+        return textField.getText().strip();
     }
 }

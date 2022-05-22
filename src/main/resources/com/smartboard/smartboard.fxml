@@ -32,7 +32,7 @@
                     <graphic>
                         <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@close_icon.png"/>
+                                <Image url="@../../close_icon.png"/>
                             </image>
                         </ImageView>
                     </graphic>
@@ -55,6 +55,15 @@
                         <Cursor fx:constant="HAND"/>
                     </cursor>
                 </ImageView>
+                <Button mnemonicParsing="false" onAction="#onLogoutSelected" prefHeight="28.0">
+                    <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../logout_icon.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
                 <Label fx:id="toolbarQuote" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT"
                        text="This is the inspirational quote" textAlignment="CENTER" textFill="#800909">
                     <font>
@@ -114,8 +123,7 @@
                     <items>
                         <MenuItem id="editProfile" mnemonicParsing="false" onAction="#onEditProfileSelected"
                                   text="Edit Profile"/>
-                        <MenuItem id="logout" mnemonicParsing="false" onAction="#onLogoutMenuItemSelected"
-                                  text="Log out"/>
+                        <MenuItem id="logout" mnemonicParsing="false" onAction="#onLogoutSelected" text="Log out"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">

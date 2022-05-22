@@ -34,13 +34,13 @@ public class DirectionButton extends Hyperlink {
 
     public void setToUp() {
         this.setText(">");
-        this.rotateProperty().set(90);
+        this.rotateProperty().set(-90);
         this.direction = UP;
     }
 
     public void setToDown() {
         this.setText(">");
-        this.rotateProperty().set(-90);
+        this.rotateProperty().set(90);
         this.direction = DOWN;
     }
 

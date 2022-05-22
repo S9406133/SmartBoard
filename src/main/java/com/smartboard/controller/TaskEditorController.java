@@ -83,6 +83,7 @@ public class TaskEditorController implements Closable, Initializable {
                 Task task;
                 if (Data.currentTask == null) {
                     task = Data.currentColumn.addSubItem(taskName);
+                    task.setCompleted(completedCheckbox.isSelected());
                 } else {
                     task = Data.currentTask;
                     task.setName(taskName);
@@ -90,7 +91,7 @@ public class TaskEditorController implements Closable, Initializable {
 
                 error = false;
                 task.setDescription(taskDescriptionField.getText().strip());
-                task.setCompleted(completedCheckbox.isSelected());
+                //task.setCompleted(completedCheckbox.isSelected());
 
                 if (dueDate != null) {
                     task.setDueDate(dueDate);
@@ -132,6 +133,18 @@ public class TaskEditorController implements Closable, Initializable {
         if (Data.currentTask != null) {
             datePicker.setValue(Data.currentTask.getDueDate());
         }
+    }
+
+    @FXML
+    private void onCompletedClicked() {
+        if (Data.currentTask != null) {
+            Data.currentTask.setCompleted(completedCheckbox.isSelected());
+        } else {
+            for (ChecklistItem item : checklistItemList){
+                item.setChecked(true);
+            }
+        }
+        reLoadChecklistRows();
     }
 
     @FXML

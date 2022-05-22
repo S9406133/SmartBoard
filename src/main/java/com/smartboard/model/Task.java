@@ -1,5 +1,7 @@
 package com.smartboard.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -40,7 +42,7 @@ public class Task extends BoardItem<ChecklistItem> {
         return this.dueDate;
     }
 
-    public void setDueDate(LocalDate newDate) {
+    public void setDueDate(@NotNull LocalDate newDate) {
         if (!newDate.isBefore(LocalDate.now())) {
             this.dueDate = newDate;
             setStatus();
@@ -58,6 +60,11 @@ public class Task extends BoardItem<ChecklistItem> {
 
     public void setCompleted(boolean completed) {
         this.isCompleted = completed;
+
+        for (ChecklistItem item : this.subItems){
+            item.setChecked(true);
+        }
+
         setStatus();
     }
 
