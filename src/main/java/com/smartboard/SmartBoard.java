@@ -16,7 +16,8 @@ public class SmartBoard extends Application {
     @Override
     public void start(Stage stage) throws IOException, StringLengthException {
 
-        Data.createInitUser();
+        //Data.createInitUser();
+        Data.loadUsersFromDB();
 
         LoginView.createLoginView();
     }

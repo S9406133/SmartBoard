@@ -83,7 +83,7 @@ public class SBController implements Closable, Initializable {
     }
 
     private void createProjectView(Project project) {
-        HBox columnHolder = new HBox();
+        HBox columnHolder = new HBox(5);
         loadColumns(columnHolder, project);
         ScrollPane scrollPane = new ScrollPane(columnHolder);
         Tab projectTab = new Tab(project.getName(), scrollPane);
@@ -169,7 +169,7 @@ public class SBController implements Closable, Initializable {
 
         ToolBar columnHeader = new ToolBar(rightButton, addTaskButton, deleteButton, columnLabel, leftButton);
         columnHeader.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-        columnHeader.setStyle("-fx-background-color: lightblue; -fx-border-color: grey;");
+        columnHeader.setStyle("-fx-background-color: ghostwhite; -fx-border-color: grey;");
         VBox.setMargin(columnHeader, new Insets(5));
 
         // Column
@@ -180,9 +180,10 @@ public class SBController implements Closable, Initializable {
         }
 
         columnBox.setSpacing(5);
-        columnBox.setMinHeight(500);
+        columnBox.setMinHeight(510);
         columnBox.setMaxWidth(columnWidth);
         columnBox.setMinWidth(columnWidth);
+        columnBox.setStyle("-fx-background-color: steelblue;");
 
         makeDroppable(columnBox, column);
 
@@ -312,6 +313,19 @@ public class SBController implements Closable, Initializable {
     }
 
     private void makeDroppable(Node node, Column column) {
+        node.setOnDragEntered(dragEvent -> {
+            if (dragEvent.getGestureSource() != node &&
+                    dragEvent.getDragboard().hasString()) {
+                node.setStyle("-fx-background-color: lightblue;");
+            }
+            dragEvent.consume();
+        });
+
+        node.setOnDragExited(dragEvent -> {
+            node.setStyle("-fx-background-color: steelblue;");
+            dragEvent.consume();
+        });
+
         // Credit https://jenkov.com/tutorials/javafx/drag-and-drop.html
         node.setOnDragOver(event -> {
             if (event.getDragboard().hasString()) {

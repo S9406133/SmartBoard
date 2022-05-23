@@ -2,6 +2,7 @@ module com.smartboard {
     requires javafx.controls;
     requires javafx.fxml;
     requires org.jetbrains.annotations;
+    requires java.sql;
 
     opens com.smartboard to javafx.fxml;
     exports com.smartboard;

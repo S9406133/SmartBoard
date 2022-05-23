@@ -27,12 +27,22 @@
         <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="646.0" BorderPane.alignment="CENTER">
             <items>
                 <Button fx:id="mainExitButton" alignment="CENTER" cancelButton="true" contentDisplay="RIGHT"
-                        mnemonicParsing="false" onAction="#handleCloseButtonAction" prefHeight="28.0" prefWidth="76.0"
+                        mnemonicParsing="false" onAction="#handleCloseButtonAction" prefHeight="28.0" prefWidth="78.0"
                         text="Exit" textAlignment="CENTER">
                     <graphic>
                         <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../../close_icon.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onLogoutSelected" prefHeight="28.0"
+                        text="Logout">
+                    <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../logout_icon.png"/>
                             </image>
                         </ImageView>
                     </graphic>
@@ -55,15 +65,6 @@
                         <Cursor fx:constant="HAND"/>
                     </cursor>
                 </ImageView>
-                <Button mnemonicParsing="false" onAction="#onLogoutSelected" prefHeight="28.0">
-                    <graphic>
-                        <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../../logout_icon.png"/>
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
                 <Label fx:id="toolbarQuote" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT"
                        text="This is the inspirational quote" textAlignment="CENTER" textFill="#800909">
                     <font>

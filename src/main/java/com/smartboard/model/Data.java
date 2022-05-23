@@ -1,5 +1,7 @@
 package com.smartboard.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Data {
@@ -33,6 +35,16 @@ public class Data {
         users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("First item");
         users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("Second item");
         users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("Third item");
+    }
+
+    public static void loadUsersFromDB() {
+        users = DB_Utils.SelectAllUsers();
+        System.out.println(users.size());
+    }
+
+    public static void setCurrentUser(User user){
+        currentUser = user;
+        //load projects, columns, tasks, checklists
     }
 
 }
