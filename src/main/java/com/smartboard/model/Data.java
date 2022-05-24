@@ -40,17 +40,42 @@ public class Data {
         System.out.println(users.size());
     }
 
-    public static void setCurrentUser(User user){
+    public static void setCurrentUser(User user) {
         currentUser = user;
 
         for (Project project : DB_Utils.SelectProjectsOfUser(currentUser.getName())) {
             currentUser.getSubItemList().add(project);
         }
+    }
 
-//        DB_Utils.SelectColumnsOfProject(1);
-//        DB_Utils.SelectTasksOfColumn(1);
-//        DB_Utils.SelectCLItemsOfTask(1);
-        //load projects, columns, tasks, checklists
+    public static void addNewUser(String username, String password, String firstName, String lastName, String imagePath)
+            throws IllegalArgumentException, StringLengthException {
+
+        if (usernameExists(username)) {
+            throw new IllegalArgumentException("This Username already exists");
+        }
+
+        users.add(new User(username, password, firstName, lastName));
+        currentUser = users.get(users.size() - 1);
+        currentUser.setImagePath(imagePath);
+
+        DB_Utils.InsertNewUser(currentUser);
+    }
+
+    /**
+     * Method to find if the username already exists in the users list
+     */
+    private static boolean usernameExists(String username) {
+        boolean returnVal = false;
+
+        for (User user : users) {
+            if (username.equalsIgnoreCase(user.getName())) {
+                returnVal = true;
+                break;
+            }
+        }
+
+        return returnVal;
     }
 
 }

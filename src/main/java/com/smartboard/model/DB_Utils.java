@@ -14,33 +14,56 @@ public class DB_Utils {
         }
     }
 
-    public static void CheckTableExist(String tableName) {
-        //final String TABLE_NAME = "Student";
+    public static boolean TableNotExists(String tableName) {
+        boolean returnVal = false;
 
         try (Connection con = DatabaseConnection.getConnection()) {
-
             DatabaseMetaData dbm = con.getMetaData();
-
             ResultSet tables = dbm.getTables(null, null, tableName, null);
 
             if (tables != null) {
-                if (tables.next()) {
-                    System.out.println("Table " + tableName + " exists.");
-                } else {
-                    System.out.println("Table " + tableName + " does not exist.");
-                }
-                tables.close(); // use close method to close ResultSet object
-            } else {
-                System.out.println("Problem with retrieving database metadata");
+                returnVal = (tables.next());
             }
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        return !returnVal;
     }
+
+//    public static void CheckTableExist(String tableName) {
+//        //final String TABLE_NAME = "Student";
+//
+//        try (Connection con = DatabaseConnection.getConnection()) {
+//
+//            DatabaseMetaData dbm = con.getMetaData();
+//
+//            ResultSet tables = dbm.getTables(null, null, tableName, null);
+//
+//            if (tables != null) {
+//                if (tables.next()) {
+//                    System.out.println("Table " + tableName + " exists.");
+//                } else {
+//                    System.out.println("Table " + tableName + " does not exist.");
+//                }
+//                tables.close(); // use close method to close ResultSet object
+//            } else {
+//                System.out.println("Problem with retrieving database metadata");
+//            }
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 
     public static ArrayList<User> SelectAllUsers() {
         final String TABLE_NAME = "USER";
         ArrayList<User> users = new ArrayList<>();
+
+        if (TableNotExists(TABLE_NAME)) {
+            System.out.println("Table '" + TABLE_NAME + "' does not exist.");
+            return users;
+        }
 
         try (Connection con = DatabaseConnection.getConnection();
              Statement stmt = con.createStatement()) {
@@ -54,6 +77,7 @@ public class DB_Utils {
                             resultSet.getString("firstname"),
                             resultSet.getString("lastname"))
                     );
+                    users.get(users.size() - 1 ).setImagePath(resultSet.getString("Imagepath"));
                 }
             }
         } catch (SQLException | StringLengthException e) {
@@ -66,6 +90,11 @@ public class DB_Utils {
     public static ArrayList<Project> SelectProjectsOfUser(String username) {
         final String TABLE_NAME = "PROJECT";
         ArrayList<Project> projectList = new ArrayList<>();
+
+        if (TableNotExists(TABLE_NAME)) {
+            System.out.println("Table '" + TABLE_NAME + "' does not exist.");
+            return projectList;
+        }
 
         try (Connection con = DatabaseConnection.getConnection();
              Statement stmt = con.createStatement()) {
@@ -99,6 +128,11 @@ public class DB_Utils {
         final String TABLE_NAME = "COLUMN";
         ArrayList<Column> columnList = new ArrayList<>();
 
+        if (TableNotExists(TABLE_NAME)) {
+            System.out.println("Table '" + TABLE_NAME + "' does not exist.");
+            return columnList;
+        }
+
         try (Connection con = DatabaseConnection.getConnection();
              Statement stmt = con.createStatement()) {
             String query = "SELECT * FROM " + TABLE_NAME +
@@ -129,6 +163,11 @@ public class DB_Utils {
     public static ArrayList<Task> SelectTasksOfColumn(int columnID) {
         final String TABLE_NAME = "TASK";
         ArrayList<Task> taskList = new ArrayList<>();
+
+        if (TableNotExists(TABLE_NAME)) {
+            System.out.println("Table '" + TABLE_NAME + "' does not exist.");
+            return taskList;
+        }
 
         try (Connection con = DatabaseConnection.getConnection();
              Statement stmt = con.createStatement()) {
@@ -169,6 +208,11 @@ public class DB_Utils {
         final String TABLE_NAME = "CHECKLISTITEM";
         ArrayList<ChecklistItem> cliList = new ArrayList<>();
 
+        if (TableNotExists(TABLE_NAME)) {
+            System.out.println("Table '" + TABLE_NAME + "' does not exist.");
+            return cliList;
+        }
+
         try (Connection con = DatabaseConnection.getConnection();
              Statement stmt = con.createStatement()) {
             String query = "SELECT * FROM " + TABLE_NAME +
@@ -191,25 +235,56 @@ public class DB_Utils {
         return cliList;
     }
 
-    public static void SelectAllQuery(String tableName) {
-        //final String TABLE_NAME = "STUDENT";
+    public static boolean InsertNewUser(User user) {
+        final String TABLE_NAME = "USER";
+        boolean success = false;
+
+        if (TableNotExists(TABLE_NAME)) {
+            System.out.println("Table '" + TABLE_NAME + "' does not exist.");
+            return success;
+        }
+
+        String sql = "INSERT INTO " + TABLE_NAME +
+                " VALUES (?, ?, ?, ?, ?)";
 
         try (Connection con = DatabaseConnection.getConnection();
-             Statement stmt = con.createStatement()) {
-            String query = "SELECT * FROM " + tableName;
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, user.getName());
+            stmt.setString(2, user.getPassword());
+            stmt.setString(3, user.getFirstName());
+            stmt.setString(4, user.getLastName());
+            stmt.setString(5, user.getImagePath());
 
-            try (ResultSet resultSet = stmt.executeQuery(query)) {
-                while (resultSet.next()) {
-                    System.out.printf("Id: %d | Student Number: %s | First Name: %s | Last Name: %s\n",
-                            resultSet.getInt("id"), resultSet.getString("student_number"),
-                            resultSet.getString("first_name"), resultSet.getString("last_name"));
-                }
-            }
+            int result = stmt.executeUpdate();
+
+            success = (result == 1);
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
+        return success;
     }
+
+//    public static void SelectAllQuery(String tableName) {
+//        //final String TABLE_NAME = "STUDENT";
+//
+//        try (Connection con = DatabaseConnection.getConnection();
+//             Statement stmt = con.createStatement()) {
+//            String query = "SELECT * FROM " + tableName;
+//
+//            try (ResultSet resultSet = stmt.executeQuery(query)) {
+//                while (resultSet.next()) {
+//                    System.out.printf("Id: %d | Student Number: %s | First Name: %s | Last Name: %s\n",
+//                            resultSet.getInt("id"), resultSet.getString("student_number"),
+//                            resultSet.getString("first_name"), resultSet.getString("last_name"));
+//                }
+//            }
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
+//
+//    }
 
     public static void InsertRow(String tableName) {
         //final String TABLE_NAME = "Student";

@@ -10,8 +10,8 @@ public class User extends BoardItem<Project> {
     private final int MAX_NAME_LENGTH = 30;
 
 
-    public User(String userName, String password, String firstName, String lastName) throws StringLengthException {
-        super(userName);
+    public User(String username, String password, String firstName, String lastName) throws StringLengthException {
+        super(username);
 
         setFirstName(firstName);
         setLastName(lastName);
@@ -60,6 +60,8 @@ public class User extends BoardItem<Project> {
             this.subItems.get(index).setDefault(false);
         }
     }
+
+    public String getPassword() { return this.password; }
 
     public String getFirstName() {
         return firstName;

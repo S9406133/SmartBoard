@@ -62,7 +62,6 @@ public class LoginController implements Closable {
         if (loggedInUser == null) {
             throw new IllegalArgumentException("No such Username");
         } else {
-            //Data.currentUser = loggedInUser;
             Data.setCurrentUser(loggedInUser);
         }
     }

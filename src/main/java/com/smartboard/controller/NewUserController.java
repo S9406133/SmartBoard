@@ -2,7 +2,6 @@ package com.smartboard.controller;
 
 import com.smartboard.model.Data;
 import com.smartboard.model.StringLengthException;
-import com.smartboard.model.User;
 import com.smartboard.view.LoginView;
 import com.smartboard.view.SmartBoardView;
 import com.smartboard.view.Utility;
@@ -54,8 +53,8 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
 
         if (!username.isBlank() && !firstname.isBlank() && !lastname.isBlank() && !password.isBlank()) {
             try {
-                createUser(username, password, firstname, lastname);
-                Data.currentUser.setImagePath(imagePath);
+                Data.addNewUser(username, password, firstname, lastname, imagePath);
+
                 String headerText = String.format("New user: %s\nName: %s %s",
                         Data.currentUser.getName(), Data.currentUser.getFirstName(), Data.currentUser.getLastName());
 
@@ -68,6 +67,7 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
                 sbView.createSmartBoardStage();
                 Stage stage = (Stage) createUserButton.getScene().getWindow();
                 stage.close();
+
             } catch (IOException ioe) {
                 System.out.println(ioe.getMessage());
             } catch (StringLengthException | IllegalArgumentException e) {
@@ -76,33 +76,6 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
         } else {
             Utility.errorAlert("Enter text in all fields");
         }
-    }
-
-    private void createUser(String username, String password, String firstName, String lastName)
-            throws IllegalArgumentException, StringLengthException {
-
-        if (usernameExists(username)) {
-            throw new IllegalArgumentException("This Username already exists");
-        }
-
-        Data.users.add(new User(username, password, firstName, lastName));
-        Data.currentUser = Data.users.get(Data.users.size() - 1);
-    }
-
-    /**
-     * Method to find if the username already exists in the users list
-     */
-    private boolean usernameExists(String username) {
-        boolean returnVal = false;
-
-        for (User user : Data.users) {
-            if (username.equalsIgnoreCase(user.getName())) {
-                returnVal = true;
-                break;
-            }
-        }
-
-        return returnVal;
     }
 
     @FXML
