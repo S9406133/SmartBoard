@@ -32,30 +32,6 @@ public class DB_Utils {
         return !returnVal;
     }
 
-//    public static void CheckTableExist(String tableName) {
-//        //final String TABLE_NAME = "Student";
-//
-//        try (Connection con = DatabaseConnection.getConnection()) {
-//
-//            DatabaseMetaData dbm = con.getMetaData();
-//
-//            ResultSet tables = dbm.getTables(null, null, tableName, null);
-//
-//            if (tables != null) {
-//                if (tables.next()) {
-//                    System.out.println("Table " + tableName + " exists.");
-//                } else {
-//                    System.out.println("Table " + tableName + " does not exist.");
-//                }
-//                tables.close(); // use close method to close ResultSet object
-//            } else {
-//                System.out.println("Problem with retrieving database metadata");
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
-
     public static ArrayList<User> SelectAllUsers() {
         final String TABLE_NAME = "USER";
         ArrayList<User> users = new ArrayList<>();
@@ -77,7 +53,7 @@ public class DB_Utils {
                             resultSet.getString("firstname"),
                             resultSet.getString("lastname"))
                     );
-                    users.get(users.size() - 1 ).setImagePath(resultSet.getString("Imagepath"));
+                    users.get(users.size() - 1).setImagePath(resultSet.getString("Imagepath"));
                 }
             }
         } catch (SQLException | StringLengthException e) {
@@ -235,14 +211,8 @@ public class DB_Utils {
         return cliList;
     }
 
-    public static boolean InsertNewUser(User user) {
+    public static void InsertNewUser(User user) {
         final String TABLE_NAME = "USER";
-        boolean success = false;
-
-        if (TableNotExists(TABLE_NAME)) {
-            System.out.println("Table '" + TABLE_NAME + "' does not exist.");
-            return success;
-        }
 
         String sql = "INSERT INTO " + TABLE_NAME +
                 " VALUES (?, ?, ?, ?, ?)";
@@ -257,13 +227,40 @@ public class DB_Utils {
 
             int result = stmt.executeUpdate();
 
-            success = (result == 1);
+            if (result < 1){
+                System.out.println("Error saving new user");
+            }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        return success;
+    }
+
+    public static void UpdateUser(User user) {
+        final String TABLE_NAME = "USER";
+
+        String sql = "UPDATE " + TABLE_NAME +
+                " SET Firstname = ?, Lastname = ?, Imagepath = ?" +
+                " WHERE Username LIKE ?";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, user.getFirstName());
+            stmt.setString(2, user.getLastName());
+            stmt.setString(3, user.getImagePath());
+            stmt.setString(4, user.getName());
+
+            int result = stmt.executeUpdate();
+
+            if (result < 1){
+                System.out.println("Error saving user data");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
 //    public static void SelectAllQuery(String tableName) {
@@ -286,24 +283,24 @@ public class DB_Utils {
 //
 //    }
 
-    public static void InsertRow(String tableName) {
-        //final String TABLE_NAME = "Student";
-
-        try (Connection con = DatabaseConnection.getConnection();
-             Statement stmt = con.createStatement()) {
-            String query = "INSERT INTO " + tableName +
-                    " VALUES (1, 's3388490', 'Peter', 'Tilmanis')";
-
-            int result = stmt.executeUpdate(query);
-
-            if (result == 1) {
-                System.out.println("Insert into table " + tableName + " executed successfully");
-                System.out.println(result + " row(s) affected");
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+//    public static void InsertRow(String tableName) {
+//        //final String TABLE_NAME = "Student";
+//
+//        try (Connection con = DatabaseConnection.getConnection();
+//             Statement stmt = con.createStatement()) {
+//            String query = "INSERT INTO " + tableName +
+//                    " VALUES (1, 's3388490', 'Peter', 'Tilmanis')";
+//
+//            int result = stmt.executeUpdate(query);
+//
+//            if (result == 1) {
+//                System.out.println("Insert into table " + tableName + " executed successfully");
+//                System.out.println(result + " row(s) affected");
+//            }
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 
     public static void DeleteRow(String tableName) {
         //final String TABLE_NAME = "Student";

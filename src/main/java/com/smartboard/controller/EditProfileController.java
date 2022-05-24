@@ -56,8 +56,8 @@ public class EditProfileController implements Closable, Initializable, Updatable
         File imageFile = Utility.displayImageFileChooser(stage);
 
         if (imageFile != null) {
-            System.out.println(imageFile);
-            Data.currentUser.setImagePath(imageFile.getPath());
+            Data.updateUserImagepath(imageFile.getPath());
+            //Data.currentUser.setImagePath(imageFile.getPath());
             SBController.staticToolbarImage.setImage(new Image(Data.currentUser.getImagePath()));
         }
     }
@@ -71,11 +71,13 @@ public class EditProfileController implements Closable, Initializable, Updatable
 
         try {
             if (!firstname.isBlank()) {
-                Data.currentUser.setFirstName(firstname);
+                Data.updateUserFirstname(firstname);
+                //Data.currentUser.setFirstName(firstname);
                 updated = true;
             }
             if (!lastname.isBlank()) {
-                Data.currentUser.setLastName(lastname);
+                Data.updateUserLastname(lastname);
+                //Data.currentUser.setLastName(lastname);
                 updated = true;
             }
         } catch (StringLengthException sle) {

@@ -78,4 +78,19 @@ public class Data {
         return returnVal;
     }
 
+    public static void updateUserImagepath(String imagePath){
+        currentUser.setImagePath(imagePath);
+        DB_Utils.UpdateUser(currentUser);
+    }
+
+    public static void updateUserFirstname(String firstName) throws StringLengthException {
+        currentUser.setFirstName(firstName);
+        DB_Utils.UpdateUser(currentUser);
+    }
+
+    public static void updateUserLastname(String lastName) throws StringLengthException {
+        currentUser.setLastName(lastName);
+        DB_Utils.UpdateUser(currentUser);
+    }
+
 }
