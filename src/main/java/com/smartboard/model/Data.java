@@ -1,7 +1,5 @@
 package com.smartboard.model;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Data {
@@ -23,19 +21,19 @@ public class Data {
     public static Column currentColumn = null;
     public static Task currentTask = null;
 
-    public static void createInitUser() throws StringLengthException {
-        users.add(new User("Sim", "a", "Simon", "James"));
-        users.get(0).addSubItem("Test Project");
-        users.get(0).getSubItem(0).addSubItem("To Do");
-        users.get(0).getSubItem(0).addSubItem("Doing");
-        users.get(0).getSubItem(0).addSubItem("Done");
-        users.get(0).getSubItem(0).getSubItem(0).addSubItem("First Task");
-        users.get(0).getSubItem(0).getSubItem(0).addSubItem("Second Task");
-        users.get(0).getSubItem(0).getSubItem(0).addSubItem("Third Task");
-        users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("First item");
-        users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("Second item");
-        users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("Third item");
-    }
+//    public static void createInitUser() throws StringLengthException {
+//        users.add(new User("Sim", "a", "Simon", "James"));
+//        users.get(0).addSubItem("Test Project");
+//        users.get(0).getSubItem(0).addSubItem("To Do");
+//        users.get(0).getSubItem(0).addSubItem("Doing");
+//        users.get(0).getSubItem(0).addSubItem("Done");
+//        users.get(0).getSubItem(0).getSubItem(0).addSubItem("First Task");
+//        users.get(0).getSubItem(0).getSubItem(0).addSubItem("Second Task");
+//        users.get(0).getSubItem(0).getSubItem(0).addSubItem("Third Task");
+//        users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("First item");
+//        users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("Second item");
+//        users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("Third item");
+//    }
 
     public static void loadUsersFromDB() {
         users = DB_Utils.SelectAllUsers();
@@ -44,6 +42,14 @@ public class Data {
 
     public static void setCurrentUser(User user){
         currentUser = user;
+
+        for (Project project : DB_Utils.SelectProjectsOfUser(currentUser.getName())) {
+            currentUser.getSubItemList().add(project);
+        }
+
+//        DB_Utils.SelectColumnsOfProject(1);
+//        DB_Utils.SelectTasksOfColumn(1);
+//        DB_Utils.SelectCLItemsOfTask(1);
         //load projects, columns, tasks, checklists
     }
 

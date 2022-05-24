@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class Task extends BoardItem<ChecklistItem> {
 
+    private int taskID;
     private String description;
     private LocalDate dueDate;
     private boolean isCompleted;
@@ -25,6 +26,10 @@ public class Task extends BoardItem<ChecklistItem> {
         this.subItems.add(new ChecklistItem(subItemName));
         return this.subItems.get(this.subItems.size() - 1);
     }
+
+    public void setTaskID(int taskID) { this.taskID = taskID; }
+
+    public int getTaskID() { return this.taskID; }
 
     public void replaceEntireChecklist(ArrayList<ChecklistItem> newList) {
         this.subItems = new ArrayList<>(newList);
@@ -61,7 +66,7 @@ public class Task extends BoardItem<ChecklistItem> {
     public void setCompleted(boolean completed) {
         this.isCompleted = completed;
 
-        for (ChecklistItem item : this.subItems){
+        for (ChecklistItem item : this.subItems) {
             item.setChecked(true);
         }
 

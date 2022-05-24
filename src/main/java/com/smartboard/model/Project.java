@@ -2,6 +2,7 @@ package com.smartboard.model;
 
 public class Project extends BoardItem<Column> {
 
+    private int projectID;
     private boolean isDefault;
     private final String DEF_NAME_SUFFIX = " #";
 
@@ -25,6 +26,10 @@ public class Project extends BoardItem<Column> {
             this.name += DEF_NAME_SUFFIX;
         }
     }
+
+    public void setProjectID(int projectID) { this.projectID = projectID; }
+
+    public int getProjectID() { return projectID; }
 
     public boolean isDefault() {
         return isDefault;

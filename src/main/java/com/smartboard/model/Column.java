@@ -2,6 +2,8 @@ package com.smartboard.model;
 
 public class Column extends BoardItem<Task> {
 
+    private int columnID;
+
     public Column(String name) throws StringLengthException {
         super(name);
     }
@@ -12,4 +14,7 @@ public class Column extends BoardItem<Task> {
         return this.subItems.get(this.subItems.size() - 1);
     }
 
+    public void setColumnID(int columnID) { this.columnID = columnID; }
+
+    public int getColumnID() { return this.columnID; }
 }
