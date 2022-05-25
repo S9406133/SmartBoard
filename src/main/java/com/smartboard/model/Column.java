@@ -1,8 +1,9 @@
 package com.smartboard.model;
 
-public class Column extends BoardItem<Task> {
+public class Column extends BoardItem<Task> implements Reorderable {
 
     private int columnID;
+    private int orderIndex;
 
     public Column(String name) throws StringLengthException {
         super(name);
@@ -14,7 +15,28 @@ public class Column extends BoardItem<Task> {
         return this.subItems.get(this.subItems.size() - 1);
     }
 
-    public void setColumnID(int columnID) { this.columnID = columnID; }
+    @Override
+    public void setName(String name) throws StringLengthException {
+        super.setName(name);
 
-    public int getColumnID() { return this.columnID; }
+        DB_Utils.UpdateColumn(this);
+    }
+
+    public void setColumnID(int columnID) {
+        this.columnID = columnID;
+    }
+
+    public int getColumnID() {
+        return this.columnID;
+    }
+
+    @Override
+    public void setOrderIndex(int orderIndex) {
+        this.orderIndex = orderIndex;
+    }
+
+    @Override
+    public int getOrderIndex() {
+        return this.orderIndex;
+    }
 }

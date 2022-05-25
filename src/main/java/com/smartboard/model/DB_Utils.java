@@ -123,6 +123,7 @@ public class DB_Utils {
                     columnList.add(new Column(resultSet.getString("Name")));
                     Column currColumn = columnList.get(columnList.size() - 1);
                     currColumn.setColumnID(resultSet.getInt("ColumnID"));
+                    currColumn.setOrderIndex(resultSet.getInt("OrderIndex"));
 
                     for (Task task : SelectTasksOfColumn(currColumn.getColumnID())) {
                         currColumn.getSubItemList().add(task);
@@ -160,6 +161,8 @@ public class DB_Utils {
                     taskList.add(new Task(resultSet.getString("Name")));
                     Task currTask = taskList.get(taskList.size() - 1);
                     currTask.setTaskID(resultSet.getInt("TaskID"));
+                    currTask.setColumnID(resultSet.getInt("ColumnID"));
+                    currTask.setOrderIndex(resultSet.getInt("OrderIndex"));
                     if (resultSet.getString("Description") != null) {
                         currTask.setDescription(resultSet.getString("Description"));
                     }
@@ -227,7 +230,7 @@ public class DB_Utils {
 
             int result = stmt.executeUpdate();
 
-            if (result < 1){
+            if (result < 1) {
                 System.out.println("Error saving new user");
             }
 
@@ -253,8 +256,169 @@ public class DB_Utils {
 
             int result = stmt.executeUpdate();
 
-            if (result < 1){
+            if (result < 1) {
                 System.out.println("Error saving user data");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static void InsertNewProject(User user, Project project) {
+        final String TABLE_NAME = "PROJECT";
+
+        String sql = "INSERT INTO " + TABLE_NAME + "(Name, IsDefault, Username)" +
+                " VALUES (?, ?, ?)";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, project.getName());
+            stmt.setBoolean(2, project.isDefault());
+            stmt.setString(3, user.getName());
+
+            int result = stmt.executeUpdate();
+
+            if (result < 1) {
+                System.out.println("Error saving new project");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static void UpdateProject(Project project) {
+        final String TABLE_NAME = "PROJECT";
+
+        String sql = "UPDATE " + TABLE_NAME +
+                " SET Name = ?, IsDefault = ?" +
+                " WHERE ProjectID = ?";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, project.getName());
+            stmt.setBoolean(2, project.isDefault());
+            stmt.setInt(3, project.getProjectID());
+
+            int result = stmt.executeUpdate();
+
+            if (result < 1) {
+                System.out.println("Error saving project data");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static void InsertNewColumn(Project project, Column column) {
+        final String TABLE_NAME = "COLUMN";
+
+        String sql = "INSERT INTO " + TABLE_NAME + "(Name, OrderIndex, ProjectID)" +
+                " VALUES (?, ?, ?)";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, column.getName());
+            stmt.setInt(2, column.getOrderIndex());
+            stmt.setInt(3, project.getProjectID());
+
+            int result = stmt.executeUpdate();
+
+            if (result < 1) {
+                System.out.println("Error saving new column");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static void UpdateColumn(Column column) {
+        final String TABLE_NAME = "COLUMN";
+
+        String sql = "UPDATE " + TABLE_NAME +
+                " SET Name = ?" +
+                " WHERE ColumnID = ?";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, column.getName());
+            stmt.setInt(2, column.getColumnID());
+
+            int result = stmt.executeUpdate();
+
+            if (result < 1) {
+                System.out.println("Error saving column data");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static void InsertNewTask(Column column, Task task) {
+        final String TABLE_NAME = "TASK";
+
+        String sql = "INSERT INTO " + TABLE_NAME + "(Name, Description, Duedate, IsCompleted, OrderIndex, ColumnID)" +
+                " VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, task.getName());
+            stmt.setString(2, task.getDescription());
+            if (task.getDueDate() != null) {
+                stmt.setString(3, task.getDueDate().toString());
+            } else {
+                stmt.setString(3, null);
+            }
+            stmt.setBoolean(4, task.isCompleted());
+            stmt.setInt(5, task.getOrderIndex());
+            stmt.setInt(6, column.getColumnID());
+
+            int result = stmt.executeUpdate();
+
+            if (result < 1) {
+                System.out.println("Error saving new task");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static void UpdateTask(Task task) {
+        final String TABLE_NAME = "TASK";
+
+        String sql = "UPDATE " + TABLE_NAME +
+                " SET Name = ?, Description = ?, Duedate = ?, IsCompleted = ?, OrderIndex = ?, ColumnID = ?" +
+                " WHERE TaskID = ?";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, task.getName());
+            stmt.setString(2, task.getDescription());
+            if (task.getDueDate() != null) {
+                stmt.setString(3, task.getDueDate().toString());
+            } else {
+                stmt.setString(3, null);
+            }
+            stmt.setBoolean(4, task.isCompleted());
+            stmt.setInt(5, task.getOrderIndex());
+            stmt.setInt(6, task.getColumnID());
+            stmt.setInt(7, task.getTaskID());
+
+            int result = stmt.executeUpdate();
+
+            if (result < 1) {
+                System.out.println("Error saving task data");
             }
 
         } catch (SQLException e) {

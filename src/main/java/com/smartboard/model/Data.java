@@ -48,6 +48,11 @@ public class Data {
         }
     }
 
+    public static void logoutCurrentUser(){
+        currentUser.getSubItemList().clear();
+        currentUser = null;
+    }
+
     public static void addNewUser(String username, String password, String firstName, String lastName, String imagePath)
             throws IllegalArgumentException, StringLengthException {
 
@@ -92,5 +97,20 @@ public class Data {
         currentUser.setLastName(lastName);
         DB_Utils.UpdateUser(currentUser);
     }
-
+//
+//    public static Project addNewProject(String name) throws StringLengthException {
+//        Project newProject = currentUser.addSubItem(name);
+//        DB_Utils.InsertNewProject(currentUser, newProject);
+//        return newProject;
+//    }
+//
+//    public static void updateProjectName(Project project, String name) throws StringLengthException {
+//        project.setName(name);
+//        DB_Utils.UpdateProject(project);
+//    }
+//
+//    public static void updateColumnName(Column column, String name) throws StringLengthException {
+//        column.setName(name);
+//        DB_Utils.UpdateColumn(column);
+//    }
 }

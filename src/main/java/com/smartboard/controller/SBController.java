@@ -83,10 +83,11 @@ public class SBController implements Closable, Initializable {
     }
 
     private void createProjectView(Project project) {
+        String projectName = (project.isDefault())? project.getName() + " #" : project.getName();
         HBox columnHolder = new HBox(5);
         loadColumns(columnHolder, project);
         ScrollPane scrollPane = new ScrollPane(columnHolder);
-        Tab projectTab = new Tab(project.getName(), scrollPane);
+        Tab projectTab = new Tab(projectName, scrollPane);
         projectsPane.getTabs().add(projectTab);
     }
 
@@ -438,7 +439,8 @@ public class SBController implements Closable, Initializable {
         String name = TextInputDialog.show("Add a new column", "Column name");
 
         if (!name.isBlank()) {
-            getCurrentProject().addSubItem(name);
+            Column newColumn = getCurrentProject().addSubItem(name);
+            newColumn.setOrderIndex(getCurrentProject().getSubItemIndex(newColumn));
             reLoadColumns();
         }
     }
@@ -459,6 +461,7 @@ public class SBController implements Closable, Initializable {
         String newName = TextInputDialog.show("Rename column", "Column title");
 
         if (!newName.isBlank()) {
+            //Data.updateColumnName(Data.currentColumn, newName);
             Data.currentColumn.setName(newName);
             reLoadColumns();
         }
@@ -479,7 +482,7 @@ public class SBController implements Closable, Initializable {
             LoginView.createLoginView();
             Stage stage = (Stage) mainExitButton.getScene().getWindow();
             stage.close();
-            Data.currentUser = null;
+            Data.logoutCurrentUser();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -490,7 +493,9 @@ public class SBController implements Closable, Initializable {
         Data.currentUser.toggleDefaultProject(getCurrentTabIndex());
 
         for (int i = 0; i < Data.currentUser.getListSize(); i++) {
-            projectsPane.getTabs().get(i).setText(Data.currentUser.getSubItem(i).getName());
+            String projectName = Data.currentUser.getSubItem(i).getName();
+            projectName = (Data.currentUser.getSubItem(i).isDefault())? projectName + " #" : projectName;
+            projectsPane.getTabs().get(i).setText(projectName);
         }
 
         reLoadWorkspaceMenu();

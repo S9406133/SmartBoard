@@ -1,9 +1,6 @@
 package com.smartboard.controller;
 
-import com.smartboard.model.ChecklistItem;
-import com.smartboard.model.Data;
-import com.smartboard.model.StringLengthException;
-import com.smartboard.model.Task;
+import com.smartboard.model.*;
 import com.smartboard.view.TextInputDialog;
 import com.smartboard.view.Utility;
 import javafx.event.Event;
@@ -58,6 +55,7 @@ public class TaskEditorController implements Closable, Initializable {
                 checklistRadio.setSelected(true);
                 checklistBox.visibleProperty().setValue(true);
                 checklistItemList = task.getSubItemList();
+                System.out.println("Init: "+checklistItemList.size());
                 loadChecklistRows();
             }
         }
@@ -69,6 +67,7 @@ public class TaskEditorController implements Closable, Initializable {
         boolean error = true;
         String taskName = taskNameField.getText().strip();
         LocalDate dueDate = datePicker.getValue();
+        String description = taskDescriptionField.getText().strip();
 
         if (dueDate != null) {
             if (dueDate.isBefore(LocalDate.now())) {
@@ -83,15 +82,20 @@ public class TaskEditorController implements Closable, Initializable {
                 Task task;
                 if (Data.currentTask == null) {
                     task = Data.currentColumn.addSubItem(taskName);
-                    task.setCompleted(completedCheckbox.isSelected());
+                    task.setOrderIndex(Data.currentColumn.getListSize() - 1);
+                    //task.setCompleted(completedCheckbox.isSelected());
                 } else {
                     task = Data.currentTask;
                     task.setName(taskName);
                 }
 
                 error = false;
-                task.setDescription(taskDescriptionField.getText().strip());
-                //task.setCompleted(completedCheckbox.isSelected());
+
+                task.setCompleted(completedCheckbox.isSelected());
+
+                if (!description.isBlank()) {
+                    task.setDescription(description);
+                }
 
                 if (dueDate != null) {
                     task.setDueDate(dueDate);
@@ -103,6 +107,12 @@ public class TaskEditorController implements Closable, Initializable {
                     task.replaceEntireChecklist(checklistItemList);
                 } else {
                     task.getSubItemList().clear();
+                }
+
+                if (Data.currentTask == null) {
+                    DB_Utils.InsertNewTask(Data.currentColumn, task);
+                } else {
+                    DB_Utils.UpdateTask(task);
                 }
 
                 handleCloseButtonAction(event);
@@ -137,13 +147,13 @@ public class TaskEditorController implements Closable, Initializable {
 
     @FXML
     private void onCompletedClicked() {
-        if (Data.currentTask != null) {
-            Data.currentTask.setCompleted(completedCheckbox.isSelected());
-        } else {
-            for (ChecklistItem item : checklistItemList){
-                item.setChecked(true);
+//        if (Data.currentTask != null) {
+//            Data.currentTask.setCompleted(completedCheckbox.isSelected());
+//        } else {
+            for (ChecklistItem item : checklistItemList) {
+                item.setChecked(completedCheckbox.isSelected());
             }
-        }
+//        }
         reLoadChecklistRows();
     }
 
@@ -156,12 +166,21 @@ public class TaskEditorController implements Closable, Initializable {
         double numChecklistCompleted = 0;
 
         for (ChecklistItem item : checklistItemList) {
+            System.out.println("Loop:"+item.isChecked());
             if (item.isChecked()) {
+                item.setChecked(true);
                 numChecklistCompleted++;
             }
         }
 
-        checklistProgress.setProgress(numChecklistCompleted / checklistItemList.size());
+        double progressNum = numChecklistCompleted / checklistItemList.size();
+        System.out.println("Comp:"+numChecklistCompleted+"/ Size:"+checklistItemList.size()+" = "+progressNum);
+
+        boolean isComp = (progressNum == 1);
+        completedCheckbox.setSelected(isComp);
+        Data.currentTask.setCompleted(isComp);
+
+        checklistProgress.setProgress(progressNum);
     }
 
     @FXML
@@ -219,6 +238,7 @@ public class TaskEditorController implements Closable, Initializable {
         checkBox.setOnAction(actionEvent ->
                 {
                     checklistItem.setChecked(checkBox.isSelected());
+                    System.out.println("Ch: "+checklistItem.isChecked());
                     setChecklistProgress();
                 }
         );

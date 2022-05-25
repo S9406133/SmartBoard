@@ -5,9 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Task extends BoardItem<ChecklistItem> {
+public class Task extends BoardItem<ChecklistItem> implements Reorderable{
 
     private int taskID;
+    private int columnID;
+    private int orderIndex;
     private String description;
     private LocalDate dueDate;
     private boolean isCompleted;
@@ -30,6 +32,16 @@ public class Task extends BoardItem<ChecklistItem> {
     public void setTaskID(int taskID) { this.taskID = taskID; }
 
     public int getTaskID() { return this.taskID; }
+
+    public void setColumnID(int columnID) { this.columnID = columnID; }
+
+    public int getColumnID() { return this.columnID; }
+
+    @Override
+    public void setOrderIndex(int orderIndex) { this.orderIndex = orderIndex; }
+
+    @Override
+    public int getOrderIndex() { return this.orderIndex; }
 
     public void replaceEntireChecklist(ArrayList<ChecklistItem> newList) {
         this.subItems = new ArrayList<>(newList);
@@ -67,7 +79,7 @@ public class Task extends BoardItem<ChecklistItem> {
         this.isCompleted = completed;
 
         for (ChecklistItem item : this.subItems) {
-            item.setChecked(true);
+            item.setChecked(completed);
         }
 
         setStatus();

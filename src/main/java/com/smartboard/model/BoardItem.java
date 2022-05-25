@@ -6,9 +6,17 @@ public abstract class BoardItem<T> {
 
     protected String name;
     protected ArrayList<T> subItems;
+    final int MIN_NAME_LENGTH = 2;
+    final int MAX_NAME_LENGTH = 30;
 
     public BoardItem(String name) throws StringLengthException {
-        setName(name);
+
+        if ((name.length() >= MIN_NAME_LENGTH) && (name.length() <= MAX_NAME_LENGTH)) {
+            this.name = name;
+        } else {
+            throw new StringLengthException("Invalid name length - Name not changed");
+        }
+
         this.subItems = new ArrayList<>();
     }
 
@@ -39,8 +47,6 @@ public abstract class BoardItem<T> {
     }
 
     public void setName(String name) throws StringLengthException {
-        final int MIN_NAME_LENGTH = 2;
-        final int MAX_NAME_LENGTH = 30;
 
         if ((name.length() >= MIN_NAME_LENGTH) && (name.length() <= MAX_NAME_LENGTH)) {
             this.name = name;
