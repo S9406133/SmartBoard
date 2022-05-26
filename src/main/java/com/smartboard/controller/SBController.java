@@ -439,8 +439,7 @@ public class SBController implements Closable, Initializable {
         String name = TextInputDialog.show("Add a new column", "Column name");
 
         if (!name.isBlank()) {
-            Column newColumn = Data.addNewColumn(getCurrentProject(), name);
-            newColumn.setOrderIndex(getCurrentProject().getSubItemIndex(newColumn));
+            Data.addNewColumn(getCurrentProject(), name);
             reLoadColumns();
         }
     }
@@ -579,6 +578,8 @@ public class SBController implements Closable, Initializable {
     private void moveTaskToNewColumn(Column newColumn, Column currentColumn, Task task) {
         newColumn.getSubItemList().add(task);
         currentColumn.removeSubItem(task);
+
+        Data.updateTaskColumn(newColumn, task);
     }
 
     private void moveColumn(Column column, String direction) {
@@ -586,12 +587,16 @@ public class SBController implements Closable, Initializable {
         int colIndex = project.getSubItemIndex(column);
 
         moveItem(project.getSubItemList(), colIndex, direction);
+
+        Data.updateColumnIndexes(project);
     }
 
     private void moveTask(Task task, String direction) {
         int taskIndex = Data.currentColumn.getSubItemIndex(task);
 
         moveItem(Data.currentColumn.getSubItemList(), taskIndex, direction);
+
+        Data.updateTaskIndexes(Data.currentColumn);
     }
 
     private void moveItem(ArrayList<?> itemList, int itemIndex, String direction) {

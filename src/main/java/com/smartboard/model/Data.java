@@ -102,6 +102,7 @@ public class Data {
 
     public static Column addNewColumn(Project project, String name) throws StringLengthException {
         Column newColumn = project.addSubItem(name);
+        newColumn.setOrderIndex(project.getSubItemIndex(newColumn));
         DB_Utils.InsertNewColumn(newColumn);
         return newColumn;
     }
@@ -111,7 +112,30 @@ public class Data {
         DB_Utils.UpdateColumn(column);
     }
 
-    public static void refreshTaskCLItems(int taskID, ArrayList<ChecklistItem> newList){
+    public static void updateColumnIndexes(Project project) {
+        int i = 0;
+        for (Column column : project.getSubItemList()) {
+            column.setOrderIndex(i);
+            DB_Utils.UpdateColumn(column);
+            i++;
+        }
+    }
+
+    public static void updateTaskIndexes(Column column) {
+        int i = 0;
+        for (Task task : column.getSubItemList()) {
+            task.setOrderIndex(i);
+            DB_Utils.UpdateTask(task);
+            i++;
+        }
+    }
+
+    public static void updateTaskColumn(Column column, Task task) {
+        task.setColumnID(column.getColumnID());
+        DB_Utils.UpdateTask(task);
+    }
+
+    public static void refreshTaskCLItems(int taskID, ArrayList<ChecklistItem> newList) {
         DB_Utils.DeleteAllTaskCLItems(taskID);
         for (ChecklistItem item : newList) {
             DB_Utils.InsertNewCLItem(taskID, item);
