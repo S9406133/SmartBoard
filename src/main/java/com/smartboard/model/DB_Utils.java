@@ -487,7 +487,7 @@ public class DB_Utils {
 
             try (ResultSet resultSet = stmt.executeQuery(query)) {
                 while (resultSet.next()) {
-                    System.out.printf("Own Id: %d ", resultSet.getInt("ownID"));
+                    System.out.printf("Own Id: %d \n", resultSet.getInt("ownID"));
                     ownID = resultSet.getInt("ownID");
                 }
             }
@@ -496,6 +496,27 @@ public class DB_Utils {
         }
 
         return ownID;
+    }
+
+    public static void DeleteItem(String itemType, int itemID) {
+        final String TABLE_NAME = itemType;
+        final String FIELD_NAME = itemType + "ID";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             Statement stmt = con.createStatement()) {
+            String sql = "DELETE FROM " + TABLE_NAME +
+                    " WHERE " + FIELD_NAME + " = " + itemID;
+            System.out.println(sql);
+
+            int result = stmt.executeUpdate(sql);
+
+            if (result == 1) {
+                System.out.println("Delete from table " + TABLE_NAME + " executed successfully");
+                System.out.println(result + " row(s) affected");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 //    public static void SelectAllQuery(String tableName) {
@@ -536,67 +557,67 @@ public class DB_Utils {
 //            System.out.println(e.getMessage());
 //        }
 //    }
-
-    public static void DeleteRow(String tableName) {
-        //final String TABLE_NAME = "Student";
-
-        try (Connection con = DatabaseConnection.getConnection();
-             Statement stmt = con.createStatement()) {
-            String sql = "DELETE FROM " + tableName +
-                    " WHERE first_name LIKE 'Tom'";
-
-            int result = stmt.executeUpdate(sql);
-
-            if (result == 1) {
-                System.out.println("Delete from table " + tableName + " executed successfully");
-                System.out.println(result + " row(s) affected");
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public static void UpdateTable(String tableName) {
-        //final String TABLE_NAME = "Student";
-
-        try (Connection con = DatabaseConnection.getConnection();
-             Statement stmt = con.createStatement()) {
-            String sql = "UPDATE " + tableName +
-                    " SET last_name = 'Singleton'" +
-                    " WHERE student_number LIKE 's3388490'";
-
-            int result = stmt.executeUpdate(sql);
-
-            if (result == 1) {
-                System.out.println("Update table " + tableName + " executed successfully");
-                System.out.println(result + " row(s) affected");
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public static void UsePreparedStatement(String tableName) {
-        //final String TABLE_NAME = "Student";
-
-        String sql = "INSERT INTO " + tableName + " (id, student_number, first_name, last_name)" +
-                " VALUES (?, ?, ?, ?)";
-
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, 2);
-            stmt.setString(2, "s3089940");
-            stmt.setString(3, "Tom");
-            stmt.setString(4, "Bruster");
-
-            int result = stmt.executeUpdate();
-
-            if (result == 1) {
-                System.out.println("Insert into table " + tableName + " executed successfully");
-                System.out.println(result + " row(s) affected");
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+//
+//    public static void DeleteRow(String tableName) {
+//        //final String TABLE_NAME = "Student";
+//
+//        try (Connection con = DatabaseConnection.getConnection();
+//             Statement stmt = con.createStatement()) {
+//            String sql = "DELETE FROM " + tableName +
+//                    " WHERE first_name LIKE 'Tom'";
+//
+//            int result = stmt.executeUpdate(sql);
+//
+//            if (result == 1) {
+//                System.out.println("Delete from table " + tableName + " executed successfully");
+//                System.out.println(result + " row(s) affected");
+//            }
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
+//
+//    public static void UpdateTable(String tableName) {
+//        //final String TABLE_NAME = "Student";
+//
+//        try (Connection con = DatabaseConnection.getConnection();
+//             Statement stmt = con.createStatement()) {
+//            String sql = "UPDATE " + tableName +
+//                    " SET last_name = 'Singleton'" +
+//                    " WHERE student_number LIKE 's3388490'";
+//
+//            int result = stmt.executeUpdate(sql);
+//
+//            if (result == 1) {
+//                System.out.println("Update table " + tableName + " executed successfully");
+//                System.out.println(result + " row(s) affected");
+//            }
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
+//
+//    public static void UsePreparedStatement(String tableName) {
+//        //final String TABLE_NAME = "Student";
+//
+//        String sql = "INSERT INTO " + tableName + " (id, student_number, first_name, last_name)" +
+//                " VALUES (?, ?, ?, ?)";
+//
+//        try (Connection con = DatabaseConnection.getConnection();
+//             PreparedStatement stmt = con.prepareStatement(sql)) {
+//            stmt.setInt(1, 2);
+//            stmt.setString(2, "s3089940");
+//            stmt.setString(3, "Tom");
+//            stmt.setString(4, "Bruster");
+//
+//            int result = stmt.executeUpdate();
+//
+//            if (result == 1) {
+//                System.out.println("Insert into table " + tableName + " executed successfully");
+//                System.out.println(result + " row(s) affected");
+//            }
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 }
