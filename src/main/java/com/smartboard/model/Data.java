@@ -34,7 +34,7 @@ public class Data {
         }
     }
 
-    public static void logoutCurrentUser(){
+    public static void logoutCurrentUser() {
         currentUser.getSubItemList().clear();
         currentUser = null;
     }
@@ -69,7 +69,7 @@ public class Data {
         return returnVal;
     }
 
-    public static void updateUserImagepath(String imagePath){
+    public static void updateUserImagepath(String imagePath) {
         currentUser.setImagePath(imagePath);
         DB_Utils.UpdateUser(currentUser);
     }
@@ -111,5 +111,11 @@ public class Data {
         DB_Utils.UpdateColumn(column);
     }
 
+    public static void refreshTaskCLItems(int taskID, ArrayList<ChecklistItem> newList){
+        DB_Utils.DeleteAllTaskCLItems(taskID);
+        for (ChecklistItem item : newList) {
+            DB_Utils.InsertNewCLItem(taskID, item);
+        }
+    }
 
 }

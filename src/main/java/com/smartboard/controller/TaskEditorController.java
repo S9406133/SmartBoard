@@ -82,7 +82,6 @@ public class TaskEditorController implements Closable, Initializable {
                 if (Data.currentTask == null) {
                     task = Data.currentColumn.addSubItem(taskName);
                     task.setOrderIndex(Data.currentColumn.getListSize() - 1);
-                    //task.setCompleted(completedCheckbox.isSelected());
                 } else {
                     task = Data.currentTask;
                     task.setName(taskName);

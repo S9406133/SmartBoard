@@ -6,9 +6,9 @@ public class Column extends BoardItem<Task> implements Reorderable {
     private int orderIndex;
     private final int projectID;
 
-    public Column(String name, int projectIndex) throws StringLengthException {
+    public Column(String name, int projectID) throws StringLengthException {
         super(name);
-        this.projectID = projectIndex;
+        this.projectID = projectID;
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Task extends BoardItem<ChecklistItem> implements Reorderable{
 
     private int taskID;
-    private final int columnID;
+    private int columnID;
     private int orderIndex;
     private String description;
     private LocalDate dueDate;
@@ -36,7 +36,7 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable{
 
     public int getTaskID() { return this.taskID; }
 
-//    public void setColumnID(int columnID) { this.columnID = columnID; }
+    public void setColumnID(int columnID) { this.columnID = columnID; }
 
     public int getColumnID() { return this.columnID; }
 
@@ -48,6 +48,7 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable{
 
     public void replaceEntireChecklist(ArrayList<ChecklistItem> newList) {
         this.subItems = new ArrayList<>(newList);
+        Data.refreshTaskCLItems(this.getTaskID(), newList);
     }
 
     public String getDescription() {

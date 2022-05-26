@@ -203,7 +203,10 @@ public class DB_Utils {
                             resultSet.getInt("TaskID"));
 
                     cliList.add(new ChecklistItem(resultSet.getString("Description")));
-                    cliList.get(cliList.size() - 1).setChecked(resultSet.getBoolean("Checked"));
+                    ChecklistItem currCli = cliList.get(cliList.size() - 1);
+                    currCli.setChecked(resultSet.getBoolean("Checked"));
+                    currCli.setItemID(resultSet.getInt("ItemID"));
+                    currCli.setTaskID(resultSet.getInt("TaskID"));
                 }
             }
         } catch (SQLException e) {
@@ -287,7 +290,7 @@ public class DB_Utils {
             System.out.println(e.getMessage());
         }
 
-        project.setProjectID(SelectParentID(TABLE_NAME, "ProjectID"));
+        project.setProjectID(SelectOwnID(TABLE_NAME, "ProjectID"));
     }
 
     public static void UpdateProject(Project project) {
@@ -337,7 +340,7 @@ public class DB_Utils {
             System.out.println(e.getMessage());
         }
 
-        column.setColumnID(SelectParentID(TABLE_NAME, "ColumnID"));
+        column.setColumnID(SelectOwnID(TABLE_NAME, "ColumnID"));
     }
 
     public static void UpdateColumn(Column column) {
@@ -394,7 +397,7 @@ public class DB_Utils {
             System.out.println(e.getMessage());
         }
 
-        task.setTaskID(SelectParentID(TABLE_NAME, "TaskID"));
+        task.setTaskID(SelectOwnID(TABLE_NAME, "TaskID"));
     }
 
     public static void UpdateTask(Task task) {
@@ -430,26 +433,69 @@ public class DB_Utils {
 
     }
 
-        public static int SelectParentID(String tableName, String fieldname) {
-        int parentID = 0;
+    public static void InsertNewCLItem(int taskID, ChecklistItem cli) {
+        final String TABLE_NAME = "CHECKLISTITEM";
+
+        String sql = "INSERT INTO " + TABLE_NAME + "(Description, Checked, TaskID)" +
+                " VALUES (?, ?, ?)";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, cli.getDescription());
+            stmt.setBoolean(2, cli.isChecked());
+            stmt.setInt(3, taskID);
+
+            int result = stmt.executeUpdate();
+
+            if (result < 1) {
+                System.out.println("Error saving new checklist item");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        cli.setItemID(SelectOwnID(TABLE_NAME, "ItemID"));
+    }
+
+    public static void DeleteAllTaskCLItems(int taskID) {
+        final String TABLE_NAME = "CHECKLISTITEM";
 
         try (Connection con = DatabaseConnection.getConnection();
              Statement stmt = con.createStatement()) {
-            String query = "SELECT MAX(" + fieldname + ") parentID" +
+            String sql = "DELETE FROM " + TABLE_NAME +
+                    " WHERE TaskID = " + taskID;
+
+            int result = stmt.executeUpdate(sql);
+
+            if (result >= 1) {
+                System.out.println("Delete from table " + TABLE_NAME + " executed successfully");
+                System.out.println(result + " row(s) affected");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static int SelectOwnID(String tableName, String fieldname) {
+        int ownID = 0;
+
+        try (Connection con = DatabaseConnection.getConnection();
+             Statement stmt = con.createStatement()) {
+            String query = "SELECT MAX(" + fieldname + ") ownID" +
                     " FROM " + tableName;
-            System.out.println(query);
 
             try (ResultSet resultSet = stmt.executeQuery(query)) {
                 while (resultSet.next()) {
-                    System.out.printf("Parent Id: %d ", resultSet.getInt("parentID"));
-                    parentID = resultSet.getInt("parentID");
+                    System.out.printf("Own Id: %d ", resultSet.getInt("ownID"));
+                    ownID = resultSet.getInt("ownID");
                 }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        return parentID;
+        return ownID;
     }
 
 //    public static void SelectAllQuery(String tableName) {

@@ -83,7 +83,7 @@ public class SBController implements Closable, Initializable {
     }
 
     private void createProjectView(Project project) {
-        String projectName = (project.isDefault())? project.getName() + " #" : project.getName();
+        String projectName = (project.isDefault()) ? project.getName() + " #" : project.getName();
         HBox columnHolder = new HBox(5);
         loadColumns(columnHolder, project);
         ScrollPane scrollPane = new ScrollPane(columnHolder);
@@ -427,7 +427,7 @@ public class SBController implements Closable, Initializable {
         String name = TextInputDialog.show("Create a new project", "Project title");
 
         if (!name.isBlank()) {
-            Project newProject = Data.addNewProject(name); // Data.currentUser.addSubItem(name);
+            Project newProject = Data.addNewProject(name);
             createProjectView(newProject);
             projectsPane.getSelectionModel().selectLast();
             addProjectToMenu(newProject, projectsPane.getTabs().get(Data.currentUser.getListSize() - 1));
@@ -439,7 +439,7 @@ public class SBController implements Closable, Initializable {
         String name = TextInputDialog.show("Add a new column", "Column name");
 
         if (!name.isBlank()) {
-            Column newColumn = Data.addNewColumn(getCurrentProject(), name); // getCurrentProject().addSubItem(name);
+            Column newColumn = Data.addNewColumn(getCurrentProject(), name);
             newColumn.setOrderIndex(getCurrentProject().getSubItemIndex(newColumn));
             reLoadColumns();
         }
@@ -451,7 +451,6 @@ public class SBController implements Closable, Initializable {
         if (!newName.isBlank()) {
             int currentTabIndex = getCurrentTabIndex();
             Project currentProject = getCurrentProject();
-            //currentProject.setName(newName);
             Data.updateProjectName(currentProject, newName);
             projectsPane.getTabs().get(currentTabIndex).setText(currentProject.getName());
             reLoadWorkspaceMenu();
@@ -463,7 +462,6 @@ public class SBController implements Closable, Initializable {
 
         if (!newName.isBlank()) {
             Data.updateColumnName(Data.currentColumn, newName);
-            //Data.currentColumn.setName(newName);
             reLoadColumns();
         }
     }
@@ -495,7 +493,7 @@ public class SBController implements Closable, Initializable {
 
         for (int i = 0; i < Data.currentUser.getListSize(); i++) {
             String projectName = Data.currentUser.getSubItem(i).getName();
-            projectName = (Data.currentUser.getSubItem(i).isDefault())? projectName + " #" : projectName;
+            projectName = (Data.currentUser.getSubItem(i).isDefault()) ? projectName + " #" : projectName;
             projectsPane.getTabs().get(i).setText(projectName);
         }
 
