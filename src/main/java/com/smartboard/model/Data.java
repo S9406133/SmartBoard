@@ -21,20 +21,6 @@ public class Data {
     public static Column currentColumn = null;
     public static Task currentTask = null;
 
-//    public static void createInitUser() throws StringLengthException {
-//        users.add(new User("Sim", "a", "Simon", "James"));
-//        users.get(0).addSubItem("Test Project");
-//        users.get(0).getSubItem(0).addSubItem("To Do");
-//        users.get(0).getSubItem(0).addSubItem("Doing");
-//        users.get(0).getSubItem(0).addSubItem("Done");
-//        users.get(0).getSubItem(0).getSubItem(0).addSubItem("First Task");
-//        users.get(0).getSubItem(0).getSubItem(0).addSubItem("Second Task");
-//        users.get(0).getSubItem(0).getSubItem(0).addSubItem("Third Task");
-//        users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("First item");
-//        users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("Second item");
-//        users.get(0).getSubItem(0).getSubItem(0).getSubItem(0).addSubItem("Third item");
-//    }
-
     public static void loadUsersFromDB() {
         users = DB_Utils.SelectAllUsers();
         System.out.println(users.size());
@@ -97,20 +83,33 @@ public class Data {
         currentUser.setLastName(lastName);
         DB_Utils.UpdateUser(currentUser);
     }
-//
-//    public static Project addNewProject(String name) throws StringLengthException {
-//        Project newProject = currentUser.addSubItem(name);
-//        DB_Utils.InsertNewProject(currentUser, newProject);
-//        return newProject;
-//    }
-//
-//    public static void updateProjectName(Project project, String name) throws StringLengthException {
-//        project.setName(name);
-//        DB_Utils.UpdateProject(project);
-//    }
-//
-//    public static void updateColumnName(Column column, String name) throws StringLengthException {
-//        column.setName(name);
-//        DB_Utils.UpdateColumn(column);
-//    }
+
+    public static Project addNewProject(String name) throws StringLengthException {
+        Project newProject = currentUser.addSubItem(name);
+        DB_Utils.InsertNewProject(newProject);
+        return newProject;
+    }
+
+    public static void updateProjectName(Project project, String name) throws StringLengthException {
+        project.setName(name);
+        DB_Utils.UpdateProject(project);
+    }
+
+    public static void updateProjectDefault(Project project, boolean isDefault) {
+        project.setDefault(isDefault);
+        DB_Utils.UpdateProject(project);
+    }
+
+    public static Column addNewColumn(Project project, String name) throws StringLengthException {
+        Column newColumn = project.addSubItem(name);
+        DB_Utils.InsertNewColumn(newColumn);
+        return newColumn;
+    }
+
+    public static void updateColumnName(Column column, String name) throws StringLengthException {
+        column.setName(name);
+        DB_Utils.UpdateColumn(column);
+    }
+
+
 }

@@ -4,22 +4,17 @@ public class Column extends BoardItem<Task> implements Reorderable {
 
     private int columnID;
     private int orderIndex;
+    private final int projectID;
 
-    public Column(String name) throws StringLengthException {
+    public Column(String name, int projectIndex) throws StringLengthException {
         super(name);
+        this.projectID = projectIndex;
     }
 
     @Override
     public Task addSubItem(String subItemName) throws StringLengthException {
-        this.subItems.add(new Task(subItemName));
+        this.subItems.add(new Task(subItemName, this.getColumnID()));
         return this.subItems.get(this.subItems.size() - 1);
-    }
-
-    @Override
-    public void setName(String name) throws StringLengthException {
-        super.setName(name);
-
-        DB_Utils.UpdateColumn(this);
     }
 
     public void setColumnID(int columnID) {
@@ -28,6 +23,10 @@ public class Column extends BoardItem<Task> implements Reorderable {
 
     public int getColumnID() {
         return this.columnID;
+    }
+
+    public int getProjectID() {
+        return projectID;
     }
 
     @Override

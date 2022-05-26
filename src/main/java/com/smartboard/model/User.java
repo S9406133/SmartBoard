@@ -27,10 +27,8 @@ public class User extends BoardItem<Project> {
 
     @Override
     public Project addSubItem(String subItemName) throws StringLengthException {
-        this.subItems.add(new Project(subItemName));
-        Project newProject = this.subItems.get(this.subItems.size() - 1);
-        DB_Utils.InsertNewProject(this, newProject);
-        return newProject;
+        this.subItems.add(new Project(subItemName, this.getName()));
+        return this.subItems.get(this.subItems.size() - 1);
     }
 
     public boolean validateLogin(String username, String password) {
@@ -54,16 +52,16 @@ public class User extends BoardItem<Project> {
 
         if (!this.subItems.get(index).isDefault()) {
             if (getDefaultProject() != null) {
-                getDefaultProject().setDefault(false);
+                Data.updateProjectDefault(getDefaultProject(), false);
             }
-            this.subItems.get(index).setDefault(true);
+            Data.updateProjectDefault(this.subItems.get(index), true);
 
         } else {
-            this.subItems.get(index).setDefault(false);
+            Data.updateProjectDefault(this.subItems.get(index), false);
         }
     }
 
-    public String getPassword() { return this.password; }
+    public String getPassword() { return password; }
 
     public String getFirstName() {
         return firstName;

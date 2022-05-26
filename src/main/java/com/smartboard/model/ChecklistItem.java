@@ -4,6 +4,7 @@ public class ChecklistItem {
 
     private String description;
     private boolean checked;
+    private int taskID;
 
     public ChecklistItem(String description) {
         this.description = description;
@@ -24,5 +25,13 @@ public class ChecklistItem {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public int getTaskID() {
+        return taskID;
+    }
+
+    public void  setTaskID(int taskID) {
+        this.taskID = taskID;
     }
 }

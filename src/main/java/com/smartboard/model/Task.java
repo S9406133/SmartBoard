@@ -8,16 +8,17 @@ import java.util.ArrayList;
 public class Task extends BoardItem<ChecklistItem> implements Reorderable{
 
     private int taskID;
-    private int columnID;
+    private final int columnID;
     private int orderIndex;
     private String description;
     private LocalDate dueDate;
     private boolean isCompleted;
     private Status status;
 
-    public Task(String name) throws StringLengthException {
+    public Task(String name, int columnID) throws StringLengthException {
         super(name);
 
+        this.columnID = columnID;
         this.description = "Provide a description...";
         this.isCompleted = false;
         this.status = Status.DATE_NOT_SET;
@@ -26,14 +27,16 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable{
     @Override
     public ChecklistItem addSubItem(String subItemName) {
         this.subItems.add(new ChecklistItem(subItemName));
-        return this.subItems.get(this.subItems.size() - 1);
+        ChecklistItem newCli = this.subItems.get(this.subItems.size() - 1);
+        newCli.setTaskID(this.getTaskID());
+        return newCli;
     }
 
     public void setTaskID(int taskID) { this.taskID = taskID; }
 
     public int getTaskID() { return this.taskID; }
 
-    public void setColumnID(int columnID) { this.columnID = columnID; }
+//    public void setColumnID(int columnID) { this.columnID = columnID; }
 
     public int getColumnID() { return this.columnID; }
 
@@ -78,8 +81,10 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable{
     public void setCompleted(boolean completed) {
         this.isCompleted = completed;
 
-        for (ChecklistItem item : this.subItems) {
-            item.setChecked(completed);
+        if (completed) {
+            for (ChecklistItem item : this.subItems) {
+                item.setChecked(true);
+            }
         }
 
         setStatus();

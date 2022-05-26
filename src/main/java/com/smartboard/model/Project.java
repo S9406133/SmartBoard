@@ -3,27 +3,20 @@ package com.smartboard.model;
 public class Project extends BoardItem<Column> {
 
     private int projectID;
+    private final String username;
     private boolean isDefault;
 
-    public Project(String name) throws StringLengthException {
+    public Project(String name, String username) throws StringLengthException {
         super(name);
 
+        this.username = username;
         this.isDefault = false;
     }
 
     @Override
     public Column addSubItem(String subItemName) throws StringLengthException {
-        this.subItems.add(new Column(subItemName));
-        Column newColumn = this.subItems.get(this.subItems.size() - 1);
-        DB_Utils.InsertNewColumn(this, newColumn);
-        return newColumn;
-    }
-
-    @Override
-    public void setName(String name) throws StringLengthException {
-        super.setName(name);
-
-        DB_Utils.UpdateProject(this);
+        this.subItems.add(new Column(subItemName, this.getProjectID()));
+        return this.subItems.get(this.subItems.size() - 1);
     }
 
     public void setProjectID(int projectID) {
@@ -34,14 +27,14 @@ public class Project extends BoardItem<Column> {
         return projectID;
     }
 
+    public String getUsername() { return username; }
+
     public boolean isDefault() {
         return isDefault;
     }
 
     public void setDefault(boolean isDefault) {
         this.isDefault = isDefault;
-
-        DB_Utils.UpdateProject(this);
     }
 
 }

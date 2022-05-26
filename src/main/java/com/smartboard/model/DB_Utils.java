@@ -83,7 +83,7 @@ public class DB_Utils {
                             resultSet.getInt("projectId"), resultSet.getString("name"),
                             resultSet.getBoolean("isDefault"), resultSet.getString("Username"));
 
-                    projectList.add(new Project(resultSet.getString("name")));
+                    projectList.add(new Project(resultSet.getString("name"), resultSet.getString("Username")));
                     Project currProject = projectList.get(projectList.size() - 1);
                     currProject.setDefault(resultSet.getBoolean("isDefault"));
                     currProject.setProjectID(resultSet.getInt("projectId"));
@@ -120,7 +120,7 @@ public class DB_Utils {
                             resultSet.getInt("ColumnID"), resultSet.getString("Name"),
                             resultSet.getInt("ProjectID"));
 
-                    columnList.add(new Column(resultSet.getString("Name")));
+                    columnList.add(new Column(resultSet.getString("Name"), resultSet.getInt("ProjectID")));
                     Column currColumn = columnList.get(columnList.size() - 1);
                     currColumn.setColumnID(resultSet.getInt("ColumnID"));
                     currColumn.setOrderIndex(resultSet.getInt("OrderIndex"));
@@ -158,10 +158,9 @@ public class DB_Utils {
                             resultSet.getString("Description"), resultSet.getString("DueDate"),
                             resultSet.getBoolean("IsCompleted"), resultSet.getInt("ColumnID"));
 
-                    taskList.add(new Task(resultSet.getString("Name")));
+                    taskList.add(new Task(resultSet.getString("Name"), resultSet.getInt("ColumnID")));
                     Task currTask = taskList.get(taskList.size() - 1);
                     currTask.setTaskID(resultSet.getInt("TaskID"));
-                    currTask.setColumnID(resultSet.getInt("ColumnID"));
                     currTask.setOrderIndex(resultSet.getInt("OrderIndex"));
                     if (resultSet.getString("Description") != null) {
                         currTask.setDescription(resultSet.getString("Description"));
@@ -266,7 +265,7 @@ public class DB_Utils {
 
     }
 
-    public static void InsertNewProject(User user, Project project) {
+    public static void InsertNewProject(Project project) {
         final String TABLE_NAME = "PROJECT";
 
         String sql = "INSERT INTO " + TABLE_NAME + "(Name, IsDefault, Username)" +
@@ -276,7 +275,7 @@ public class DB_Utils {
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, project.getName());
             stmt.setBoolean(2, project.isDefault());
-            stmt.setString(3, user.getName());
+            stmt.setString(3, project.getUsername());
 
             int result = stmt.executeUpdate();
 
@@ -288,6 +287,7 @@ public class DB_Utils {
             System.out.println(e.getMessage());
         }
 
+        project.setProjectID(SelectParentID(TABLE_NAME, "ProjectID"));
     }
 
     public static void UpdateProject(Project project) {
@@ -315,7 +315,7 @@ public class DB_Utils {
 
     }
 
-    public static void InsertNewColumn(Project project, Column column) {
+    public static void InsertNewColumn(Column column) {
         final String TABLE_NAME = "COLUMN";
 
         String sql = "INSERT INTO " + TABLE_NAME + "(Name, OrderIndex, ProjectID)" +
@@ -325,7 +325,7 @@ public class DB_Utils {
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, column.getName());
             stmt.setInt(2, column.getOrderIndex());
-            stmt.setInt(3, project.getProjectID());
+            stmt.setInt(3, column.getProjectID());
 
             int result = stmt.executeUpdate();
 
@@ -337,19 +337,21 @@ public class DB_Utils {
             System.out.println(e.getMessage());
         }
 
+        column.setColumnID(SelectParentID(TABLE_NAME, "ColumnID"));
     }
 
     public static void UpdateColumn(Column column) {
         final String TABLE_NAME = "COLUMN";
 
         String sql = "UPDATE " + TABLE_NAME +
-                " SET Name = ?" +
+                " SET Name = ?, OrderIndex = ?" +
                 " WHERE ColumnID = ?";
 
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, column.getName());
-            stmt.setInt(2, column.getColumnID());
+            stmt.setInt(2, column.getOrderIndex());
+            stmt.setInt(3, column.getColumnID());
 
             int result = stmt.executeUpdate();
 
@@ -363,7 +365,7 @@ public class DB_Utils {
 
     }
 
-    public static void InsertNewTask(Column column, Task task) {
+    public static void InsertNewTask(Task task) {
         final String TABLE_NAME = "TASK";
 
         String sql = "INSERT INTO " + TABLE_NAME + "(Name, Description, Duedate, IsCompleted, OrderIndex, ColumnID)" +
@@ -380,7 +382,7 @@ public class DB_Utils {
             }
             stmt.setBoolean(4, task.isCompleted());
             stmt.setInt(5, task.getOrderIndex());
-            stmt.setInt(6, column.getColumnID());
+            stmt.setInt(6, task.getColumnID());
 
             int result = stmt.executeUpdate();
 
@@ -392,6 +394,7 @@ public class DB_Utils {
             System.out.println(e.getMessage());
         }
 
+        task.setTaskID(SelectParentID(TABLE_NAME, "TaskID"));
     }
 
     public static void UpdateTask(Task task) {
@@ -425,6 +428,28 @@ public class DB_Utils {
             System.out.println(e.getMessage());
         }
 
+    }
+
+        public static int SelectParentID(String tableName, String fieldname) {
+        int parentID = 0;
+
+        try (Connection con = DatabaseConnection.getConnection();
+             Statement stmt = con.createStatement()) {
+            String query = "SELECT MAX(" + fieldname + ") parentID" +
+                    " FROM " + tableName;
+            System.out.println(query);
+
+            try (ResultSet resultSet = stmt.executeQuery(query)) {
+                while (resultSet.next()) {
+                    System.out.printf("Parent Id: %d ", resultSet.getInt("parentID"));
+                    parentID = resultSet.getInt("parentID");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return parentID;
     }
 
 //    public static void SelectAllQuery(String tableName) {
