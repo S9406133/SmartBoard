@@ -100,11 +100,10 @@ public class Data {
         DB_Utils.UpdateProject(project);
     }
 
-    public static Column addNewColumn(Project project, String name) throws StringLengthException {
+    public static void addNewColumn(Project project, String name) throws StringLengthException {
         Column newColumn = project.addSubItem(name);
         newColumn.setOrderIndex(project.getSubItemIndex(newColumn));
         DB_Utils.InsertNewColumn(newColumn);
-        return newColumn;
     }
 
     public static void updateColumnName(Column column, String name) throws StringLengthException {
@@ -121,6 +120,19 @@ public class Data {
         }
     }
 
+    public static void deleteColumn(Project project, String deleteClass, int itemID) {
+        DB_Utils.DeleteItem(deleteClass, deleteClass + "ID", itemID);
+        updateColumnIndexes(project);
+    }
+
+    public static void addNewTask(Task task){
+        DB_Utils.InsertNewTask(task);
+        for (ChecklistItem item : task.getSubItemList()){
+            item.setTaskID(task.getTaskID());
+        }
+        refreshTaskCLItems(task.getTaskID(), task.getSubItemList());
+    }
+
     public static void updateTaskIndexes(Column column) {
         int i = 0;
         for (Task task : column.getSubItemList()) {
@@ -135,6 +147,11 @@ public class Data {
         DB_Utils.UpdateTask(task);
     }
 
+    public static void deleteTask(Column column, String deleteClass, int itemID) {
+        DB_Utils.DeleteItem(deleteClass, deleteClass + "ID", itemID);
+        updateTaskIndexes(column);
+    }
+
     public static void refreshTaskCLItems(int taskID, ArrayList<ChecklistItem> newList) {
         DB_Utils.DeleteAllTaskCLItems(taskID);
         for (ChecklistItem item : newList) {
@@ -142,5 +159,9 @@ public class Data {
         }
     }
 
+    public static void deleteTaskCLItems(Task task){
+        currentTask.getSubItemList().clear();
+        DB_Utils.DeleteAllTaskCLItems(task.getTaskID());
+    }
 
 }

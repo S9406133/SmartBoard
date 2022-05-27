@@ -48,7 +48,10 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable{
 
     public void replaceEntireChecklist(ArrayList<ChecklistItem> newList) {
         this.subItems = new ArrayList<>(newList);
-        Data.refreshTaskCLItems(this.getTaskID(), newList);
+        System.out.println("TaskID: "+taskID);
+        if (this.taskID > 0) {
+            Data.refreshTaskCLItems(this.taskID, newList);
+        }
     }
 
     public String getDescription() {

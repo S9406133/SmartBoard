@@ -103,11 +103,13 @@ public class TaskEditorController implements Closable, Initializable {
                     task.replaceEntireChecklist(checklistItemList);
                     task.setCompleted(completedCheckbox.isSelected());
                 } else {
-                    task.getSubItemList().clear();
+                    if (Data.currentTask != null) {
+                        Data.deleteTaskCLItems(task);
+                    }
                 }
 
                 if (Data.currentTask == null) {
-                    DB_Utils.InsertNewTask(task);
+                    Data.addNewTask(task);
                 } else {
                     DB_Utils.UpdateTask(task);
                 }

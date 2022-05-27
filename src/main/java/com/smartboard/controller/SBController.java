@@ -542,7 +542,7 @@ public class SBController implements Closable, Initializable {
     private void deleteBoardItem(BoardItem<?> superItem, BoardItem<?> itemToDelete, String alertTitle) {
         String deleteClass = itemToDelete.getClass().getSimpleName();
         String itemName = itemToDelete.getName();
-        int itemID = 0;
+        int itemID = -1;
         switch (deleteClass) {
             case "Project" -> itemID = ((Project) itemToDelete).getProjectID();
             case "Column" -> itemID = ((Column) itemToDelete).getColumnID();
@@ -561,11 +561,17 @@ public class SBController implements Closable, Initializable {
                     projectsPane.getTabs().clear();
                     displayProjects();
                     setProjectMenuDisable();
+                    DB_Utils.DeleteItem(deleteClass, deleteClass + "ID", itemID);
                 }
-                case "Column", "Task" -> reLoadColumns();
+                case "Column" -> {
+                    reLoadColumns();
+                    Data.deleteColumn((Project) superItem, deleteClass, itemID);
+                }
+                case "Task" -> {
+                    reLoadColumns();
+                    Data.deleteTask((Column) superItem, deleteClass, itemID);
+                }
             }
-
-            DB_Utils.DeleteItem(deleteClass, itemID);
 
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);

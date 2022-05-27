@@ -120,7 +120,15 @@ public class DB_Utils {
                             resultSet.getInt("ColumnID"), resultSet.getString("Name"),
                             resultSet.getInt("ProjectID"));
 
-                    columnList.add(new Column(resultSet.getString("Name"), resultSet.getInt("ProjectID")));
+                    if (columnList.size() <= resultSet.getInt("OrderIndex")) {
+                        columnList.add(new Column(resultSet.getString("Name"), resultSet.getInt("ProjectID")));
+                        System.out.println("Add Column: " + resultSet.getInt("OrderIndex"));
+                    } else {
+                        System.out.println("Index Column: " + resultSet.getInt("OrderIndex"));
+                        columnList.add(resultSet.getInt("OrderIndex"),
+                                new Column(resultSet.getString("Name"), resultSet.getInt("ProjectID")));
+                    }
+
                     Column currColumn = columnList.get(columnList.size() - 1);
                     currColumn.setColumnID(resultSet.getInt("ColumnID"));
                     currColumn.setOrderIndex(resultSet.getInt("OrderIndex"));
@@ -158,7 +166,16 @@ public class DB_Utils {
                             resultSet.getString("Description"), resultSet.getString("DueDate"),
                             resultSet.getBoolean("IsCompleted"), resultSet.getInt("ColumnID"));
 
-                    taskList.add(new Task(resultSet.getString("Name"), resultSet.getInt("ColumnID")));
+                    if (taskList.size() <= resultSet.getInt("OrderIndex")) {
+                        taskList.add(
+                                new Task(resultSet.getString("Name"), resultSet.getInt("ColumnID")));
+                        System.out.println("Add Task: " + resultSet.getInt("OrderIndex"));
+                    } else {
+                        System.out.println("Index Task: " + resultSet.getInt("OrderIndex"));
+                        taskList.add(resultSet.getInt("OrderIndex"),
+                                new Task(resultSet.getString("Name"), resultSet.getInt("ColumnID")));
+                    }
+
                     Task currTask = taskList.get(taskList.size() - 1);
                     currTask.setTaskID(resultSet.getInt("TaskID"));
                     currTask.setOrderIndex(resultSet.getInt("OrderIndex"));
@@ -349,6 +366,7 @@ public class DB_Utils {
         String sql = "UPDATE " + TABLE_NAME +
                 " SET Name = ?, OrderIndex = ?" +
                 " WHERE ColumnID = ?";
+        System.out.println("UPDATE COLUMN: "+column.getColumnID());
 
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -406,6 +424,7 @@ public class DB_Utils {
         String sql = "UPDATE " + TABLE_NAME +
                 " SET Name = ?, Description = ?, Duedate = ?, IsCompleted = ?, OrderIndex = ?, ColumnID = ?" +
                 " WHERE TaskID = ?";
+        System.out.println("UPDATE TASK: "+ task.getTaskID());
 
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -498,25 +517,65 @@ public class DB_Utils {
         return ownID;
     }
 
-    public static void DeleteItem(String itemType, int itemID) {
-        final String TABLE_NAME = itemType;
-        final String FIELD_NAME = itemType + "ID";
+    public static void DeleteItem(String typeName, String fieldName, int itemID) {
+
+        switch (typeName) {
+            case "Project" -> {
+                for (Integer fieldID : SelectAllSubitemIDs("Column", "ProjectID", itemID)) {
+                    DeleteItem("Column", "ColumnID", fieldID);
+                }
+            }
+            case "Column" -> {
+                for (Integer fieldID : SelectAllSubitemIDs("Task", "ColumnID", itemID)) {
+                    DeleteItem("Task", "TaskID", fieldID);
+                }
+            }
+            case "Task" -> {
+                for (Integer fieldID : SelectAllSubitemIDs("Checklistitem", "TaskID", itemID)) {
+                    DeleteItem("Checklistitem", "ItemID", fieldID);
+                }
+            }
+        }
 
         try (Connection con = DatabaseConnection.getConnection();
              Statement stmt = con.createStatement()) {
-            String sql = "DELETE FROM " + TABLE_NAME +
-                    " WHERE " + FIELD_NAME + " = " + itemID;
+            String sql = "DELETE FROM " + typeName +
+                    " WHERE " + fieldName + " = " + itemID;
             System.out.println(sql);
 
             int result = stmt.executeUpdate(sql);
 
             if (result == 1) {
-                System.out.println("Delete from table " + TABLE_NAME + " executed successfully");
+                System.out.println("Delete from table " + typeName + " executed successfully");
                 System.out.println(result + " row(s) affected");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+        public static ArrayList<Integer> SelectAllSubitemIDs(String tableName, String fieldName, int fieldID) {
+        String selectID = (tableName.equalsIgnoreCase("Checklistitem"))? "ItemID" : tableName + "ID";
+        ArrayList<Integer> itemList = new ArrayList<>();
+
+        try (Connection con = DatabaseConnection.getConnection();
+             Statement stmt = con.createStatement()) {
+
+            String query = "SELECT " + selectID + " FROM " + tableName +
+                    " WHERE " + fieldName + " = " + fieldID;
+            System.out.println(query);
+
+            try (ResultSet resultSet = stmt.executeQuery(query)) {
+                while (resultSet.next()) {
+                    System.out.println(resultSet.getInt(selectID));
+                    itemList.add(resultSet.getInt(selectID));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return  itemList;
     }
 
 //    public static void SelectAllQuery(String tableName) {
