@@ -1,7 +1,7 @@
 package com.smartboard.controller;
 
-import com.smartboard.model.Data;
 import com.smartboard.model.StringLengthException;
+import com.smartboard.model.User_Utils;
 import com.smartboard.view.LoginView;
 import com.smartboard.view.SmartBoardView;
 import com.smartboard.view.Utility;
@@ -40,7 +40,7 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        imagePath = Data.defPicturePath;
+        imagePath = User_Utils.defPicturePath;
         userImage.setImage(new Image(imagePath));
     }
 
@@ -53,10 +53,10 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
 
         if (!username.isBlank() && !firstname.isBlank() && !lastname.isBlank() && !password.isBlank()) {
             try {
-                Data.addNewUser(username, password, firstname, lastname, imagePath);
+                User_Utils.addNewUser(username, password, firstname, lastname, imagePath);
 
                 String headerText = String.format("New user: %s\nName: %s %s",
-                        Data.currentUser.getName(), Data.currentUser.getFirstName(), Data.currentUser.getLastName());
+                        User_Utils.currentUser.getName(), User_Utils.currentUser.getFirstName(), User_Utils.currentUser.getLastName());
 
                 Alert exitAlert = new Alert(Alert.AlertType.INFORMATION);
                 exitAlert.setTitle("New user created");

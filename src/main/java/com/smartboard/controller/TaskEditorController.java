@@ -40,8 +40,8 @@ public class TaskEditorController implements Closable, Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if (Data.currentTask != null) {
-            Task task = Data.currentTask;
+        if (Task_Utils.currentTask != null) {
+            Task task = Task_Utils.currentTask;
             taskNameField.setText(task.getName());
             taskDescriptionField.setText(task.getDescription());
             completedCheckbox.setSelected(task.isCompleted());
@@ -79,11 +79,11 @@ public class TaskEditorController implements Closable, Initializable {
         } else {
             try {
                 Task task;
-                if (Data.currentTask == null) {
-                    task = Data.currentColumn.addSubItem(taskName);
-                    task.setOrderIndex(Data.currentColumn.getListSize() - 1);
+                if (Task_Utils.currentTask == null) {
+                    task = Column_Utils.currentColumn.addSubItem(taskName);
+                    task.setOrderIndex(Column_Utils.currentColumn.getListSize() - 1);
                 } else {
-                    task = Data.currentTask;
+                    task = Task_Utils.currentTask;
                     task.setName(taskName);
                 }
 
@@ -103,13 +103,13 @@ public class TaskEditorController implements Closable, Initializable {
                     task.replaceEntireChecklist(checklistItemList);
                     task.setCompleted(completedCheckbox.isSelected());
                 } else {
-                    if (Data.currentTask != null) {
-                        Data.deleteTaskCLItems(task);
+                    if (Task_Utils.currentTask != null) {
+                        Task_Utils.deleteTaskCLItems(task);
                     }
                 }
 
-                if (Data.currentTask == null) {
-                    Data.addNewTask(task);
+                if (Task_Utils.currentTask == null) {
+                    Task_Utils.addNewTask(task);
                 } else {
                     DB_Utils.UpdateTask(task);
                 }
@@ -139,8 +139,8 @@ public class TaskEditorController implements Closable, Initializable {
 
     private void setDatePicker() {
         datePicker.visibleProperty().setValue(true);
-        if (Data.currentTask != null) {
-            datePicker.setValue(Data.currentTask.getDueDate());
+        if (Task_Utils.currentTask != null) {
+            datePicker.setValue(Task_Utils.currentTask.getDueDate());
         }
     }
 

@@ -52,12 +52,12 @@ public class User extends BoardItem<Project> {
 
         if (!this.subItems.get(index).isDefault()) {
             if (getDefaultProject() != null) {
-                Data.updateProjectDefault(getDefaultProject(), false);
+                Project_Utils.updateProjectDefault(getDefaultProject(), false);
             }
-            Data.updateProjectDefault(this.subItems.get(index), true);
+            Project_Utils.updateProjectDefault(this.subItems.get(index), true);
 
         } else {
-            Data.updateProjectDefault(this.subItems.get(index), false);
+            Project_Utils.updateProjectDefault(this.subItems.get(index), false);
         }
     }
 

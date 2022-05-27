@@ -1,7 +1,7 @@
 package com.smartboard.controller;
 
-import com.smartboard.model.Data;
 import com.smartboard.model.User;
+import com.smartboard.model.User_Utils;
 import com.smartboard.view.NewUserView;
 import com.smartboard.view.SmartBoardView;
 import com.smartboard.view.Utility;
@@ -48,7 +48,7 @@ public class LoginController implements Closable {
     private void login(String username, String password) throws IllegalArgumentException {
         User loggedInUser = null;
 
-        for (User user : Data.users) {
+        for (User user : User_Utils.users) {
             if (user.getName().equalsIgnoreCase(username)) {
                 if (user.validateLogin(username, password)) {
                     loggedInUser = user;
@@ -62,7 +62,7 @@ public class LoginController implements Closable {
         if (loggedInUser == null) {
             throw new IllegalArgumentException("No such Username");
         } else {
-            Data.setCurrentUser(loggedInUser);
+            User_Utils.setCurrentUser(loggedInUser);
         }
     }
 

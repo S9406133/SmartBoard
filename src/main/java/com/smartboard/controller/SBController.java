@@ -57,9 +57,9 @@ public class SBController implements Closable, Initializable {
         staticToolbarImage = toolbarImage;
         staticToolbarName = toolbarName;
 
-        toolbarImage.setImage(new Image(Data.currentUser.getImagePath()));
-        toolbarName.setText(Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName());
-        toolbarQuote.setText(getRandomQuote().toString());
+        toolbarImage.setImage(new Image(User_Utils.currentUser.getImagePath()));
+        toolbarName.setText(User_Utils.currentUser.getFirstName() + " " + User_Utils.currentUser.getLastName());
+        toolbarQuote.setText(Quotes_Utils.getRandomQuote().toString());
 
         displayProjects();
 
@@ -68,7 +68,7 @@ public class SBController implements Closable, Initializable {
 
     private void displayProjects() {
         int i = 0;
-        for (Project project : Data.currentUser.getSubItemList()) {
+        for (Project project : User_Utils.currentUser.getSubItemList()) {
             createProjectView(project);
             if (project.isDefault()) {
                 projectsPane.getSelectionModel().selectLast();
@@ -79,7 +79,7 @@ public class SBController implements Closable, Initializable {
     }
 
     private void setProjectMenuDisable() {
-        projectMenu.disableProperty().setValue(Data.currentUser.getListSize() == 0);
+        projectMenu.disableProperty().setValue(User_Utils.currentUser.getListSize() == 0);
     }
 
     private void createProjectView(Project project) {
@@ -121,8 +121,8 @@ public class SBController implements Closable, Initializable {
         addTaskButton.setTooltip(new Tooltip("Add a new task to this column"));
         addTaskButton.setOnAction(actionEvent -> {
             try {
-                Data.currentColumn = column;
-                Data.currentTask = null;
+                Column_Utils.currentColumn = column;
+                Task_Utils.currentTask = null;
                 TaskEditorView.createTaskEditorView("Add");
                 reLoadColumns();
             } catch (IOException ioe) {
@@ -148,7 +148,7 @@ public class SBController implements Closable, Initializable {
         columnLabel.setMaxWidth(170);
         columnLabel.setPrefWidth(170);
         columnLabel.setOnMouseClicked(mouseEvent -> {
-            Data.currentColumn = column;
+            Column_Utils.currentColumn = column;
             showInputDialog(mouseEvent);
         });
 
@@ -202,7 +202,7 @@ public class SBController implements Closable, Initializable {
         updateButton.setLayoutY(44);
         updateButton.setOnAction(actionEvent -> {
             try {
-                Data.currentTask = task;
+                Task_Utils.currentTask = task;
                 TaskEditorView.createTaskEditorView("Update");
                 reLoadColumns();
             } catch (IOException ioe) {
@@ -246,7 +246,7 @@ public class SBController implements Closable, Initializable {
         upButton.setLayoutY(6);
         upButton.setTooltip(new Tooltip("Move up the column"));
         upButton.setOnAction(actionEvent -> {
-            Data.currentColumn = column;
+            Column_Utils.currentColumn = column;
             moveTask(task, upButton.getDirection());
             reLoadColumns();
         });
@@ -257,7 +257,7 @@ public class SBController implements Closable, Initializable {
         downButton.setLayoutY(6);
         downButton.setTooltip(new Tooltip("Move down the column"));
         downButton.setOnAction(actionEvent -> {
-            Data.currentColumn = column;
+            Column_Utils.currentColumn = column;
             moveTask(task, downButton.getDirection());
             reLoadColumns();
         });
@@ -305,8 +305,8 @@ public class SBController implements Closable, Initializable {
         taskPane.setOnDragDetected((MouseEvent event) -> {
             Dragboard db = taskPane.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();
-            Data.currentColumn = column;
-            Data.currentTask = task;
+            Column_Utils.currentColumn = column;
+            Task_Utils.currentTask = task;
             content.putString(task.getName());
             db.setContent(content);
         });
@@ -341,8 +341,8 @@ public class SBController implements Closable, Initializable {
             if (db.hasString()) {
                 event.setDropCompleted(true);
 
-                if (column != Data.currentColumn) {
-                    moveTaskToNewColumn(column, Data.currentColumn, Data.currentTask);
+                if (column != Column_Utils.currentColumn) {
+                    moveTaskToNewColumn(column, Column_Utils.currentColumn, Task_Utils.currentTask);
                     reLoadColumns();
                 }
             } else {
@@ -392,7 +392,7 @@ public class SBController implements Closable, Initializable {
         removeProjectsFromMenu();
 
         int i = 0;
-        for (Project project : Data.currentUser.getSubItemList()) {
+        for (Project project : User_Utils.currentUser.getSubItemList()) {
             addProjectToMenu(project, projectsPane.getTabs().get(i));
             i++;
         }
@@ -428,10 +428,10 @@ public class SBController implements Closable, Initializable {
         String name = TextInputDialog.show("Create a new project", "Project title");
 
         if (!name.isBlank()) {
-            Project newProject = Data.addNewProject(name);
+            Project newProject = Project_Utils.addNewProject(name);
             createProjectView(newProject);
             projectsPane.getSelectionModel().selectLast();
-            addProjectToMenu(newProject, projectsPane.getTabs().get(Data.currentUser.getListSize() - 1));
+            addProjectToMenu(newProject, projectsPane.getTabs().get(User_Utils.currentUser.getListSize() - 1));
             setProjectMenuDisable();
         }
     }
@@ -440,7 +440,7 @@ public class SBController implements Closable, Initializable {
         String name = TextInputDialog.show("Add a new column", "Column name");
 
         if (!name.isBlank()) {
-            Data.addNewColumn(getCurrentProject(), name);
+            Column_Utils.addNewColumn(getCurrentProject(), name);
             reLoadColumns();
         }
     }
@@ -451,7 +451,7 @@ public class SBController implements Closable, Initializable {
         if (!newName.isBlank()) {
             int currentTabIndex = getCurrentTabIndex();
             Project currentProject = getCurrentProject();
-            Data.updateProjectName(currentProject, newName);
+            Project_Utils.updateProjectName(currentProject, newName);
             projectsPane.getTabs().get(currentTabIndex).setText(currentProject.getName());
             reLoadWorkspaceMenu();
         }
@@ -461,7 +461,7 @@ public class SBController implements Closable, Initializable {
         String newName = TextInputDialog.show("Rename column", "Column title");
 
         if (!newName.isBlank()) {
-            Data.updateColumnName(Data.currentColumn, newName);
+            Column_Utils.updateColumnName(Column_Utils.currentColumn, newName);
             reLoadColumns();
         }
     }
@@ -481,7 +481,7 @@ public class SBController implements Closable, Initializable {
             LoginView.createLoginView();
             Stage stage = (Stage) mainExitButton.getScene().getWindow();
             stage.close();
-            Data.logoutCurrentUser();
+            User_Utils.logoutCurrentUser();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -489,11 +489,11 @@ public class SBController implements Closable, Initializable {
 
     @FXML
     private void toggleDefaultSetting() {
-        Data.currentUser.toggleDefaultProject(getCurrentTabIndex());
+        User_Utils.currentUser.toggleDefaultProject(getCurrentTabIndex());
 
-        for (int i = 0; i < Data.currentUser.getListSize(); i++) {
-            String projectName = Data.currentUser.getSubItem(i).getName();
-            projectName = (Data.currentUser.getSubItem(i).isDefault()) ? projectName + " #" : projectName;
+        for (int i = 0; i < User_Utils.currentUser.getListSize(); i++) {
+            String projectName = User_Utils.currentUser.getSubItem(i).getName();
+            projectName = (User_Utils.currentUser.getSubItem(i).isDefault()) ? projectName + " #" : projectName;
             projectsPane.getTabs().get(i).setText(projectName);
         }
 
@@ -511,7 +511,7 @@ public class SBController implements Closable, Initializable {
         deleteAlert.setContentText("Press OK to delete, or cancel to return to Smart Board");
 
         if (deleteAlert.showAndWait().get() == ButtonType.OK) {
-            deleteBoardItem(Data.currentUser, getCurrentProject(), alertTitle);
+            deleteBoardItem(User_Utils.currentUser, getCurrentProject(), alertTitle);
         }
     }
 
@@ -566,11 +566,11 @@ public class SBController implements Closable, Initializable {
                 }
                 case "Column" -> {
                     reLoadColumns();
-                    Data.deleteColumn((Project) superItem, deleteClass, itemID);
+                    Column_Utils.deleteColumn((Project) superItem, deleteClass, itemID);
                 }
                 case "Task" -> {
                     reLoadColumns();
-                    Data.deleteTask((Column) superItem, deleteClass, itemID);
+                    Task_Utils.deleteTask((Column) superItem, deleteClass, itemID);
                 }
             }
 
@@ -586,7 +586,7 @@ public class SBController implements Closable, Initializable {
         newColumn.getSubItemList().add(task);
         currentColumn.removeSubItem(task);
 
-        Data.updateTaskColumn(newColumn, task);
+        Task_Utils.updateTaskColumn(newColumn, task);
     }
 
     private void moveColumn(Column column, String direction) {
@@ -595,15 +595,15 @@ public class SBController implements Closable, Initializable {
 
         moveItem(project.getSubItemList(), colIndex, direction);
 
-        Data.updateColumnIndexes(project);
+        Column_Utils.updateColumnIndexes(project);
     }
 
     private void moveTask(Task task, String direction) {
-        int taskIndex = Data.currentColumn.getSubItemIndex(task);
+        int taskIndex = Column_Utils.currentColumn.getSubItemIndex(task);
 
-        moveItem(Data.currentColumn.getSubItemList(), taskIndex, direction);
+        moveItem(Column_Utils.currentColumn.getSubItemList(), taskIndex, direction);
 
-        Data.updateTaskIndexes(Data.currentColumn);
+        Task_Utils.updateTaskIndexes(Column_Utils.currentColumn);
     }
 
     private void moveItem(ArrayList<?> itemList, int itemIndex, String direction) {
@@ -661,18 +661,12 @@ public class SBController implements Closable, Initializable {
         alert.showAndWait();
     }
 
-    private Quote getRandomQuote() {
-        Random rand = new Random();
-        int randomInt = rand.nextInt(Data.QUOTES.length);
-        return Data.QUOTES[randomInt];
-    }
-
     private int getCurrentTabIndex() {
         return projectsPane.getSelectionModel().getSelectedIndex();
     }
 
     private Project getCurrentProject() {
-        return Data.currentUser.getSubItem(getCurrentTabIndex());
+        return User_Utils.currentUser.getSubItem(getCurrentTabIndex());
     }
 
 }

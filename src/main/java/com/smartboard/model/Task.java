@@ -50,7 +50,7 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable{
         this.subItems = new ArrayList<>(newList);
         System.out.println("TaskID: "+taskID);
         if (this.taskID > 0) {
-            Data.refreshTaskCLItems(this.taskID, newList);
+            Task_Utils.refreshTaskCLItems(this.taskID, newList);
         }
     }
 

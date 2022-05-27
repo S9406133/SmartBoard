@@ -1,7 +1,7 @@
 package com.smartboard.controller;
 
-import com.smartboard.model.Data;
 import com.smartboard.model.StringLengthException;
+import com.smartboard.model.User_Utils;
 import com.smartboard.view.Utility;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -34,9 +34,9 @@ public class EditProfileController implements Closable, Initializable, Updatable
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        currentUsername.setText(Data.currentUser.getName());
-        currentName.setText(Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName());
-        editUserImage.setImage(new Image(Data.currentUser.getImagePath()));
+        currentUsername.setText(User_Utils.currentUser.getName());
+        currentName.setText(User_Utils.currentUser.getFirstName() + " " + User_Utils.currentUser.getLastName());
+        editUserImage.setImage(new Image(User_Utils.currentUser.getImagePath()));
     }
 
     @FXML
@@ -56,9 +56,8 @@ public class EditProfileController implements Closable, Initializable, Updatable
         File imageFile = Utility.displayImageFileChooser(stage);
 
         if (imageFile != null) {
-            Data.updateUserImagepath(imageFile.getPath());
-            //Data.currentUser.setImagePath(imageFile.getPath());
-            SBController.staticToolbarImage.setImage(new Image(Data.currentUser.getImagePath()));
+            User_Utils.updateUserImagepath(imageFile.getPath());
+            SBController.staticToolbarImage.setImage(new Image(User_Utils.currentUser.getImagePath()));
         }
     }
 
@@ -71,13 +70,11 @@ public class EditProfileController implements Closable, Initializable, Updatable
 
         try {
             if (!firstname.isBlank()) {
-                Data.updateUserFirstname(firstname);
-                //Data.currentUser.setFirstName(firstname);
+                User_Utils.updateUserFirstname(firstname);
                 updated = true;
             }
             if (!lastname.isBlank()) {
-                Data.updateUserLastname(lastname);
-                //Data.currentUser.setLastName(lastname);
+                User_Utils.updateUserLastname(lastname);
                 updated = true;
             }
         } catch (StringLengthException sle) {
@@ -88,7 +85,7 @@ public class EditProfileController implements Closable, Initializable, Updatable
             Utility.errorAlert(alertMessage);
         } else {
             SBController.staticToolbarName.setText(
-                    Data.currentUser.getFirstName() + " " + Data.currentUser.getLastName()
+                    User_Utils.currentUser.getFirstName() + " " + User_Utils.currentUser.getLastName()
             );
             this.handleCloseButtonAction(event);
         }
