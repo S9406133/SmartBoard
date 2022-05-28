@@ -28,7 +28,6 @@ import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 public class SBController implements Closable, Initializable {
@@ -586,7 +585,7 @@ public class SBController implements Closable, Initializable {
         newColumn.getSubItemList().add(task);
         currentColumn.removeSubItem(task);
 
-        Task_Utils.updateTaskColumn(newColumn, task);
+        Task_Utils.updateTaskColumn(getCurrentProject(), newColumn, task);
     }
 
     private void moveColumn(Column column, String direction) {

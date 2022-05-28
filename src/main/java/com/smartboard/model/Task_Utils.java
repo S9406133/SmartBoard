@@ -17,15 +17,20 @@ public class Task_Utils {
     public static void updateTaskIndexes(Column column) {
         int i = 0;
         for (Task task : column.getSubItemList()) {
+            System.out.println("loop "+task.getTaskID()+task.getName());
             task.setOrderIndex(i);
             DB_Utils.UpdateTask(task);
             i++;
         }
     }
 
-    public static void updateTaskColumn(Column column, Task task) {
-        task.setColumnID(column.getColumnID());
-        DB_Utils.UpdateTask(task);
+    public static void updateTaskColumn(Project project, Column newColumn, Task task) {
+        System.out.println("New col: "+newColumn.getColumnID() + " " + newColumn.getName());
+        task.setColumnID(newColumn.getColumnID());
+
+        for (Column column : project.getSubItemList()){
+            updateTaskIndexes(column);
+        }
     }
 
     public static void deleteTask(Column column, String deleteClass, int itemID) {

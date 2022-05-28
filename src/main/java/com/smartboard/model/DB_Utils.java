@@ -120,16 +120,19 @@ public class DB_Utils {
                             resultSet.getInt("ColumnID"), resultSet.getString("Name"),
                             resultSet.getInt("ProjectID"));
 
+                    int currIndex;
                     if (columnList.size() <= resultSet.getInt("OrderIndex")) {
                         columnList.add(new Column(resultSet.getString("Name"), resultSet.getInt("ProjectID")));
                         System.out.println("Add Column: " + resultSet.getInt("OrderIndex"));
+                        currIndex = columnList.size() - 1;
                     } else {
-                        System.out.println("Index Column: " + resultSet.getInt("OrderIndex"));
-                        columnList.add(resultSet.getInt("OrderIndex"),
+                        currIndex = resultSet.getInt("OrderIndex");
+                        System.out.println("Index Column: " + currIndex);
+                        columnList.add(currIndex,
                                 new Column(resultSet.getString("Name"), resultSet.getInt("ProjectID")));
                     }
 
-                    Column currColumn = columnList.get(columnList.size() - 1);
+                    Column currColumn = columnList.get(currIndex);
                     currColumn.setColumnID(resultSet.getInt("ColumnID"));
                     currColumn.setOrderIndex(resultSet.getInt("OrderIndex"));
 
@@ -166,17 +169,20 @@ public class DB_Utils {
                             resultSet.getString("Description"), resultSet.getString("DueDate"),
                             resultSet.getBoolean("IsCompleted"), resultSet.getInt("ColumnID"));
 
+                    int currIndex;
                     if (taskList.size() <= resultSet.getInt("OrderIndex")) {
                         taskList.add(
                                 new Task(resultSet.getString("Name"), resultSet.getInt("ColumnID")));
                         System.out.println("Add Task: " + resultSet.getInt("OrderIndex"));
+                        currIndex = taskList.size() - 1;
                     } else {
-                        System.out.println("Index Task: " + resultSet.getInt("OrderIndex"));
-                        taskList.add(resultSet.getInt("OrderIndex"),
+                        currIndex = resultSet.getInt("OrderIndex");
+                        System.out.println("Index Task: " + currIndex);
+                        taskList.add(currIndex,
                                 new Task(resultSet.getString("Name"), resultSet.getInt("ColumnID")));
                     }
 
-                    Task currTask = taskList.get(taskList.size() - 1);
+                    Task currTask = taskList.get(currIndex);
                     currTask.setTaskID(resultSet.getInt("TaskID"));
                     currTask.setOrderIndex(resultSet.getInt("OrderIndex"));
                     if (resultSet.getString("Description") != null) {
@@ -366,7 +372,7 @@ public class DB_Utils {
         String sql = "UPDATE " + TABLE_NAME +
                 " SET Name = ?, OrderIndex = ?" +
                 " WHERE ColumnID = ?";
-        System.out.println("UPDATE COLUMN: "+column.getColumnID());
+        System.out.println("UPDATE COLUMN: " + column.getName() + " " + column.getOrderIndex() + " " + column.getColumnID());
 
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -424,7 +430,7 @@ public class DB_Utils {
         String sql = "UPDATE " + TABLE_NAME +
                 " SET Name = ?, Description = ?, Duedate = ?, IsCompleted = ?, OrderIndex = ?, ColumnID = ?" +
                 " WHERE TaskID = ?";
-        System.out.println("UPDATE TASK: "+ task.getTaskID());
+        System.out.println("UPDATE TASK: " + task.getName() + " " + task.getOrderIndex() + " " + task.getTaskID());
 
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -554,8 +560,8 @@ public class DB_Utils {
         }
     }
 
-        public static ArrayList<Integer> SelectAllSubitemIDs(String tableName, String fieldName, int fieldID) {
-        String selectID = (tableName.equalsIgnoreCase("Checklistitem"))? "ItemID" : tableName + "ID";
+    public static ArrayList<Integer> SelectAllSubitemIDs(String tableName, String fieldName, int fieldID) {
+        String selectID = (tableName.equalsIgnoreCase("Checklistitem")) ? "ItemID" : tableName + "ID";
         ArrayList<Integer> itemList = new ArrayList<>();
 
         try (Connection con = DatabaseConnection.getConnection();
@@ -575,108 +581,7 @@ public class DB_Utils {
             System.out.println(e.getMessage());
         }
 
-        return  itemList;
+        return itemList;
     }
 
-//    public static void SelectAllQuery(String tableName) {
-//        //final String TABLE_NAME = "STUDENT";
-//
-//        try (Connection con = DatabaseConnection.getConnection();
-//             Statement stmt = con.createStatement()) {
-//            String query = "SELECT * FROM " + tableName;
-//
-//            try (ResultSet resultSet = stmt.executeQuery(query)) {
-//                while (resultSet.next()) {
-//                    System.out.printf("Id: %d | Student Number: %s | First Name: %s | Last Name: %s\n",
-//                            resultSet.getInt("id"), resultSet.getString("student_number"),
-//                            resultSet.getString("first_name"), resultSet.getString("last_name"));
-//                }
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//
-//    }
-
-//    public static void InsertRow(String tableName) {
-//        //final String TABLE_NAME = "Student";
-//
-//        try (Connection con = DatabaseConnection.getConnection();
-//             Statement stmt = con.createStatement()) {
-//            String query = "INSERT INTO " + tableName +
-//                    " VALUES (1, 's3388490', 'Peter', 'Tilmanis')";
-//
-//            int result = stmt.executeUpdate(query);
-//
-//            if (result == 1) {
-//                System.out.println("Insert into table " + tableName + " executed successfully");
-//                System.out.println(result + " row(s) affected");
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
-//
-//    public static void DeleteRow(String tableName) {
-//        //final String TABLE_NAME = "Student";
-//
-//        try (Connection con = DatabaseConnection.getConnection();
-//             Statement stmt = con.createStatement()) {
-//            String sql = "DELETE FROM " + tableName +
-//                    " WHERE first_name LIKE 'Tom'";
-//
-//            int result = stmt.executeUpdate(sql);
-//
-//            if (result == 1) {
-//                System.out.println("Delete from table " + tableName + " executed successfully");
-//                System.out.println(result + " row(s) affected");
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
-//
-//    public static void UpdateTable(String tableName) {
-//        //final String TABLE_NAME = "Student";
-//
-//        try (Connection con = DatabaseConnection.getConnection();
-//             Statement stmt = con.createStatement()) {
-//            String sql = "UPDATE " + tableName +
-//                    " SET last_name = 'Singleton'" +
-//                    " WHERE student_number LIKE 's3388490'";
-//
-//            int result = stmt.executeUpdate(sql);
-//
-//            if (result == 1) {
-//                System.out.println("Update table " + tableName + " executed successfully");
-//                System.out.println(result + " row(s) affected");
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
-//
-//    public static void UsePreparedStatement(String tableName) {
-//        //final String TABLE_NAME = "Student";
-//
-//        String sql = "INSERT INTO " + tableName + " (id, student_number, first_name, last_name)" +
-//                " VALUES (?, ?, ?, ?)";
-//
-//        try (Connection con = DatabaseConnection.getConnection();
-//             PreparedStatement stmt = con.prepareStatement(sql)) {
-//            stmt.setInt(1, 2);
-//            stmt.setString(2, "s3089940");
-//            stmt.setString(3, "Tom");
-//            stmt.setString(4, "Bruster");
-//
-//            int result = stmt.executeUpdate();
-//
-//            if (result == 1) {
-//                System.out.println("Insert into table " + tableName + " executed successfully");
-//                System.out.println(result + " row(s) affected");
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
 }
