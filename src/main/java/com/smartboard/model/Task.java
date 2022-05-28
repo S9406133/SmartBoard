@@ -85,10 +85,8 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable {
     }
 
     public void setDueDate(@NotNull LocalDate newDate) {
-        if (!newDate.isBefore(LocalDate.now())) {
-            this.dueDate = newDate;
-            setStatus();
-        }
+        this.dueDate = newDate;
+        setStatus();
     }
 
     public void nullDueDate() {

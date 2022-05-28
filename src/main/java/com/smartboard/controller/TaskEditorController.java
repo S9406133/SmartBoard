@@ -262,7 +262,7 @@ public class TaskEditorController implements Closable, Initializable {
     /**
      * Creates and returns a Checklist item row from the item data
      */
-    private HBox createChecklistRow(ChecklistItem checklistItem) {
+    private @NotNull HBox createChecklistRow(@NotNull ChecklistItem checklistItem) {
 
         // Checklist checkbox
         CheckBox checkBox = new CheckBox(checklistItem.getDescription());

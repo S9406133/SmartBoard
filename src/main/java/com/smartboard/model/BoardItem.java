@@ -5,6 +5,7 @@
 
 package com.smartboard.model;
 
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public abstract class BoardItem<T> {
@@ -14,7 +15,7 @@ public abstract class BoardItem<T> {
     final int MIN_NAME_LENGTH = 2;
     final int MAX_NAME_LENGTH = 30;
 
-    public BoardItem(String name) throws StringLengthException {
+    public BoardItem(@NotNull String name) throws StringLengthException {
 
         if ((name.length() >= MIN_NAME_LENGTH) && (name.length() <= MAX_NAME_LENGTH)) {
             this.name = name;
@@ -51,7 +52,7 @@ public abstract class BoardItem<T> {
         return this.name;
     }
 
-    public void setName(String name) throws StringLengthException {
+    public void setName(@NotNull String name) throws StringLengthException {
 
         if ((name.length() >= MIN_NAME_LENGTH) && (name.length() <= MAX_NAME_LENGTH)) {
             this.name = name;

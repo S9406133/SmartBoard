@@ -49,7 +49,7 @@ public interface Controller_Utils {
         int minIndex = 0;
         int maxIndex = itemList.size() - 1;
 
-        switch (direction) {
+        switch (direction.toLowerCase()) {
             case "left", "up" -> {
                 if (itemIndex > minIndex) {
                     Collections.swap(itemList, itemIndex, itemIndex - 1);

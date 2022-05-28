@@ -574,7 +574,7 @@ public class DB_Utils {
      * ie. DELETE FROM typeName WHERE fieldName = itemID.
      * This method is called recursively to delete all sub-items of the initial specified records.
      *
-     * @param typeName  The name of the type of Boarditem to be deleted (also the table name)
+     * @param typeName  The name of the type of BoardItem to be deleted (also the table name)
      * @param fieldName The name of the field that the itemID relates to (either Primary or Foreign key field)
      * @param itemID    The ID number to delete by as in the fieldName
      */

@@ -6,7 +6,6 @@
 package com.smartboard.model;
 
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 
 public class Task_Utils {
