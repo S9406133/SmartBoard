@@ -1,3 +1,7 @@
+/**
+ * This is the class which defines the Project held in the list of a User
+ */
+
 package com.smartboard.model;
 
 public class Project extends BoardItem<Column> {

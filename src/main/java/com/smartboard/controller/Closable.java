@@ -1,3 +1,7 @@
+/**
+ * Interface used by a controller which controls a closable view
+ */
+
 package com.smartboard.controller;
 
 import javafx.event.Event;

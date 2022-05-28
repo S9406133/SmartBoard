@@ -1,3 +1,7 @@
+/**
+ * This is the class which defines the Column held in the list of a Project
+ */
+
 package com.smartboard.model;
 
 public class Column extends BoardItem<Task> implements Reorderable {

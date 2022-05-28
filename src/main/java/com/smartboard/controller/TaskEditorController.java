@@ -1,3 +1,8 @@
+/**
+ * This is the controller class for the Task Editor view
+ * It controls all aspects of the Task Editor view
+ */
+
 package com.smartboard.controller;
 
 import com.smartboard.model.*;
@@ -60,6 +65,9 @@ public class TaskEditorController implements Closable, Initializable {
         }
     }
 
+    /**
+     * Validates user data and creates a new Task from the data entered
+     */
     @FXML
     private void onOkButtonClicked(Event event) {
         String alertMessage = "";
@@ -127,6 +135,9 @@ public class TaskEditorController implements Closable, Initializable {
 
     }
 
+    /**
+     * Displays the Date Picker when the radio button is selected
+     */
     @FXML
     private void toggleDueDate() {
         if (dueDateRadio.isSelected()) {
@@ -137,6 +148,9 @@ public class TaskEditorController implements Closable, Initializable {
         }
     }
 
+    /**
+     * Sets the value of the Date Picker
+     */
     private void setDatePicker() {
         datePicker.visibleProperty().setValue(true);
         if (Task_Utils.currentTask != null) {
@@ -144,6 +158,9 @@ public class TaskEditorController implements Closable, Initializable {
         }
     }
 
+    /**
+     * Sets all Checklist items to checked when Completed checkbox is selected
+     */
     @FXML
     private void onCompletedClicked() {
         for (ChecklistItem item : checklistItemList) {
@@ -153,11 +170,17 @@ public class TaskEditorController implements Closable, Initializable {
         reLoadChecklistRows();
     }
 
+    /**
+     * Displays the list of Checklist items when the radio button is selected
+     */
     @FXML
     private void toggleChecklist() {
         checklistBox.visibleProperty().setValue(checklistRadio.isSelected());
     }
 
+    /**
+     * Sets the value of the checklist progress bar
+     */
     private void setChecklistProgress() {
         double numChecklistCompleted = 0;
 
@@ -174,6 +197,9 @@ public class TaskEditorController implements Closable, Initializable {
         checklistProgress.setProgress(progressNum);
     }
 
+    /**
+     * Creates a new Checklist item and adds it to the list
+     */
     @FXML
     private void addChecklistItem() {
         String description = TextInputDialog.show("Add a checklist item", "Description");
@@ -184,6 +210,9 @@ public class TaskEditorController implements Closable, Initializable {
         }
     }
 
+    /**
+     * Edits the description of the checklist item and refreshes the view
+     */
     private void editChecklistItem(ChecklistItem editItem) {
         String description = TextInputDialog.show("Edit a checklist item", "New description");
 
@@ -198,6 +227,9 @@ public class TaskEditorController implements Closable, Initializable {
         }
     }
 
+    /**
+     * Deletes the checklist item and refreshes the view
+     */
     private void deleteChecklistItem(ChecklistItem deleteItem) {
 
         for (int i = 0; i < checklistItemList.size(); i++) {
@@ -209,6 +241,9 @@ public class TaskEditorController implements Closable, Initializable {
         reLoadChecklistRows();
     }
 
+    /**
+     * Loads each Checklist item into the View
+     */
     private void loadChecklistRows() {
         for (ChecklistItem item : checklistItemList) {
             checklistBox.getChildren().add(createChecklistRow(item));
@@ -216,13 +251,20 @@ public class TaskEditorController implements Closable, Initializable {
         setChecklistProgress();
     }
 
+    /**
+     * Removes and re-loads the checklist items into the View
+     */
     private void reLoadChecklistRows() {
         checklistBox.getChildren().removeIf(node -> node instanceof HBox);
         loadChecklistRows();
     }
 
+    /**
+     * Creates and returns a Checklist item row from the item data
+     */
     private HBox createChecklistRow(ChecklistItem checklistItem) {
 
+        // Checklist checkbox
         CheckBox checkBox = new CheckBox(checklistItem.getDescription());
         checkBox.setSelected(checklistItem.isChecked());
         HBox.setMargin(checkBox, new Insets(4, 50, 0, 0));
@@ -235,6 +277,7 @@ public class TaskEditorController implements Closable, Initializable {
         HBox cBox = new HBox(checkBox);
         cBox.setMinWidth(200);
 
+        // Checklist Edit button
         Hyperlink editLink = new Hyperlink("Edit");
         editLink.setStyle("-fx-underline: false");
         HBox.setMargin(editLink, new Insets(0, 10, 0, 0));
@@ -242,6 +285,7 @@ public class TaskEditorController implements Closable, Initializable {
                 editChecklistItem(checklistItem)
         );
 
+        // Checklist Delete button
         Hyperlink deleteLink = new Hyperlink("Delete");
         deleteLink.setStyle("-fx-underline: false");
         deleteLink.setOnAction(actionEvent ->
@@ -254,6 +298,10 @@ public class TaskEditorController implements Closable, Initializable {
         return rowBox;
     }
 
+    /**
+     * Closes the current stage.
+     * Implemented from the Closable interface
+     */
     @FXML
     @Override
     public void handleCloseButtonAction(@NotNull Event event) {

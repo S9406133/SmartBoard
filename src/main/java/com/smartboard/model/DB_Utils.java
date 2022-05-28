@@ -1,4 +1,10 @@
+/**
+ * This class holds the static methods to interact with the related database
+ */
+
 package com.smartboard.model;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -6,6 +12,9 @@ import java.util.ArrayList;
 
 public class DB_Utils {
 
+    /**
+     * An inner class which is used to return a connection to the database
+     */
     public static class DatabaseConnection {
         private static final String DB_URL = "jdbc:sqlite:smartboard.db";
 
@@ -14,6 +23,11 @@ public class DB_Utils {
         }
     }
 
+    /**
+     * Used to determine if the specified table exists in the database
+     *
+     * @return True if it doesn't exist, False if it does exist
+     */
     public static boolean TableNotExists(String tableName) {
         boolean returnVal = false;
 
@@ -32,6 +46,9 @@ public class DB_Utils {
         return !returnVal;
     }
 
+    /**
+     * Selects all records in the USER db and returns them as a list of User class
+     */
     public static ArrayList<User> SelectAllUsers() {
         final String TABLE_NAME = "USER";
         ArrayList<User> users = new ArrayList<>();
@@ -63,7 +80,11 @@ public class DB_Utils {
         return users;
     }
 
-    public static ArrayList<Project> SelectProjectsOfUser(String username) {
+    /**
+     * Selects all records from the PROJECT db with a foreign key of the passed
+     * in username and returns them as a list of Project class
+     */
+    public static @NotNull ArrayList<Project> SelectProjectsOfUser(String username) {
         final String TABLE_NAME = "PROJECT";
         ArrayList<Project> projectList = new ArrayList<>();
 
@@ -79,7 +100,6 @@ public class DB_Utils {
 
             try (ResultSet resultSet = stmt.executeQuery(query)) {
                 while (resultSet.next()) {
-
                     projectList.add(new Project(resultSet.getString("name"), resultSet.getString("Username")));
                     Project currProject = projectList.get(projectList.size() - 1);
                     currProject.setDefault(resultSet.getBoolean("isDefault"));
@@ -97,7 +117,11 @@ public class DB_Utils {
         return projectList;
     }
 
-    public static ArrayList<Column> SelectColumnsOfProject(int projectID) {
+    /**
+     * Selects all records from the COLUMN db with a foreign key of the passed
+     * in projectID and returns them as a list of Column class
+     */
+    public static @NotNull ArrayList<Column> SelectColumnsOfProject(int projectID) {
         final String TABLE_NAME = "COLUMN";
         ArrayList<Column> columnList = new ArrayList<>();
 
@@ -114,6 +138,7 @@ public class DB_Utils {
             try (ResultSet resultSet = stmt.executeQuery(query)) {
                 while (resultSet.next()) {
 
+                    // Orders the records in the list by their orderIndex value
                     int currIndex;
                     if (columnList.size() <= resultSet.getInt("OrderIndex")) {
                         columnList.add(new Column(resultSet.getString("Name"), resultSet.getInt("ProjectID")));
@@ -140,7 +165,11 @@ public class DB_Utils {
         return columnList;
     }
 
-    public static ArrayList<Task> SelectTasksOfColumn(int columnID) {
+    /**
+     * Selects all records from the TASK db with a foreign key of the passed
+     * in columnID and returns them as a list of Task class
+     */
+    public static @NotNull ArrayList<Task> SelectTasksOfColumn(int columnID) {
         final String TABLE_NAME = "TASK";
         ArrayList<Task> taskList = new ArrayList<>();
 
@@ -157,6 +186,7 @@ public class DB_Utils {
             try (ResultSet resultSet = stmt.executeQuery(query)) {
                 while (resultSet.next()) {
 
+                    // Orders the records in the list by their orderIndex value
                     int currIndex;
                     if (taskList.size() <= resultSet.getInt("OrderIndex")) {
                         taskList.add(
@@ -191,7 +221,11 @@ public class DB_Utils {
         return taskList;
     }
 
-    public static ArrayList<ChecklistItem> SelectCLItemsOfTask(int taskID) {
+    /**
+     * Selects all records from the CHECKLISTITEM db with a foreign key of the passed
+     * in taskID and returns them as a list of ChecklistItem class
+     */
+    public static @NotNull ArrayList<ChecklistItem> SelectCLItemsOfTask(int taskID) {
         final String TABLE_NAME = "CHECKLISTITEM";
         ArrayList<ChecklistItem> cliList = new ArrayList<>();
 
@@ -207,7 +241,6 @@ public class DB_Utils {
 
             try (ResultSet resultSet = stmt.executeQuery(query)) {
                 while (resultSet.next()) {
-
                     cliList.add(new ChecklistItem(resultSet.getString("Description")));
                     ChecklistItem currCli = cliList.get(cliList.size() - 1);
                     currCli.setChecked(resultSet.getBoolean("Checked"));
@@ -222,7 +255,10 @@ public class DB_Utils {
         return cliList;
     }
 
-    public static void InsertNewUser(User user) {
+    /**
+     * Inserts a new record of a User into the USER table
+     */
+    public static void InsertNewUser(@NotNull User user) {
         final String TABLE_NAME = "USER";
 
         String sql = "INSERT INTO " + TABLE_NAME +
@@ -248,7 +284,10 @@ public class DB_Utils {
 
     }
 
-    public static void UpdateUser(User user) {
+    /**
+     * Updates the attributes of a record in the USER table
+     */
+    public static void UpdateUser(@NotNull User user) {
         final String TABLE_NAME = "USER";
 
         String sql = "UPDATE " + TABLE_NAME +
@@ -274,7 +313,10 @@ public class DB_Utils {
 
     }
 
-    public static void InsertNewProject(Project project) {
+    /**
+     * Inserts a new record of a Project into the PROJECT table
+     */
+    public static void InsertNewProject(@NotNull Project project) {
         final String TABLE_NAME = "PROJECT";
 
         String sql = "INSERT INTO " + TABLE_NAME + "(Name, IsDefault, Username)" +
@@ -299,7 +341,10 @@ public class DB_Utils {
         project.setProjectID(SelectOwnID(TABLE_NAME, "ProjectID"));
     }
 
-    public static void UpdateProject(Project project) {
+    /**
+     * Updates the attributes of a record in the PROJECT table
+     */
+    public static void UpdateProject(@NotNull Project project) {
         final String TABLE_NAME = "PROJECT";
 
         String sql = "UPDATE " + TABLE_NAME +
@@ -324,7 +369,10 @@ public class DB_Utils {
 
     }
 
-    public static void InsertNewColumn(Column column) {
+    /**
+     * Inserts a new record of a Column into the COLUMN table
+     */
+    public static void InsertNewColumn(@NotNull Column column) {
         final String TABLE_NAME = "COLUMN";
 
         String sql = "INSERT INTO " + TABLE_NAME + "(Name, OrderIndex, ProjectID)" +
@@ -349,7 +397,10 @@ public class DB_Utils {
         column.setColumnID(SelectOwnID(TABLE_NAME, "ColumnID"));
     }
 
-    public static void UpdateColumn(Column column) {
+    /**
+     * Updates the attributes of a record in the COLUMN table
+     */
+    public static void UpdateColumn(@NotNull Column column) {
         final String TABLE_NAME = "COLUMN";
 
         String sql = "UPDATE " + TABLE_NAME +
@@ -374,7 +425,10 @@ public class DB_Utils {
 
     }
 
-    public static void InsertNewTask(Task task) {
+    /**
+     * Inserts a new record of a Task into the TASK table
+     */
+    public static void InsertNewTask(@NotNull Task task) {
         final String TABLE_NAME = "TASK";
 
         String sql = "INSERT INTO " + TABLE_NAME + "(Name, Description, Duedate, IsCompleted, OrderIndex, ColumnID)" +
@@ -406,7 +460,10 @@ public class DB_Utils {
         task.setTaskID(SelectOwnID(TABLE_NAME, "TaskID"));
     }
 
-    public static void UpdateTask(Task task) {
+    /**
+     * Updates the attributes of a record in the TASK table
+     */
+    public static void UpdateTask(@NotNull Task task) {
         final String TABLE_NAME = "TASK";
 
         String sql = "UPDATE " + TABLE_NAME +
@@ -439,7 +496,10 @@ public class DB_Utils {
 
     }
 
-    public static void InsertNewCLItem(int taskID, ChecklistItem cli) {
+    /**
+     * Inserts a new record of a ChecklistItem into the CHECKLISTITEM table
+     */
+    public static void InsertNewCLItem(int taskID, @NotNull ChecklistItem cli) {
         final String TABLE_NAME = "CHECKLISTITEM";
 
         String sql = "INSERT INTO " + TABLE_NAME + "(Description, Checked, TaskID)" +
@@ -464,6 +524,9 @@ public class DB_Utils {
         cli.setItemID(SelectOwnID(TABLE_NAME, "ItemID"));
     }
 
+    /**
+     * Deletes all records from the CHECKLISTITEM table with a foreign key of the passed in taskID
+     */
     public static void DeleteAllTaskCLItems(int taskID) {
         final String TABLE_NAME = "CHECKLISTITEM";
 
@@ -483,6 +546,9 @@ public class DB_Utils {
         }
     }
 
+    /**
+     * Selects and returns the ID (Primary Key) of the last record added to the specified table
+     */
     public static int SelectOwnID(String tableName, String fieldname) {
         int ownID = 0;
 
@@ -493,7 +559,6 @@ public class DB_Utils {
 
             try (ResultSet resultSet = stmt.executeQuery(query)) {
                 while (resultSet.next()) {
-                    System.out.printf("Own Id: %d \n", resultSet.getInt("ownID"));
                     ownID = resultSet.getInt("ownID");
                 }
             }
@@ -504,7 +569,16 @@ public class DB_Utils {
         return ownID;
     }
 
-    public static void DeleteItem(String typeName, String fieldName, int itemID) {
+    /**
+     * Deletes the records from the specified typeName table according to the fieldName and fieldID specified.
+     * ie. DELETE FROM typeName WHERE fieldName = itemID.
+     * This method is called recursively to delete all sub-items of the initial specified records.
+     *
+     * @param typeName  The name of the type of Boarditem to be deleted (also the table name)
+     * @param fieldName The name of the field that the itemID relates to (either Primary or Foreign key field)
+     * @param itemID    The ID number to delete by as in the fieldName
+     */
+    public static void DeleteItem(@NotNull String typeName, String fieldName, int itemID) {
 
         switch (typeName) {
             case "Project" -> {
@@ -540,7 +614,10 @@ public class DB_Utils {
         }
     }
 
-    public static ArrayList<Integer> SelectAllSubitemIDs(String tableName, String fieldName, int fieldID) {
+    /**
+     * Selects all the ID (Primary Key) numbers of the records form the parameters specified and returns them as a list
+     */
+    public static @NotNull ArrayList<Integer> SelectAllSubitemIDs(@NotNull String tableName, String fieldName, int fieldID) {
         String selectID = (tableName.equalsIgnoreCase("Checklistitem")) ? "ItemID" : tableName + "ID";
         ArrayList<Integer> itemList = new ArrayList<>();
 

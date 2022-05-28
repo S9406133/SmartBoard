@@ -1,3 +1,8 @@
+/**
+ * This is the controller class for the main Login view
+ * It controls all aspects of the Login view
+ */
+
 package com.smartboard.controller;
 
 import com.smartboard.model.User;
@@ -21,6 +26,9 @@ public class LoginController implements Closable {
     @FXML
     private TextField passwordField;
 
+    /**
+     * Takes the inputted user data and attempts to login
+     */
     @FXML
     private void onSignInButtonClick(Event event) {
         String username = usernameField.getText().strip();
@@ -45,6 +53,9 @@ public class LoginController implements Closable {
         }
     }
 
+    /**
+     * Checks each User in the User list and attempts to login
+     */
     private void login(String username, String password) throws IllegalArgumentException {
         User loggedInUser = null;
 
@@ -66,6 +77,9 @@ public class LoginController implements Closable {
         }
     }
 
+    /**
+     * Displays the Create user view
+     */
     @FXML
     private void onCreateUserButtonClick(Event event) {
         try {
@@ -76,6 +90,10 @@ public class LoginController implements Closable {
         }
     }
 
+    /**
+     * Closes the current stage.
+     * Implemented from the Closable interface
+     */
     @FXML
     @Override
     public void handleCloseButtonAction(@NotNull Event event) {

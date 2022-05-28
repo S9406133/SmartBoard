@@ -1,3 +1,8 @@
+/**
+ * This is the super class for Model classes which define
+ * the user and the items held by the user and shown on the Smart Board
+ */
+
 package com.smartboard.model;
 
 import java.util.ArrayList;

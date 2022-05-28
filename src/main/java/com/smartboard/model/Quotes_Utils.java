@@ -1,3 +1,7 @@
+/**
+ * This interface holds the static data and methods for the Quotes instance
+ */
+
 package com.smartboard.model;
 
 import java.util.Random;

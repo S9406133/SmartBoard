@@ -1,3 +1,7 @@
+/**
+ * This Enum defines the statuses available for a Task instance
+ */
+
 package com.smartboard.model;
 
 public enum Status {

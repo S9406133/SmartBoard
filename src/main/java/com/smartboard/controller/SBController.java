@@ -1,3 +1,8 @@
+/**
+ * This is the controller class for the main Smart Board view
+ * It controls all aspects of the Smart Board view
+ */
+
 package com.smartboard.controller;
 
 import com.smartboard.model.*;
@@ -65,6 +70,9 @@ public class SBController implements Closable, Initializable {
         setProjectMenuDisable();
     }
 
+    /**
+     * Adds all the users projects to the view
+     */
     private void displayProjects() {
         int i = 0;
         for (Project project : User_Utils.currentUser.getSubItemList()) {
@@ -77,11 +85,17 @@ public class SBController implements Closable, Initializable {
         }
     }
 
+    /**
+     * Disables the project menu option if the there are no projects displayed
+     */
     private void setProjectMenuDisable() {
         projectMenu.disableProperty().setValue(User_Utils.currentUser.getListSize() == 0);
     }
 
-    private void createProjectView(Project project) {
+    /**
+     * Creates the project tab with the Column Boxes as contents
+     */
+    private void createProjectView(@NotNull Project project) {
         String projectName = (project.isDefault()) ? project.getName() + " #" : project.getName();
         HBox columnHolder = new HBox(5);
         loadColumns(columnHolder, project);
@@ -90,12 +104,18 @@ public class SBController implements Closable, Initializable {
         projectsPane.getTabs().add(projectTab);
     }
 
-    private void loadColumns(HBox columnHolder, Project project) {
+    /**
+     * Loads each column box into the project columnholder HBox
+     */
+    private void loadColumns(HBox columnHolder, @NotNull Project project) {
         for (Column column : project.getSubItemList()) {
             columnHolder.getChildren().add(createColumnView(column));
         }
     }
 
+    /**
+     * Resets and reloads the columns
+     */
     private void reLoadColumns() {
         try {
             ScrollPane scrollPane = (ScrollPane) projectsPane.getTabs().get(getCurrentTabIndex()).getContent();
@@ -107,11 +127,14 @@ public class SBController implements Closable, Initializable {
         }
     }
 
-    private VBox createColumnView(Column column) {
+    /**
+     * Creates and returns the column VBox from the column data.
+     */
+    private @NotNull VBox createColumnView(@NotNull Column column) {
         int columnWidth = 310;
         int iconHeight = 17;
 
-        // Column Header
+        // Add task button
         Button addTaskButton = new Button();
         ImageView addIcon = new ImageView(new Image("add_icon.png"));
         addIcon.preserveRatioProperty().setValue(true);
@@ -129,6 +152,7 @@ public class SBController implements Closable, Initializable {
             }
         });
 
+        // Delete column button
         Button deleteButton = new Button();
         ImageView deleteIcon = new ImageView(new Image("delete_f_icon.png"));
         deleteIcon.preserveRatioProperty().setValue(true);
@@ -139,6 +163,7 @@ public class SBController implements Closable, Initializable {
                 actionEvent -> onDeleteColumnClicked(column)
         );
 
+        // Column header label
         Label columnLabel = new Label(column.getName());
         columnLabel.setId("columnLabel");
         columnLabel.setFont(HEAD_FONT_SIZE);
@@ -151,6 +176,7 @@ public class SBController implements Closable, Initializable {
             showInputDialog(mouseEvent);
         });
 
+        // Move column buttons
         DirectionButton leftButton = new DirectionButton();
         leftButton.setToLeft();
         leftButton.setTooltip(new Tooltip("Move the column left"));
@@ -167,6 +193,7 @@ public class SBController implements Closable, Initializable {
             reLoadColumns();
         });
 
+        // Column header
         ToolBar columnHeader = new ToolBar(rightButton, addTaskButton, deleteButton, columnLabel, leftButton);
         columnHeader.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         columnHeader.setStyle("-fx-background-color: ghostwhite; -fx-border-color: grey;");
@@ -190,7 +217,10 @@ public class SBController implements Closable, Initializable {
         return columnBox;
     }
 
-    private AnchorPane createTaskView(Column column, Task task) {
+    /**
+     * Creates and returns a Task Anchorpane from the task data
+     */
+    private @NotNull AnchorPane createTaskView(Column column, @NotNull Task task) {
         final String APPROACHING = "khaki";
         final String COMPLETED = "lightgreen";
 
@@ -239,6 +269,7 @@ public class SBController implements Closable, Initializable {
                 }
         );
 
+        // Task move buttons
         DirectionButton upButton = new DirectionButton();
         upButton.setToUp();
         upButton.setLayoutX(235);
@@ -313,7 +344,10 @@ public class SBController implements Closable, Initializable {
         return taskPane;
     }
 
-    private void makeDroppable(Node node, Column column) {
+    /**
+     * Makes the passed in node a droppable location
+     */
+    private void makeDroppable(@NotNull Node node, Column column) {
         node.setOnDragEntered(dragEvent -> {
             if (dragEvent.getGestureSource() != node &&
                     dragEvent.getDragboard().hasString()) {
@@ -351,7 +385,10 @@ public class SBController implements Closable, Initializable {
         });
     }
 
-    private String getStatusColor(Task task) {
+    /**
+     * Returns the colour associated with the task status
+     */
+    private String getStatusColor(@NotNull Task task) {
         final String NOT_SET = "azure";
         final String APPROACHING = "khaki";
         final String OVERDUE = "red";
@@ -370,6 +407,9 @@ public class SBController implements Closable, Initializable {
         return retColor;
     }
 
+    /**
+     * Creates a menuitem for the passed in project and adds it to the workspace menu
+     */
     private void addProjectToMenu(@NotNull Project project, Tab tab) {
         MenuItem currItem = new MenuItem(project.getName());
         currItem.setId(project.getName());
@@ -378,6 +418,9 @@ public class SBController implements Closable, Initializable {
         workspaceMenu.getItems().add(currItem);
     }
 
+    /**
+     * Removes all project menu items from the workspace menu
+     */
     private void removeProjectsFromMenu() {
         workspaceMenu.getItems().removeIf(menuItem -> {
             if (menuItem.getId() != null) {
@@ -387,6 +430,9 @@ public class SBController implements Closable, Initializable {
         });
     }
 
+    /**
+     * Reloads the current projects to the workspace menu
+     */
     private void reLoadWorkspaceMenu() {
         removeProjectsFromMenu();
 
@@ -397,6 +443,9 @@ public class SBController implements Closable, Initializable {
         }
     }
 
+    /**
+     * Calls a method to show an input dialog box depending on the event source
+     */
     @FXML
     private void showInputDialog(@NotNull Event event) {
         try {
@@ -423,6 +472,11 @@ public class SBController implements Closable, Initializable {
         }
     }
 
+    /**
+     * Creates and displays a new project from the text entered
+     *
+     * @throws StringLengthException If name is less an 2 or greater than 30 characters
+     */
     private void addProject() throws StringLengthException {
         String name = TextInputDialog.show("Create a new project", "Project title");
 
@@ -435,15 +489,11 @@ public class SBController implements Closable, Initializable {
         }
     }
 
-    private void addColumn() throws StringLengthException {
-        String name = TextInputDialog.show("Add a new column", "Column name");
-
-        if (!name.isBlank()) {
-            Column_Utils.addNewColumn(getCurrentProject(), name);
-            reLoadColumns();
-        }
-    }
-
+    /**
+     * Sets a new name for the current project and refreshes the view
+     *
+     * @throws StringLengthException If name is less an 2 or greater than 30 characters
+     */
     private void renameProject() throws StringLengthException {
         String newName = TextInputDialog.show("Rename project", "Project title");
 
@@ -456,36 +506,9 @@ public class SBController implements Closable, Initializable {
         }
     }
 
-    private void renameColumn() throws StringLengthException {
-        String newName = TextInputDialog.show("Rename column", "Column title");
-
-        if (!newName.isBlank()) {
-            Column_Utils.updateColumnName(Column_Utils.currentColumn, newName);
-            reLoadColumns();
-        }
-    }
-
-    @FXML
-    private void onEditProfileSelected() {
-        try {
-            EditProfileView.createEditProfileView();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void onLogoutSelected() {
-        try {
-            LoginView.createLoginView();
-            Stage stage = (Stage) mainExitButton.getScene().getWindow();
-            stage.close();
-            User_Utils.logoutCurrentUser();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }
-
+    /**
+     * Toggles the default setting for the current project and refreshes the view
+     */
     @FXML
     private void toggleDefaultSetting() {
         User_Utils.currentUser.toggleDefaultProject(getCurrentTabIndex());
@@ -499,48 +522,104 @@ public class SBController implements Closable, Initializable {
         reLoadWorkspaceMenu();
     }
 
+    /**
+     * Creates and displays a new column from the text entered
+     *
+     * @throws StringLengthException If name is less an 2 or greater than 30 characters
+     */
+    private void addColumn() throws StringLengthException {
+        String name = TextInputDialog.show("Add a new column", "Column name");
+
+        if (!name.isBlank()) {
+            Column_Utils.addNewColumn(getCurrentProject(), name);
+            reLoadColumns();
+        }
+    }
+
+    /**
+     * Sets a new name for the current column and refeshes the view
+     *
+     * @throws StringLengthException If name is less an 2 or greater than 30 characters
+     */
+    private void renameColumn() throws StringLengthException {
+        String newName = TextInputDialog.show("Rename column", "Column title");
+
+        if (!newName.isBlank()) {
+            Column_Utils.updateColumnName(Column_Utils.currentColumn, newName);
+            reLoadColumns();
+        }
+    }
+
+    /**
+     * Displays the Edit profile view
+     */
+    @FXML
+    private void onEditProfileSelected() {
+        try {
+            EditProfileView.createEditProfileView();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    /**
+     * Calls the methods to log out the current user
+     */
+    @FXML
+    private void onLogoutSelected() {
+        try {
+            LoginView.createLoginView();
+            Stage stage = (Stage) mainExitButton.getScene().getWindow();
+            stage.close();
+            User_Utils.logoutCurrentUser();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    /**
+     * Displays a confirmation alert dialogue when delete project is selected.
+     * Calls the method to delete if confirmed.
+     */
     @FXML
     private void onDeleteProjectSelected() {
-        String alertTitle = "Delete project";
-        String projectName = getCurrentProject().getName();
-        Alert deleteAlert = new Alert(Alert.AlertType.WARNING);
-        deleteAlert.getButtonTypes().add(ButtonType.CANCEL);
-        deleteAlert.setTitle(alertTitle);
-        deleteAlert.setHeaderText("You're about to delete the current project - " + projectName + "!");
-        deleteAlert.setContentText("Press OK to delete, or cancel to return to Smart Board");
+        ButtonType buttonType = View_Utils.deleteAlert(getCurrentProject().getName(), "Project");
 
-        if (deleteAlert.showAndWait().get() == ButtonType.OK) {
-            deleteBoardItem(User_Utils.currentUser, getCurrentProject(), alertTitle);
+        if (buttonType == ButtonType.OK) {
+            deleteBoardItem(User_Utils.currentUser, getCurrentProject());
         }
     }
 
+    /**
+     * Displays a confirmation alert dialogue when delete column is selected.
+     * Calls the method to delete if confirmed.
+     */
     private void onDeleteColumnClicked(Column column) {
-        String alertTitle = "Delete Column";
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(alertTitle);
-        alert.setHeaderText("You're about to delete column - " + column.getName());
-        alert.setContentText("Press OK to delete, or cancel to return to Smart Board");
+        ButtonType buttonType = View_Utils.deleteAlert(column.getName(), "Column");
 
-        if (alert.showAndWait().get() == ButtonType.OK) {
-            Project currProject = getCurrentProject();
-            deleteBoardItem(currProject, column, alertTitle);
+        if (buttonType == ButtonType.OK) {
+            deleteBoardItem(getCurrentProject(), column);
         }
     }
 
+    /**
+     * Displays a confirmation alert dialogue when delete task is selected.
+     * Calls the method to delete if confirmed.
+     */
     private void onDeleteTaskClicked(Column column, Task task) {
-        String alertTitle = "Delete Task";
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(alertTitle);
-        alert.setHeaderText("You're about to delete task - " + task.getName());
-        alert.setContentText("Press OK to delete, or cancel to return to Smart Board");
+        ButtonType buttonType = View_Utils.deleteAlert(task.getName(), "Task");
 
-        if (alert.showAndWait().get() == ButtonType.OK) {
-            deleteBoardItem(column, task, alertTitle);
+        if (buttonType == ButtonType.OK) {
+            deleteBoardItem(column, task);
         }
     }
 
-    private void deleteBoardItem(BoardItem<?> superItem, BoardItem<?> itemToDelete, String alertTitle) {
+    /**
+     * Method to delete a generic BoardItem and refresh the view
+     */
+    private void deleteBoardItem(BoardItem<?> superItem, BoardItem<?> itemToDelete) {
         String deleteClass = itemToDelete.getClass().getSimpleName();
+        String alertTitle = "Delete " + deleteClass;
         String itemName = itemToDelete.getName();
         int itemID = -1;
         switch (deleteClass) {
@@ -565,7 +644,7 @@ public class SBController implements Closable, Initializable {
                 }
                 case "Column" -> {
                     reLoadColumns();
-                    Column_Utils.deleteColumn((Project) superItem, deleteClass, itemID);
+                    Column_Utils.deleteColumn((Project) superItem, itemID);
                 }
                 case "Task" -> {
                     reLoadColumns();
@@ -581,6 +660,9 @@ public class SBController implements Closable, Initializable {
         }
     }
 
+    /**
+     * Moves a task to a new column by adding it to the new column and removing it from the old
+     */
     private void moveTaskToNewColumn(Column newColumn, Column currentColumn, Task task) {
         newColumn.getSubItemList().add(task);
         currentColumn.removeSubItem(task);
@@ -588,6 +670,9 @@ public class SBController implements Closable, Initializable {
         Task_Utils.updateTaskColumn(getCurrentProject(), newColumn, task);
     }
 
+    /**
+     * Moves a column with the project's list
+     */
     private void moveColumn(Column column, String direction) {
         Project project = getCurrentProject();
         int colIndex = project.getSubItemIndex(column);
@@ -597,6 +682,9 @@ public class SBController implements Closable, Initializable {
         Column_Utils.updateColumnIndexes(project);
     }
 
+    /**
+     * Moves a task within a columns list
+     */
     private void moveTask(Task task, String direction) {
         int taskIndex = Column_Utils.currentColumn.getSubItemIndex(task);
 
@@ -605,6 +693,9 @@ public class SBController implements Closable, Initializable {
         Task_Utils.updateTaskIndexes(Column_Utils.currentColumn);
     }
 
+    /**
+     * Method to move a generic BoardItem within the list
+     */
     private void moveItem(ArrayList<?> itemList, int itemIndex, String direction) {
         int minIndex = 0;
         int maxIndex = itemList.size() - 1;
@@ -623,6 +714,10 @@ public class SBController implements Closable, Initializable {
         }
     }
 
+    /**
+     * Closes the current stage.
+     * Implemented from the Closable interface
+     */
     @FXML
     @Override
     public void handleCloseButtonAction(@NotNull Event event) {
@@ -639,6 +734,9 @@ public class SBController implements Closable, Initializable {
         }
     }
 
+    /**
+     * Displays an Information dialogue
+     */
     @FXML
     private void showVersionInfo() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -651,19 +749,47 @@ public class SBController implements Closable, Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * Displays an Information dialogue
+     */
     @FXML
     private void showAboutInfo() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About Smart Board");
         alert.setHeaderText("""
-                Include instructions here""");
+                        ** Projects **
+                - Add Projects to the workspace by selecting 'New Project' in the Workspace menu.
+                - The current Project can be Renamed or deleted by selecting the relevant option in the Project menu.
+                - A Project can also be set/unset as default in the Project menu. 
+                The default Project is the Project selected when logging-in.
+                        ** Columns **
+                - Columns can be added to a Project by selecting 'Add Column' in the Project menu.
+                - Columns can be renamed by clicking on blank space in the Column header.
+                - Columns can be moved left or right within the Project by
+                clicking the left '<' or right '>' buttons in the column header.
+                - A Column can be deleted by clicking the delete button in the Column header
+                        ** Tasks **
+                - Task cards can be added to a Column by clicking on the '+' button in the Column header.
+                - The task editor will be displayed, which will allow you to set the Task name, a due date, 
+                a description, add a checklist or set the Task as 'Completed'.
+                - Once created a Task can be edited by clicking the 'Update' button on the Task card.
+                - A Task can be deleted by clicking the 'Delete' button on the Task card.
+                        ** User **
+                - Your user profile can be edited by selecting 'Edit Profile' in the User menu, 
+                or by Clicking on your profile info in the bottom info bar.""");
         alert.showAndWait();
     }
 
+    /**
+     * Returns the currently selected Tab index
+     */
     private int getCurrentTabIndex() {
         return projectsPane.getSelectionModel().getSelectedIndex();
     }
 
+    /**
+     * Returns the current selected Project
+     */
     private Project getCurrentProject() {
         return User_Utils.currentUser.getSubItem(getCurrentTabIndex());
     }

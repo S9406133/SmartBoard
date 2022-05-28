@@ -1,3 +1,7 @@
+/**
+ * This class creates and controls a custom Text Input Dialogue Box
+ */
+
 package com.smartboard.view;
 
 import com.smartboard.SmartBoard;

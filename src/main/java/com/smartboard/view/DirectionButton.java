@@ -1,3 +1,7 @@
+/**
+ * This class defines a custom Hyperlink used as direction buttons
+ */
+
 package com.smartboard.view;
 
 import javafx.scene.control.Hyperlink;

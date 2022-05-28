@@ -1,3 +1,7 @@
+/**
+ * This is the class which defines the Task held in the list of a Column
+ */
+
 package com.smartboard.model;
 
 import org.jetbrains.annotations.NotNull;
@@ -58,6 +62,9 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable {
         return this.orderIndex;
     }
 
+    /**
+     * Replaces all ChecklistItems in the subItems list with newList
+     */
     public void replaceEntireChecklist(ArrayList<ChecklistItem> newList) {
         this.subItems = new ArrayList<>(newList);
         if (this.taskID > 0) {
@@ -121,6 +128,18 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable {
         return this.status;
     }
 
+    /**
+     * Sets Task Status
+     * ** No due date set ->
+     * and not completed = DATE_NOT_SET
+     * and is completed = COMPLETED_ON_TIME,
+     * ** Due date is set and not completed ->
+     * and is before or on the due date = APPROACHING
+     * and is after the due date = OVERDUE,
+     * ** Due date is set and is completed ->
+     * and is before or on the due date = COMPLETED_ON_TIME
+     * and is after the due date = COMPLETED_LATE,
+     */
     public void setStatus() {
         LocalDate today = LocalDate.now();
 

@@ -1,3 +1,8 @@
+/**
+ * This is the controller class for the main Profile Editor view
+ * It controls all aspects of the Profile Editor view
+ */
+
 package com.smartboard.controller;
 
 import com.smartboard.model.StringLengthException;
@@ -39,6 +44,10 @@ public class EditProfileController implements Closable, Initializable, Updatable
         editUserImage.setImage(new Image(User_Utils.currentUser.getImagePath()));
     }
 
+    /**
+     * Closes the current stage.
+     * Implemented from the Closable interface
+     */
     @FXML
     @Override
     public void handleCloseButtonAction(@NotNull Event event) {
@@ -47,6 +56,9 @@ public class EditProfileController implements Closable, Initializable, Updatable
         stage.close();
     }
 
+    /**
+     * Displays an image file chooser and sets the chosen image to the users profile
+     */
     @FXML
     @Override
     public void onImageClicked(@NotNull Event event) {
@@ -61,6 +73,9 @@ public class EditProfileController implements Closable, Initializable, Updatable
         }
     }
 
+    /**
+     * Saves all the updated profile data to the current user profile
+     */
     @FXML
     protected void onUpdateClicked(Event event) {
         String firstname = editFirstnameField.getText().strip();

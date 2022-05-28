@@ -1,3 +1,8 @@
+/**
+ * This is the class that defines the Checklist item
+ * which a Task can hold a list of.
+ */
+
 package com.smartboard.model;
 
 public class ChecklistItem {

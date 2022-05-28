@@ -1,3 +1,8 @@
+/**
+ * Interface used by a controller which controls a view with an
+ * image that can be updated.
+ */
+
 package com.smartboard.controller;
 
 import javafx.event.Event;

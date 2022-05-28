@@ -1,3 +1,7 @@
+/**
+ * This is the class which defines the User which holds a list of Projects
+ */
+
 package com.smartboard.model;
 
 public class User extends BoardItem<Project> {
@@ -31,10 +35,16 @@ public class User extends BoardItem<Project> {
         return this.subItems.get(this.subItems.size() - 1);
     }
 
+    /**
+     * Validates a username and password combination and returns the boolean value
+     */
     public boolean validateLogin(String username, String password) {
         return this.name.equalsIgnoreCase(username) && this.password.equals(password);
     }
 
+    /**
+     * Returns the Project which is set to default, else null
+     */
     public Project getDefaultProject() {
         Project defaultProject = null;
 
@@ -48,6 +58,10 @@ public class User extends BoardItem<Project> {
         return defaultProject;
     }
 
+    /**
+     * Toggles the value of the passed in Project(by index),
+     * unsets another project if needed
+     */
     public void toggleDefaultProject(int index) throws IndexOutOfBoundsException {
 
         if (!this.subItems.get(index).isDefault()) {

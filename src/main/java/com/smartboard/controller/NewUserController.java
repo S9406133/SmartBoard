@@ -44,6 +44,9 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
         userImage.setImage(new Image(imagePath));
     }
 
+    /**
+     * Creates a new User object from the entered user data
+     */
     @FXML
     private void onCreateUserButtonClick() {
         String username = newUsernameField.getText().strip();
@@ -78,6 +81,10 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
         }
     }
 
+    /**
+     * Closes the current stage.
+     * Implemented from the Closable interface
+     */
     @FXML
     @Override
     public void handleCloseButtonAction(@NotNull Event event) {
@@ -91,6 +98,9 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
         }
     }
 
+    /**
+     * Displays an image file chooser and sets the chosen image to the current data set
+     */
     @FXML
     @Override
     public void onImageClicked(@NotNull Event event) {

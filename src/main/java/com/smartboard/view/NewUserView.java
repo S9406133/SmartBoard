@@ -1,3 +1,7 @@
+/**
+ * This is the view creating class for the Create New User stage
+ */
+
 package com.smartboard.view;
 
 import com.smartboard.SmartBoard;
