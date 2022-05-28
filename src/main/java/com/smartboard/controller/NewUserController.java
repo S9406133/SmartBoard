@@ -4,7 +4,7 @@ import com.smartboard.model.StringLengthException;
 import com.smartboard.model.User_Utils;
 import com.smartboard.view.LoginView;
 import com.smartboard.view.SmartBoardView;
-import com.smartboard.view.Utility;
+import com.smartboard.view.View_Utils;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -71,10 +71,10 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
             } catch (IOException ioe) {
                 System.out.println(ioe.getMessage());
             } catch (StringLengthException | IllegalArgumentException e) {
-                Utility.errorAlert(e.getMessage());
+                View_Utils.errorAlert(e.getMessage());
             }
         } else {
-            Utility.errorAlert("Enter text in all fields");
+            View_Utils.errorAlert("Enter text in all fields");
         }
     }
 
@@ -96,7 +96,7 @@ public class NewUserController implements Closable, Initializable, UpdatableImag
     public void onImageClicked(@NotNull Event event) {
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
-        File imageFile = Utility.displayImageFileChooser(stage);
+        File imageFile = View_Utils.displayImageFileChooser(stage);
 
         if (imageFile != null) {
             imagePath = imageFile.getPath();

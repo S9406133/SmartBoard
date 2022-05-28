@@ -79,9 +79,6 @@ public class DB_Utils {
 
             try (ResultSet resultSet = stmt.executeQuery(query)) {
                 while (resultSet.next()) {
-                    System.out.printf("PROJECT -> Id: %d | Name: %s | Default: %s | UserName: %s\n",
-                            resultSet.getInt("projectId"), resultSet.getString("name"),
-                            resultSet.getBoolean("isDefault"), resultSet.getString("Username"));
 
                     projectList.add(new Project(resultSet.getString("name"), resultSet.getString("Username")));
                     Project currProject = projectList.get(projectList.size() - 1);
@@ -116,18 +113,13 @@ public class DB_Utils {
 
             try (ResultSet resultSet = stmt.executeQuery(query)) {
                 while (resultSet.next()) {
-                    System.out.printf("  COLUMN -> Col Id: %d | Name: %s | Proj Id: %d\n",
-                            resultSet.getInt("ColumnID"), resultSet.getString("Name"),
-                            resultSet.getInt("ProjectID"));
 
                     int currIndex;
                     if (columnList.size() <= resultSet.getInt("OrderIndex")) {
                         columnList.add(new Column(resultSet.getString("Name"), resultSet.getInt("ProjectID")));
-                        System.out.println("Add Column: " + resultSet.getInt("OrderIndex"));
                         currIndex = columnList.size() - 1;
                     } else {
                         currIndex = resultSet.getInt("OrderIndex");
-                        System.out.println("Index Column: " + currIndex);
                         columnList.add(currIndex,
                                 new Column(resultSet.getString("Name"), resultSet.getInt("ProjectID")));
                     }
@@ -164,20 +156,14 @@ public class DB_Utils {
 
             try (ResultSet resultSet = stmt.executeQuery(query)) {
                 while (resultSet.next()) {
-                    System.out.printf("    TASK -> Task Id: %d | Name: %s | Desc: %s | DueDate: %s | IsComp: %s | Col Id: %d\n",
-                            resultSet.getInt("TaskID"), resultSet.getString("Name"),
-                            resultSet.getString("Description"), resultSet.getString("DueDate"),
-                            resultSet.getBoolean("IsCompleted"), resultSet.getInt("ColumnID"));
 
                     int currIndex;
                     if (taskList.size() <= resultSet.getInt("OrderIndex")) {
                         taskList.add(
                                 new Task(resultSet.getString("Name"), resultSet.getInt("ColumnID")));
-                        System.out.println("Add Task: " + resultSet.getInt("OrderIndex"));
                         currIndex = taskList.size() - 1;
                     } else {
                         currIndex = resultSet.getInt("OrderIndex");
-                        System.out.println("Index Task: " + currIndex);
                         taskList.add(currIndex,
                                 new Task(resultSet.getString("Name"), resultSet.getInt("ColumnID")));
                     }
@@ -221,9 +207,6 @@ public class DB_Utils {
 
             try (ResultSet resultSet = stmt.executeQuery(query)) {
                 while (resultSet.next()) {
-                    System.out.printf("      CLI -> Descr: %s | Checked: %s | TaskId: %d\n",
-                            resultSet.getString("Description"), resultSet.getBoolean("Checked"),
-                            resultSet.getInt("TaskID"));
 
                     cliList.add(new ChecklistItem(resultSet.getString("Description")));
                     ChecklistItem currCli = cliList.get(cliList.size() - 1);
@@ -372,7 +355,6 @@ public class DB_Utils {
         String sql = "UPDATE " + TABLE_NAME +
                 " SET Name = ?, OrderIndex = ?" +
                 " WHERE ColumnID = ?";
-        System.out.println("UPDATE COLUMN: " + column.getName() + " " + column.getOrderIndex() + " " + column.getColumnID());
 
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -430,7 +412,6 @@ public class DB_Utils {
         String sql = "UPDATE " + TABLE_NAME +
                 " SET Name = ?, Description = ?, Duedate = ?, IsCompleted = ?, OrderIndex = ?, ColumnID = ?" +
                 " WHERE TaskID = ?";
-        System.out.println("UPDATE TASK: " + task.getName() + " " + task.getOrderIndex() + " " + task.getTaskID());
 
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -547,7 +528,6 @@ public class DB_Utils {
              Statement stmt = con.createStatement()) {
             String sql = "DELETE FROM " + typeName +
                     " WHERE " + fieldName + " = " + itemID;
-            System.out.println(sql);
 
             int result = stmt.executeUpdate(sql);
 
@@ -569,7 +549,6 @@ public class DB_Utils {
 
             String query = "SELECT " + selectID + " FROM " + tableName +
                     " WHERE " + fieldName + " = " + fieldID;
-            System.out.println(query);
 
             try (ResultSet resultSet = stmt.executeQuery(query)) {
                 while (resultSet.next()) {

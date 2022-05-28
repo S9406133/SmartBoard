@@ -10,7 +10,6 @@ public class User_Utils {
 
     public static void loadUsersFromDB() {
         users = DB_Utils.SelectAllUsers();
-        System.out.println(users.size());
     }
 
     public static void setCurrentUser(User user) {

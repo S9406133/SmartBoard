@@ -4,7 +4,7 @@ import com.smartboard.model.User;
 import com.smartboard.model.User_Utils;
 import com.smartboard.view.NewUserView;
 import com.smartboard.view.SmartBoardView;
-import com.smartboard.view.Utility;
+import com.smartboard.view.View_Utils;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -38,10 +38,10 @@ public class LoginController implements Closable {
                 System.out.println(ioe.getMessage());
 
             } catch (IllegalArgumentException iae) {
-                Utility.errorAlert(iae.getMessage());
+                View_Utils.errorAlert(iae.getMessage());
             }
         } else {
-            Utility.errorAlert("Enter text in both fields");
+            View_Utils.errorAlert("Enter text in both fields");
         }
     }
 

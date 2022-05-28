@@ -22,7 +22,7 @@ public class User extends BoardItem<Project> {
             throw new StringLengthException("Invalid password length - User not created");
         }
 
-        this.imagePath = "fry_avatar.jpg";
+        this.imagePath = User_Utils.defPicturePath;
     }
 
     @Override
@@ -61,7 +61,9 @@ public class User extends BoardItem<Project> {
         }
     }
 
-    public String getPassword() { return password; }
+    public String getPassword() {
+        return password;
+    }
 
     public String getFirstName() {
         return firstName;

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Task extends BoardItem<ChecklistItem> implements Reorderable{
+public class Task extends BoardItem<ChecklistItem> implements Reorderable {
 
     private int taskID;
     private int columnID;
@@ -32,23 +32,34 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable{
         return newCli;
     }
 
-    public void setTaskID(int taskID) { this.taskID = taskID; }
+    public void setTaskID(int taskID) {
+        this.taskID = taskID;
+    }
 
-    public int getTaskID() { return this.taskID; }
+    public int getTaskID() {
+        return this.taskID;
+    }
 
-    public void setColumnID(int columnID) { this.columnID = columnID; }
+    public void setColumnID(int columnID) {
+        this.columnID = columnID;
+    }
 
-    public int getColumnID() { return this.columnID; }
+    public int getColumnID() {
+        return this.columnID;
+    }
 
     @Override
-    public void setOrderIndex(int orderIndex) { this.orderIndex = orderIndex; }
+    public void setOrderIndex(int orderIndex) {
+        this.orderIndex = orderIndex;
+    }
 
     @Override
-    public int getOrderIndex() { return this.orderIndex; }
+    public int getOrderIndex() {
+        return this.orderIndex;
+    }
 
     public void replaceEntireChecklist(ArrayList<ChecklistItem> newList) {
         this.subItems = new ArrayList<>(newList);
-        System.out.println("TaskID: "+taskID);
         if (this.taskID > 0) {
             Task_Utils.refreshTaskCLItems(this.taskID, newList);
         }

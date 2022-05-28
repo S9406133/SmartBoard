@@ -55,8 +55,6 @@ public class TextInputDialog {
         dialogStage.setOnCloseRequest(windowEvent -> textField.setText(""));
         dialogStage.showAndWait();
 
-        textField.requestFocus(); // ??
-
         return textField.getText().strip();
     }
 }

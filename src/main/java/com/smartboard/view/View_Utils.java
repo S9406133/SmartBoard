@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
-public class Utility {
+public class View_Utils {
 
     public static void errorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

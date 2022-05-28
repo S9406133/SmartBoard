@@ -1,6 +1,5 @@
 package com.smartboard;
 
-import com.smartboard.model.StringLengthException;
 import com.smartboard.model.User_Utils;
 import com.smartboard.view.LoginView;
 import javafx.application.Application;
@@ -14,10 +13,9 @@ public class SmartBoard extends Application {
     public static final Image icon = new Image("sb_icon.png");
 
     @Override
-    public void start(Stage stage) throws IOException, StringLengthException {
+    public void start(Stage stage) throws IOException {
 
         User_Utils.loadUsersFromDB();
-
         LoginView.createLoginView();
     }
 

@@ -27,7 +27,9 @@ public class Project extends BoardItem<Column> {
         return projectID;
     }
 
-    public String getUsername() { return username; }
+    public String getUsername() {
+        return username;
+    }
 
     public boolean isDefault() {
         return isDefault;

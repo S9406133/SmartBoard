@@ -44,5 +44,7 @@ public class DirectionButton extends Hyperlink {
         this.direction = DOWN;
     }
 
-    public String getDirection() { return this.direction; }
+    public String getDirection() {
+        return this.direction;
+    }
 }

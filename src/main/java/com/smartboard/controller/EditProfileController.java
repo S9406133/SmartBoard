@@ -2,7 +2,7 @@ package com.smartboard.controller;
 
 import com.smartboard.model.StringLengthException;
 import com.smartboard.model.User_Utils;
-import com.smartboard.view.Utility;
+import com.smartboard.view.View_Utils;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -53,7 +53,7 @@ public class EditProfileController implements Closable, Initializable, Updatable
         handleCloseButtonAction(event);
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
-        File imageFile = Utility.displayImageFileChooser(stage);
+        File imageFile = View_Utils.displayImageFileChooser(stage);
 
         if (imageFile != null) {
             User_Utils.updateUserImagepath(imageFile.getPath());
@@ -82,7 +82,7 @@ public class EditProfileController implements Closable, Initializable, Updatable
         }
 
         if (!updated) {
-            Utility.errorAlert(alertMessage);
+            View_Utils.errorAlert(alertMessage);
         } else {
             SBController.staticToolbarName.setText(
                     User_Utils.currentUser.getFirstName() + " " + User_Utils.currentUser.getLastName()

@@ -419,7 +419,7 @@ public class SBController implements Closable, Initializable {
         } catch (ClassCastException cce) {
             cce.printStackTrace();
         } catch (StringLengthException sle) {
-            Utility.errorAlert(sle.getMessage());
+            View_Utils.errorAlert(sle.getMessage());
         }
     }
 

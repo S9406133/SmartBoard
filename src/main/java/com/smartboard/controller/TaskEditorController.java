@@ -2,7 +2,7 @@ package com.smartboard.controller;
 
 import com.smartboard.model.*;
 import com.smartboard.view.TextInputDialog;
-import com.smartboard.view.Utility;
+import com.smartboard.view.View_Utils;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -70,7 +70,7 @@ public class TaskEditorController implements Closable, Initializable {
 
         if (dueDate != null) {
             if (dueDate.isBefore(LocalDate.now())) {
-                Utility.errorAlert("Due date is in the past - not updated");
+                View_Utils.errorAlert("Due date is in the past - not updated");
             }
         }
 
@@ -122,7 +122,7 @@ public class TaskEditorController implements Closable, Initializable {
         }
 
         if (error) {
-            Utility.errorAlert(alertMessage);
+            View_Utils.errorAlert(alertMessage);
         }
 
     }
@@ -146,9 +146,9 @@ public class TaskEditorController implements Closable, Initializable {
 
     @FXML
     private void onCompletedClicked() {
-            for (ChecklistItem item : checklistItemList) {
-                item.setChecked(completedCheckbox.isSelected());
-            }
+        for (ChecklistItem item : checklistItemList) {
+            item.setChecked(completedCheckbox.isSelected());
+        }
 
         reLoadChecklistRows();
     }
