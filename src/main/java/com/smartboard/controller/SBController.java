@@ -31,8 +31,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.ResourceBundle;
 
 public class SBController implements Closable, Initializable {
@@ -181,7 +179,7 @@ public class SBController implements Closable, Initializable {
         leftButton.setToLeft();
         leftButton.setTooltip(new Tooltip("Move the column left"));
         leftButton.setOnAction(actionEvent -> {
-            moveColumn(column, leftButton.getDirection());
+            Controller_Utils.moveColumn(getCurrentProject(), column, leftButton.getDirection());
             reLoadColumns();
         });
 
@@ -189,7 +187,7 @@ public class SBController implements Closable, Initializable {
         rightButton.setToRight();
         rightButton.setTooltip(new Tooltip("Move the column right"));
         rightButton.setOnAction(actionEvent -> {
-            moveColumn(column, rightButton.getDirection());
+            Controller_Utils.moveColumn(getCurrentProject(), column, rightButton.getDirection());
             reLoadColumns();
         });
 
@@ -218,7 +216,7 @@ public class SBController implements Closable, Initializable {
     }
 
     /**
-     * Creates and returns a Task Anchorpane from the task data
+     * Creates and returns a Task AnchorPane from the task data
      */
     private @NotNull AnchorPane createTaskView(Column column, @NotNull Task task) {
         final String APPROACHING = "khaki";
@@ -263,7 +261,7 @@ public class SBController implements Closable, Initializable {
         completed.setOnAction(actionEvent ->
                 {
                     task.setCompleted(completed.isSelected());
-                    dueDateColor = getStatusColor(task);
+                    dueDateColor = Controller_Utils.getStatusColor(task);
                     reLoadColumns();
                     DB_Utils.UpdateTask(task);
                 }
@@ -277,7 +275,7 @@ public class SBController implements Closable, Initializable {
         upButton.setTooltip(new Tooltip("Move up the column"));
         upButton.setOnAction(actionEvent -> {
             Column_Utils.currentColumn = column;
-            moveTask(task, upButton.getDirection());
+            Controller_Utils.moveTask(task, upButton.getDirection());
             reLoadColumns();
         });
 
@@ -288,7 +286,7 @@ public class SBController implements Closable, Initializable {
         downButton.setTooltip(new Tooltip("Move down the column"));
         downButton.setOnAction(actionEvent -> {
             Column_Utils.currentColumn = column;
-            moveTask(task, downButton.getDirection());
+            Controller_Utils.moveTask(task, downButton.getDirection());
             reLoadColumns();
         });
 
@@ -309,7 +307,7 @@ public class SBController implements Closable, Initializable {
         checklistLabel.setLayoutY(86);
 
         // Due date label
-        dueDateColor = getStatusColor(task);
+        dueDateColor = Controller_Utils.getStatusColor(task);
         Label dueDateLabel = new Label("  Not set");
         ImageView ddImage = new ImageView(new Image("alarm_icon.png"));
         ddImage.preserveRatioProperty().setValue(true);
@@ -345,11 +343,11 @@ public class SBController implements Closable, Initializable {
     }
 
     /**
-     * Makes the passed in node a droppable location
+     * Makes the passed in column a droppable location
      */
     private void makeDroppable(@NotNull Node node, Column column) {
         node.setOnDragEntered(dragEvent -> {
-            if (dragEvent.getGestureSource() != node &&
+            if (column != Column_Utils.currentColumn &&
                     dragEvent.getDragboard().hasString()) {
                 node.setStyle("-fx-background-color: lightblue;");
             }
@@ -375,7 +373,7 @@ public class SBController implements Closable, Initializable {
                 event.setDropCompleted(true);
 
                 if (column != Column_Utils.currentColumn) {
-                    moveTaskToNewColumn(column, Column_Utils.currentColumn, Task_Utils.currentTask);
+                    Controller_Utils.moveTaskToNewColumn(getCurrentProject(), column, Column_Utils.currentColumn, Task_Utils.currentTask);
                     reLoadColumns();
                 }
             } else {
@@ -383,28 +381,6 @@ public class SBController implements Closable, Initializable {
             }
             event.consume();
         });
-    }
-
-    /**
-     * Returns the colour associated with the task status
-     */
-    private String getStatusColor(@NotNull Task task) {
-        final String NOT_SET = "azure";
-        final String APPROACHING = "khaki";
-        final String OVERDUE = "red";
-        final String COMPLETED = "lightgreen";
-        final String COMPLETED_LATE = "lightpink";
-        String retColor = NOT_SET;
-
-        switch (task.getStatus()) {
-            case DATE_NOT_SET -> retColor = NOT_SET;
-            case APPROACHING -> retColor = APPROACHING;
-            case COMPLETED_ON_TIME -> retColor = COMPLETED;
-            case OVERDUE -> retColor = OVERDUE;
-            case COMPLETED_LATE -> retColor = COMPLETED_LATE;
-        }
-
-        return retColor;
     }
 
     /**
@@ -594,7 +570,7 @@ public class SBController implements Closable, Initializable {
      * Displays a confirmation alert dialogue when delete column is selected.
      * Calls the method to delete if confirmed.
      */
-    private void onDeleteColumnClicked(Column column) {
+    private void onDeleteColumnClicked(@NotNull Column column) {
         ButtonType buttonType = View_Utils.deleteAlert(column.getName(), "Column");
 
         if (buttonType == ButtonType.OK) {
@@ -606,7 +582,7 @@ public class SBController implements Closable, Initializable {
      * Displays a confirmation alert dialogue when delete task is selected.
      * Calls the method to delete if confirmed.
      */
-    private void onDeleteTaskClicked(Column column, Task task) {
+    private void onDeleteTaskClicked(Column column, @NotNull Task task) {
         ButtonType buttonType = View_Utils.deleteAlert(task.getName(), "Task");
 
         if (buttonType == ButtonType.OK) {
@@ -617,7 +593,7 @@ public class SBController implements Closable, Initializable {
     /**
      * Method to delete a generic BoardItem and refresh the view
      */
-    private void deleteBoardItem(BoardItem<?> superItem, BoardItem<?> itemToDelete) {
+    private void deleteBoardItem(BoardItem<?> superItem, @NotNull BoardItem<?> itemToDelete) {
         String deleteClass = itemToDelete.getClass().getSimpleName();
         String alertTitle = "Delete " + deleteClass;
         String itemName = itemToDelete.getName();
@@ -657,60 +633,6 @@ public class SBController implements Closable, Initializable {
             alert.setTitle(alertTitle);
             alert.setHeaderText("Error deleting - " + itemName);
             alert.showAndWait();
-        }
-    }
-
-    /**
-     * Moves a task to a new column by adding it to the new column and removing it from the old
-     */
-    private void moveTaskToNewColumn(Column newColumn, Column currentColumn, Task task) {
-        newColumn.getSubItemList().add(task);
-        currentColumn.removeSubItem(task);
-
-        Task_Utils.updateTaskColumn(getCurrentProject(), newColumn, task);
-    }
-
-    /**
-     * Moves a column with the project's list
-     */
-    private void moveColumn(Column column, String direction) {
-        Project project = getCurrentProject();
-        int colIndex = project.getSubItemIndex(column);
-
-        moveItem(project.getSubItemList(), colIndex, direction);
-
-        Column_Utils.updateColumnIndexes(project);
-    }
-
-    /**
-     * Moves a task within a columns list
-     */
-    private void moveTask(Task task, String direction) {
-        int taskIndex = Column_Utils.currentColumn.getSubItemIndex(task);
-
-        moveItem(Column_Utils.currentColumn.getSubItemList(), taskIndex, direction);
-
-        Task_Utils.updateTaskIndexes(Column_Utils.currentColumn);
-    }
-
-    /**
-     * Method to move a generic BoardItem within the list
-     */
-    private void moveItem(ArrayList<?> itemList, int itemIndex, String direction) {
-        int minIndex = 0;
-        int maxIndex = itemList.size() - 1;
-
-        switch (direction) {
-            case "left", "up" -> {
-                if (itemIndex > minIndex) {
-                    Collections.swap(itemList, itemIndex, itemIndex - 1);
-                }
-            }
-            case "right", "down" -> {
-                if (itemIndex < maxIndex) {
-                    Collections.swap(itemList, itemIndex, itemIndex + 1);
-                }
-            }
         }
     }
 
@@ -760,7 +682,7 @@ public class SBController implements Closable, Initializable {
                         ** Projects **
                 - Add Projects to the workspace by selecting 'New Project' in the Workspace menu.
                 - The current Project can be Renamed or deleted by selecting the relevant option in the Project menu.
-                - A Project can also be set/unset as default in the Project menu. 
+                - A Project can also be set/unset as default in the Project menu.
                 The default Project is the Project selected when logging-in.
                         ** Columns **
                 - Columns can be added to a Project by selecting 'Add Column' in the Project menu.
@@ -770,12 +692,12 @@ public class SBController implements Closable, Initializable {
                 - A Column can be deleted by clicking the delete button in the Column header
                         ** Tasks **
                 - Task cards can be added to a Column by clicking on the '+' button in the Column header.
-                - The task editor will be displayed, which will allow you to set the Task name, a due date, 
+                - The task editor will be displayed, which will allow you to set the Task name, a due date,\040
                 a description, add a checklist or set the Task as 'Completed'.
                 - Once created a Task can be edited by clicking the 'Update' button on the Task card.
                 - A Task can be deleted by clicking the 'Delete' button on the Task card.
                         ** User **
-                - Your user profile can be edited by selecting 'Edit Profile' in the User menu, 
+                - Your user profile can be edited by selecting 'Edit Profile' in the User menu,
                 or by Clicking on your profile info in the bottom info bar.""");
         alert.showAndWait();
     }
@@ -790,7 +712,7 @@ public class SBController implements Closable, Initializable {
     /**
      * Returns the current selected Project
      */
-    private Project getCurrentProject() {
+    public Project getCurrentProject() {
         return User_Utils.currentUser.getSubItem(getCurrentTabIndex());
     }
 
