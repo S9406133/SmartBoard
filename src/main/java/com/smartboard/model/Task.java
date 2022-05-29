@@ -102,12 +102,16 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable {
         this.isCompleted = completed;
 
         if (completed) {
-            for (ChecklistItem item : this.subItems) {
-                item.setChecked(true);
-            }
+            setAllChecklistItems(true);
         }
 
         setStatus();
+    }
+
+    public void setAllChecklistItems(boolean checked){
+        for (ChecklistItem item : this.subItems) {
+            item.setChecked(checked);
+        }
     }
 
     public int getNumChecklistCompleted() {

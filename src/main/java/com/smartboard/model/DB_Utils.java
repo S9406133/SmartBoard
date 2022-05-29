@@ -605,9 +605,8 @@ public class DB_Utils {
 
             int result = stmt.executeUpdate(sql);
 
-            if (result == 1) {
-                System.out.println("Delete from table " + typeName + " executed successfully");
-                System.out.println(result + " row(s) affected");
+            if (result == 0) {
+                System.out.println("No records deleted from table " + typeName);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

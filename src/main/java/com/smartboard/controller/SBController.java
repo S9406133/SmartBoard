@@ -261,6 +261,7 @@ public class SBController implements Closable, Initializable {
         completed.setOnAction(actionEvent ->
                 {
                     task.setCompleted(completed.isSelected());
+                    task.setAllChecklistItems(task.isCompleted());
                     dueDateColor = Controller_Utils.getStatusColor(task);
                     reLoadColumns();
                     DB_Utils.UpdateTask(task);
