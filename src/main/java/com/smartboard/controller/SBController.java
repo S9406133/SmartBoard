@@ -264,6 +264,7 @@ public class SBController implements Closable, Initializable {
                     dueDateColor = Controller_Utils.getStatusColor(task);
                     reLoadColumns();
                     DB_Utils.UpdateTask(task);
+                    Task_Utils.refreshTaskCLItems(task.getTaskID(), task.getSubItemList());
                 }
         );
 
