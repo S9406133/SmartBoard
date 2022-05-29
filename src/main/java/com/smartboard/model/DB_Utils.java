@@ -537,9 +537,8 @@ public class DB_Utils {
 
             int result = stmt.executeUpdate(sql);
 
-            if (result >= 1) {
-                System.out.println("Delete from table " + TABLE_NAME + " executed successfully");
-                System.out.println(result + " row(s) affected");
+            if (result < 1) {
+                System.out.println("Error deleting new checklist item");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -628,7 +627,6 @@ public class DB_Utils {
 
             try (ResultSet resultSet = stmt.executeQuery(query)) {
                 while (resultSet.next()) {
-                    System.out.println(resultSet.getInt(selectID));
                     itemList.add(resultSet.getInt(selectID));
                 }
             }
