@@ -79,6 +79,11 @@ public class TaskEditorController implements Closable, Initializable {
         if (dueDate != null) {
             if (dueDate.isBefore(LocalDate.now())) {
                 View_Utils.errorAlert("Due date is in the past - not updated");
+                if (Task_Utils.currentTask != null){
+                    dueDate = Task_Utils.currentTask.getDueDate();
+                } else {
+                    dueDate = null;
+                }
             }
         }
 

@@ -208,6 +208,7 @@ public class DB_Utils {
                         currTask.setDueDate(LocalDate.parse(resultSet.getString("DueDate")));
                     }
                     currTask.setCompleted(resultSet.getBoolean("IsCompleted"));
+                    currTask.setStatus(resultSet.getString("Status"));
 
                     for (ChecklistItem clItem : SelectCLItemsOfTask(currTask.getTaskID())) {
                         currTask.getSubItemList().add(clItem);
@@ -431,8 +432,8 @@ public class DB_Utils {
     public static void InsertNewTask(@NotNull Task task) {
         final String TABLE_NAME = "TASK";
 
-        String sql = "INSERT INTO " + TABLE_NAME + "(Name, Description, Duedate, IsCompleted, OrderIndex, ColumnID)" +
-                " VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO " + TABLE_NAME + "(Name, Description, Duedate, IsCompleted, Status, OrderIndex, ColumnID)" +
+                " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -444,8 +445,9 @@ public class DB_Utils {
                 stmt.setString(3, null);
             }
             stmt.setBoolean(4, task.isCompleted());
-            stmt.setInt(5, task.getOrderIndex());
-            stmt.setInt(6, task.getColumnID());
+            stmt.setString(5, task.getStatus().toString());
+            stmt.setInt(6, task.getOrderIndex());
+            stmt.setInt(7, task.getColumnID());
 
             int result = stmt.executeUpdate();
 
@@ -467,7 +469,7 @@ public class DB_Utils {
         final String TABLE_NAME = "TASK";
 
         String sql = "UPDATE " + TABLE_NAME +
-                " SET Name = ?, Description = ?, Duedate = ?, IsCompleted = ?, OrderIndex = ?, ColumnID = ?" +
+                " SET Name = ?, Description = ?, Duedate = ?, IsCompleted = ?, Status = ?, OrderIndex = ?, ColumnID = ?" +
                 " WHERE TaskID = ?";
 
         try (Connection con = DatabaseConnection.getConnection();
@@ -480,9 +482,10 @@ public class DB_Utils {
                 stmt.setString(3, null);
             }
             stmt.setBoolean(4, task.isCompleted());
-            stmt.setInt(5, task.getOrderIndex());
-            stmt.setInt(6, task.getColumnID());
-            stmt.setInt(7, task.getTaskID());
+            stmt.setString(5, task.getStatus().toString());
+            stmt.setInt(6, task.getOrderIndex());
+            stmt.setInt(7, task.getColumnID());
+            stmt.setInt(8, task.getTaskID());
 
             int result = stmt.executeUpdate();
 

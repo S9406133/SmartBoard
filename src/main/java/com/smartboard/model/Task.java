@@ -86,12 +86,12 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable {
 
     public void setDueDate(@NotNull LocalDate newDate) {
         this.dueDate = newDate;
-        setStatus();
+        calculateStatus();
     }
 
     public void nullDueDate() {
         this.dueDate = null;
-        setStatus();
+        calculateStatus();
     }
 
     public boolean isCompleted() {
@@ -105,7 +105,7 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable {
             setAllChecklistItems(true);
         }
 
-        setStatus();
+        calculateStatus();
     }
 
     public void setAllChecklistItems(boolean checked){
@@ -130,6 +130,16 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable {
         return this.status;
     }
 
+    public void setStatus(String statusStr){
+
+        for (Status status : Status.values()){
+            if (statusStr.equalsIgnoreCase(status.toString())) {
+                this.status = status;
+            }
+        }
+
+    }
+
     /**
      * Sets Task Status
      * ** No due date set ->
@@ -142,7 +152,7 @@ public class Task extends BoardItem<ChecklistItem> implements Reorderable {
      * and is before or on the due date = COMPLETED_ON_TIME
      * and is after the due date = COMPLETED_LATE,
      */
-    public void setStatus() {
+    public void calculateStatus() {
         LocalDate today = LocalDate.now();
 
         if (this.isCompleted) {
